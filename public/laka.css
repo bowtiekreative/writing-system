@@ -67,7 +67,7 @@ body {
 h1, h2, h3, h4 { color: var(--rp-heading); font-weight: 600; margin: 0; }
 h1 { font-size: clamp(40px, 7vw, 80px); line-height: 1.02; letter-spacing: -0.05em; }
 h2 { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -0.04em; }
-h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.15; letter-spacing: -0.03em; }
+h3 { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.15; letter-spacing: -0.03em; }
 h4 { font-size: 18px; line-height: 1.35; letter-spacing: -0.01em; }
 p { margin: 0 0 var(--space-4); max-width: var(--measure); }
 
@@ -420,6 +420,7 @@ details.disclose > div { padding: 0 var(--space-5) var(--space-5); }
 .mt-9 { margin-top: var(--space-9); }
 .mb-2 { margin-bottom: var(--space-2); }
 .mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
 .m-0  { margin: 0; }
 .pb-9 { padding-bottom: var(--space-9); }
 .indent { padding-left: var(--space-6); }

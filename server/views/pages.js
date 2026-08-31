@@ -79,7 +79,7 @@ export function home () {
           <span class="feature__icon">${icon('levels')}</span>
           <div>
             <p class="eyebrow mb-2">Level ${esc(l.level)}</p>
-            <h3 style="font-size:22px">${esc(l.id.replace(/_/g, ' '))}</h3>
+            <h3 class="t-24">${esc(l.id.replace(/_/g, ' '))}</h3>
           </div>
           <p class="m-0"><strong class="ink">${esc(l.formula)}</strong></p>
           <p class="m-0">${esc(l.job)}</p>
@@ -273,11 +273,11 @@ export function ruleDetail (rule) {
 
       <div class="grid grid--2 mt-9">
         <div class="card">
-          <h2 style="font-size:22px;margin-bottom:var(--space-4)">Then</h2>
+          <h2 class="t-24 mb-4">Then</h2>
           ${actionList(rule.then)}
         </div>
         <div class="card">
-          <h2 style="font-size:22px;margin-bottom:var(--space-4)">Else</h2>
+          <h2 class="t-24 mb-4">Else</h2>
           ${actionList(rule.else)}
         </div>
       </div>

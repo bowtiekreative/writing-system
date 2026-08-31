@@ -550,7 +550,7 @@ export function apiPage () {
     "facts": { "claim": { "type": "causal" } }
   }'</code></pre>
 
-      <h3 style="font-size:22px;margin-top:var(--space-7)">What comes back</h3>
+      <h3 class="t-24 mt-7">What comes back</h3>
       <dl class="deflist">
         <dt>verdict</dt><dd><code>blocked</code> when a hard constraint demands a change, otherwise <code>clear</code>.</dd>
         <dt>blocking</dt><dd>Hard constraints that fired and require an edit.</dd>

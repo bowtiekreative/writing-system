@@ -37,7 +37,7 @@ const ICON_PATHS = {
   test: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/>'
 }
 
-export function icon (name, { size = 22 } = {}) {
+export function icon (name, { size = 24 } = {}) {
   const path = ICON_PATHS[name]
   if (!path) return ''
   return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${path}</svg>`
