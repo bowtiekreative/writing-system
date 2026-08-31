@@ -117,7 +117,7 @@ code:not(pre code) {
 
 /* --------------------------------------------------------------- layout -- */
 
-.wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+.wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding-inline: var(--space-4); }
 .stack > * + * { margin-top: var(--space-6); }
 main { display: block; }
 section { padding-block: var(--space-10); }
@@ -208,7 +208,7 @@ section + section { border-top: 1px solid var(--rp-hairline); }
 }
 .panel {
   background: var(--rp-surface); border: 1px solid var(--rp-hairline);
-  border-radius: var(--radius-panel); padding: clamp(20px, 4vw, 40px);
+  border-radius: var(--radius-panel); padding: var(--space-5);
 }
 .grid { display: grid; gap: var(--space-5); }
 .grid--2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
@@ -309,7 +309,7 @@ tbody tr:last-child td { border-bottom: 0; }
 
 /* --------------------------------------------------------------- hero ---- */
 
-.hero { position: relative; overflow: hidden; padding-block: clamp(56px, 9vw, 112px) var(--space-10); }
+.hero { position: relative; overflow: hidden; padding-block: var(--space-9) var(--space-10); }
 .hero__content { position: relative; z-index: 1; }
 
 /* Environmental motion: the volumetric lattice. The page's visual anchor where there is
@@ -381,6 +381,16 @@ details.disclose > div { padding: 0 var(--space-5) var(--space-5); }
   .bar__seal { width: 28px; height: 28px; }
   .steps > li { grid-template-columns: 36px minmax(0, 1fr); }
   .steps > li::before { width: 36px; height: 36px; }
+}
+
+@media (min-width: 700px) {
+  .wrap { padding-inline: var(--space-6); }
+  .panel { padding: var(--space-7); }
+  .hero { padding-block: var(--space-10) var(--space-10); }
+}
+@media (min-width: 1100px) {
+  .wrap { padding-inline: var(--space-8); }
+  .panel { padding: var(--space-8); }
 }
 
 @media (prefers-reduced-motion: reduce) {

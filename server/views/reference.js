@@ -303,7 +303,7 @@ export function sourcesPage () {
 
   return {
     title: 'Bibliography',
-    description: `The ${corpus.sources.length} sources behind the rules, with the rules that cite each one.`,
+    description: `The ${corpus.sources.length} books, standards, style guides and papers behind the rules — grouped by kind, each listed with the rules that cite it, so any rule can be traced back to what it came from.`,
     path: '/sources',
     body
   }
@@ -433,7 +433,7 @@ export function filePage (entry) {
 
   return {
     title: entry.title,
-    description: `${entry.title} — ${role ?? 'part of the LAKA Volumetric Writing Grammar System'}. Served verbatim as JSON.`,
+    description: `${entry.title}: ${role ?? 'part of the LAKA Volumetric Writing Grammar System'}. Read the file rendered in full, browse the rules defined in it, and fetch the same JSON verbatim over the API.`,
     path: `/files/${entry.slug}`,
     body
   }
