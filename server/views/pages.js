@@ -58,7 +58,7 @@ export function home () {
         { value: corpus.transformations.length, label: 'LAKA transformation states' },
         { value: corpus.files.length, label: 'Source files' }
       ])}
-      <p class="muted" style="font-size:14px;margin-top:var(--space-4)">
+      <p class="muted t-14 mt-4">
         Counts derive from the corpus itself at load time, not from the manifest's declarations.
         Source: the ${corpus.files.length} JSON files served at <a href="/v1/files">/v1/files</a>, version ${esc(corpus.manifest.version)},
         generated ${esc(corpus.manifest.generated_at ?? 'unknown')}.
@@ -83,7 +83,7 @@ export function home () {
           </div>
           <p class="m-0"><strong class="ink">${esc(l.formula)}</strong></p>
           <p class="m-0">${esc(l.job)}</p>
-          <p class="muted" style="margin:0;font-size:14px">Fails when: ${esc(l.failure)}</p>
+          <p class="muted m-0 t-14">Fails when: ${esc(l.failure)}</p>
         </article>`).join('')}
       </div>
       <p class="mt-7"><a href="/principles">Read the first principles in full →</a></p>
@@ -121,12 +121,12 @@ export function home () {
     <div class="wrap">
       <div class="panel stack">
         <p class="eyebrow">Read this before you use it</p>
-        <h2 style="max-width:20ch">The system decides how hard a rule binds — not that everything should be plain.</h2>
+        <h2 class="narrow">The system decides how hard a rule binds — not that everything should be plain.</h2>
         <p class="tight">${esc(corpus.manifest.usage_note)}</p>
         <div class="grid grid--2 mt-6">
           ${Object.entries(corpus.engineSpec.strength_behavior ?? {}).map(([k, v]) => `
           <div class="card">
-            <p style="margin:0 0 var(--space-3)">${strengthBadge(k)}</p>
+            <p class="mb-3-only">${strengthBadge(k)}</p>
             <p class="m-0">${esc(v)}</p>
           </div>`).join('')}
         </div>
@@ -238,11 +238,11 @@ export function ruleDetail (rule) {
     <div class="wrap stack">
       <p class="eyebrow"><a href="/rules">Rules</a> / <a href="/rules?domain=${attr(rule.domain)}">${esc(rule.domain.replace(/_/g, ' '))}</a></p>
       <div class="row row--baseline">
-        <span class="mono muted" style="font-size:15px">${esc(rule.id)}</span>
+        <span class="mono muted t-15">${esc(rule.id)}</span>
         ${strengthBadge(rule.strength)}
         ${chip(`layer: ${rule.layer}`)}
       </div>
-      <h1 style="font-size:clamp(32px,5vw,56px);margin-top:var(--space-4)">${esc(rule.name)}</h1>
+      <h1 class="t-32 mt-4">${esc(rule.name)}</h1>
       <p class="lede">${esc(rule.human_logic)}</p>
 
       <div class="panel">
@@ -255,7 +255,7 @@ export function ruleDetail (rule) {
       <div class="card">${conditionTree(rule.when)}</div>
 
       ${facts.length ? `
-      <h3 style="font-size:20px;margin-top:var(--space-7)">Facts this rule reads</h3>
+      <h3 class="t-20 mt-7">Facts this rule reads</h3>
       <div class="table-scroll">
         <table>
           <caption class="visually-hidden">Fact paths read by ${esc(rule.id)} and whether the analyser derives them</caption>
@@ -294,8 +294,8 @@ export function ruleDetail (rule) {
       ${tests.length ? `
       <h2 class="mt-9">Test cases</h2>
       ${tests.map((t) => `
-      <div class="card" style="margin-bottom:var(--space-4)">
-        <p class="eyebrow" style="margin-bottom:var(--space-4)">${esc(t.id)} · ${esc(t.assertion)}</p>
+      <div class="card mb-4">
+        <p class="eyebrow mb-4">${esc(t.id)} · ${esc(t.assertion)}</p>
         <dl class="deflist">
           <dt>Before</dt><dd><code>${esc(t.before)}</code></dd>
           <dt>After</dt><dd><code>${esc(t.after)}</code></dd>
@@ -308,7 +308,7 @@ export function ruleDetail (rule) {
       <div class="card">
         <dl class="deflist">
           <dt>Smallest sufficient intervention</dt><dd>${rule.laka.smallest_sufficient_intervention ? 'Yes' : 'No'}</dd>
-          <dt>Primary axes</dt><dd><ul class="chips">${(rule.laka.primary_axes ?? []).map((a) => `<li><a href="/laka#${attr(a)}" style="text-decoration:none">${chip(a)}</a></li>`).join('')}</ul></dd>
+          <dt>Primary axes</dt><dd><ul class="chips">${(rule.laka.primary_axes ?? []).map((a) => `<li><a href="/laka#${attr(a)}" class="plain">${chip(a)}</a></li>`).join('')}</ul></dd>
         </dl>
       </div>` : ''}
 
@@ -376,7 +376,7 @@ export function enginePage ({ submitted, result, form, error }) {
   const findings = (items, heading, note) => {
     if (!items?.length) return ''
     return `
-      <h3 style="margin-top:var(--space-8);font-size:24px">${esc(heading)} <span class="muted" style="font-size:16px;font-weight:400">(${items.length})</span></h3>
+      <h3 class="mt-8 t-24">${esc(heading)} <span class="muted t-16 t-regular">(${items.length})</span></h3>
       ${note ? `<p class="muted tight t-14">${esc(note)}</p>` : ''}
       ${items.map((f) => `
       <div class="finding">
@@ -387,9 +387,9 @@ export function enginePage ({ submitted, result, form, error }) {
           ${f.occurrences > 1 ? chip(`${f.occurrences}×`) : ''}
         </div>
         <h4>${esc(f.name)}</h4>
-        <p style="margin:var(--space-2) 0 0">${esc(f.human_logic)}</p>
-        <p class="muted" style="margin:var(--space-2) 0 0;font-size:14px">${esc(f.because)}</p>
-        <p style="margin:var(--space-3) 0 0;font-size:14px"><strong class="ink">Do:</strong> ${(f.actions ?? []).map((a) => esc(a.action)).join(', ') || '—'}</p>
+        <p class="my-2">${esc(f.human_logic)}</p>
+        <p class="muted my-2 t-14">${esc(f.because)}</p>
+        <p class="my-3 t-14"><strong class="ink">Do:</strong> ${(f.actions ?? []).map((a) => esc(a.action)).join(', ') || '—'}</p>
         ${f.units?.length ? `<ul class="finding__units">${f.units.map((u) => `<li>${esc(u.type)} ${u.index + 1}: “${esc(u.excerpt)}”</li>`).join('')}</ul>` : ''}
       </div>`).join('')}`
   }
@@ -401,12 +401,12 @@ export function enginePage ({ submitted, result, form, error }) {
         <div class="verdict verdict--${result.verdict === 'blocked' ? 'blocked' : 'clear'}">
           <span class="verdict__mark" aria-hidden="true">${result.verdict === 'blocked' ? '!' : '✓'}</span>
           <div>
-            <p style="margin:0;font-size:20px;color:var(--rp-heading);font-weight:600">
+            <p class="m-0 t-20 strong-ink">
               ${result.verdict === 'blocked'
                 ? `Blocked — ${result.blocking.length} hard constraint${result.blocking.length === 1 ? '' : 's'} demand a change`
                 : 'Clear — no hard constraint demands a change'}
             </p>
-            <p class="muted" style="margin:var(--space-1) 0 0;font-size:14px">
+            <p class="muted my-1 t-14">
               ${result.coverage.rules_selected} rules selected · ${result.coverage.evaluations} evaluations ·
               ${result.coverage.resolved} resolved · ${result.coverage.unresolved} awaiting facts ·
               ${result.engine.evaluated_in_ms} ms
@@ -440,7 +440,7 @@ export function enginePage ({ submitted, result, form, error }) {
                 </tbody>
               </table>
             </div>
-            <p class="muted" style="font-size:14px;margin-top:var(--space-4)">Send these under <code>facts</code> on <code>POST /v1/evaluate</code> to resolve them.</p>
+            <p class="muted t-14 mt-4">Send these under <code>facts</code> on <code>POST /v1/evaluate</code> to resolve them.</p>
           </div>
         </details>` : ''}
 
@@ -490,11 +490,11 @@ export function enginePage ({ submitted, result, form, error }) {
           ${axisSelect('purpose', 'Purpose', form.purpose)}
           ${axisSelect('reading_condition', 'Reading condition', form.reading_condition)}
         </div>
-        <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;align-items:center">
+        <div class="row">
           <button class="pill pill--solid" type="submit">Evaluate</button>
           <button class="pill" type="submit" name="sample" value="1">Use the sample text</button>
         </div>
-        <p class="muted" style="font-size:14px;margin:0">
+        <p class="muted t-14 m-0">
           Nothing is stored. The evaluation runs on the server and the response is not cached.
         </p>
       </form>
@@ -535,11 +535,11 @@ export function principles () {
       ${pageHead({ eyebrow: 'The model', title: esc(fp.title ?? 'First principles') })}
       <div class="panel">
         <p class="eyebrow">The zero rule</p>
-        <p style="margin:0;font-size:clamp(20px,2.6vw,28px);line-height:1.35;color:var(--rp-heading)">${esc(fp.zero_rule)}</p>
+        <p class="m-0 t-quote ink">${esc(fp.zero_rule)}</p>
       </div>
       <div class="card">
         <p class="eyebrow">Core equation</p>
-        <p class="mono" style="margin:0;font-size:16px;color:var(--rp-heading)">${esc(fp.core_equation)}</p>
+        <p class="mono m-0 t-16 ink">${esc(fp.core_equation)}</p>
       </div>
 
       <h2 class="mt-9">The eleven levels</h2>
@@ -562,7 +562,7 @@ export function principles () {
       <h2 class="mt-9">Conservation rules</h2>
       <p class="tight muted">What must survive any edit.</p>
       <ol class="steps">${(fp.conservation_rules ?? []).map((c) => `
-        <li><div><p class="m-0"><span class="mono muted meta-id">${esc(c.id)}</span></p><p style="margin:var(--space-1) 0 0;color:var(--rp-heading)">${esc(c.rule)}</p></div></li>`).join('')}</ol>
+        <li><div><p class="m-0"><span class="mono muted meta-id">${esc(c.id)}</span></p><p class="my-1 ink">${esc(c.rule)}</p></div></li>`).join('')}</ol>
 
       <h2 class="mt-9">Universal operations</h2>
       <div class="grid grid--3">${(fp.universal_operations ?? []).map((o) => `
@@ -579,7 +579,7 @@ export function principles () {
           <thead><tr><th scope="col">Kind</th><th scope="col">Formula</th></tr></thead>
           <tbody>${Object.entries(fp.composition_formulas ?? {}).map(([k, v]) => `
             <tr>
-              <td style="color:var(--rp-heading);font-weight:600;white-space:nowrap">${esc(k.replace(/_/g, ' '))}</td>
+              <td class="strong-ink nowrap">${esc(k.replace(/_/g, ' '))}</td>
               <td class="mono">${esc(v)}</td>
             </tr>`).join('')}
           </tbody>
@@ -617,7 +617,7 @@ export function lakaGrid () {
   <section>
     <div class="wrap stack">
       <h2>A volumetric address</h2>
-      <div class="card"><p class="mono" style="margin:0;color:var(--rp-heading);font-size:15px">${esc(g.volumetric_address)}</p></div>
+      <div class="card"><p class="mono m-0 ink t-15">${esc(g.volumetric_address)}</p></div>
       <div class="panel">
         <p class="eyebrow">Outcome separation</p>
         <p class="lead-statement">${esc(g.outcome_separation)}</p>
@@ -632,7 +632,7 @@ export function lakaGrid () {
       ${[...byAxis.entries()].map(([axis, states]) => `
       <article class="panel" id="${attr(axis)}" class="mt-6">
         <h3>${esc(axis.replace(/_/g, ' '))}</h3>
-        <p class="muted" style="margin-top:var(--space-2)">${esc(states[0]?.key_question ?? (g.transformation_dynamics ?? []).find((d) => d.id === axis)?.key_question ?? '')}</p>
+        <p class="muted mt-2">${esc(states[0]?.key_question ?? (g.transformation_dynamics ?? []).find((d) => d.id === axis)?.key_question ?? '')}</p>
         <div class="table-scroll mt-5">
           <table>
             <caption class="visually-hidden">States of the ${esc(axis)} axis</caption>
@@ -640,7 +640,7 @@ export function lakaGrid () {
             <tbody>${states.map((s) => `
               <tr id="${attr(s.id)}">
                 <td class="mono ink">${esc(s.code ?? '')}</td>
-                <td style="white-space:nowrap">${esc(s.state ?? '')}</td>
+                <td class="nowrap">${esc(s.state ?? '')}</td>
                 <td>${esc(s.writing_application ?? '')}</td>
                 <td class="muted">${esc(s.evaluation ?? '')}</td>
               </tr>`).join('')}
@@ -657,12 +657,12 @@ export function lakaGrid () {
       <p class="tight muted">Where two axes interact, these decide.</p>
       ${corpus.crossAxis.map((r) => `
       <div class="card">
-        <p class="mono muted" style="font-size:13px;margin:0 0 var(--space-3)">${esc(r.id)}</p>
+        <p class="mono muted t-13 mb-3-only">${esc(r.id)}</p>
         <div class="grid grid--2">
           <div><p class="eyebrow mb-2">If</p>${conditionTree(r.if)}</div>
           <div>
             <p class="eyebrow mb-2">Then</p>${renderValue(r.then)}
-            <p class="eyebrow" style="margin:var(--space-4) 0 var(--space-2)">Else</p>${renderValue(r.else)}
+            <p class="eyebrow label-gap-4">Else</p>${renderValue(r.else)}
           </div>
         </div>
       </div>`).join('')}

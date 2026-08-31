@@ -439,3 +439,32 @@ details.disclose > div { padding: 0 var(--space-5) var(--space-5); }
 .actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-8); }
 .meta-id { font-family: var(--mono); font-size: 13px; color: var(--rp-muted); margin: 0 0 var(--space-2); }
 .lead-statement { margin: 0; font-size: 18px; color: var(--rp-heading); }
+
+/* Type sizes, kept separate from the box utilities so a font-size and a margin never
+   share one declaration. Every value is a scale value. */
+.t-15 { font-size: 15px; }
+.t-16 { font-size: 16px; }
+.t-20 { font-size: 20px; }
+.t-32 { font-size: clamp(32px, 5vw, 56px); }
+.t-quote { font-size: clamp(24px, 2.6vw, 28px); line-height: 1.35; }
+.t-count { font-size: 0.5em; font-weight: 400; }
+.t-regular { font-weight: 400; }
+
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mb-4 { margin-bottom: var(--space-4); }
+.my-1 { margin: var(--space-1) 0 0; }
+.my-2 { margin: var(--space-2) 0 0; }
+.my-3 { margin: var(--space-3) 0 0; }
+.my-4 { margin: var(--space-4) 0 0; }
+.my-5 { margin: var(--space-5) 0 0; }
+.my-6 { margin: var(--space-6) 0 0; }
+.label-gap-4 { margin: var(--space-4) 0 var(--space-2); }
+.label-gap-5 { margin: var(--space-5) 0 var(--space-2); }
+.label-gap-6 { margin: var(--space-6) 0 var(--space-3); }
+.mb-3-only { margin: 0 0 var(--space-3); }
+
+.plain { text-decoration: none; }
+.narrow { max-width: 20ch; }
+.wide { max-width: 100ch; }
+.term { color: var(--rp-heading); text-transform: none; font-size: 16px; letter-spacing: 0; }

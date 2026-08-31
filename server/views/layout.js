@@ -135,7 +135,7 @@ function footer () {
         <p class="m-0"><a href="/privacy">Privacy</a> · <a href="/api">API</a> · <a href="https://github.com/bowtiekreative/writing-system" rel="noopener">Source</a></p>
         <p class="m-0">Powered by <a href="https://bowtiekreative.com">Bow Tie Kreative</a></p>
       </div>
-      <p class="muted" style="margin-top:var(--space-6);font-size:13px;max-width:100ch">${esc(corpus.manifest.copyright_note)}</p>
+      <p class="muted mt-6 t-13 wide">${esc(corpus.manifest.copyright_note)}</p>
     </div>
   </footer>`
 }

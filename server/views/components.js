@@ -46,7 +46,7 @@ export function conditionTree (node, depth = 0) {
 /** Render a then/else action list. */
 export function actionList (actions, { empty = 'No actions declared.' } = {}) {
   if (!Array.isArray(actions) || actions.length === 0) return `<p class="muted">${esc(empty)}</p>`
-  return `<ol class="stack" style="padding-left:var(--space-6);margin:0">${actions.map((a) => {
+  return `<ol class="stack indent m-0">${actions.map((a) => {
     if (typeof a === 'string') return `<li>${esc(a)}</li>`
     const bits = []
     if (a.target) bits.push(`target <code>${esc(a.target)}</code>`)
@@ -76,7 +76,7 @@ export function ruleRow (rule) {
 export function jsonBlock (value, caption) {
   const body = esc(JSON.stringify(value, null, 2))
   return `<figure class="m-0">
-    ${caption ? `<figcaption class="muted" style="font-size:13px;margin-bottom:var(--space-2)">${esc(caption)}</figcaption>` : ''}
+    ${caption ? `<figcaption class="muted t-13 mb-2">${esc(caption)}</figcaption>` : ''}
     <pre><code>${body}</code></pre>
   </figure>`
 }

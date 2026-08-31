@@ -49,8 +49,8 @@ export function logicPage () {
       <div class="card">
         <p class="eyebrow mb-3">If</p>
         ${conditionTree(c.if)}
-        <p class="eyebrow" style="margin:var(--space-4) 0 var(--space-2)">Then</p>
-        <p style="margin:0;color:var(--rp-heading)">${esc(typeof c.then === 'string' ? c.then : JSON.stringify(c.then))}</p>
+        <p class="eyebrow label-gap-4">Then</p>
+        <p class="m-0 ink">${esc(typeof c.then === 'string' ? c.then : JSON.stringify(c.then))}</p>
       </div>`).join('')}
 
     <h2 class="mt-9">The rule schema</h2>
@@ -133,7 +133,7 @@ export function templatesPage () {
           </div>
         </div>
         ${Array.isArray(t.slots) && t.slots.length ? `
-        <p class="eyebrow" style="margin:var(--space-6) 0 var(--space-3)">Slots, in order</p>
+        <p class="eyebrow label-gap-6">Slots, in order</p>
         <ol class="steps">${t.slots.map((s) => `<li><div>${renderValue(s)}</div></li>`).join('')}</ol>` : ''}
       </article>`).join('')}
   `)
@@ -159,10 +159,10 @@ export function pipelinesPage () {
       <article class="panel" id="${attr(p.id)}" class="mt-6">
         <p class="mono muted meta-id">${esc(p.id)}</p>
         <h2 class="t-28">${esc(p.name)}</h2>
-        <p class="eyebrow" style="margin:var(--space-6) 0 var(--space-3)">Steps</p>
+        <p class="eyebrow label-gap-6">Steps</p>
         <ol class="steps">${(p.steps ?? []).map((s) => `<li><div>${renderValue(s)}</div></li>`).join('')}</ol>
         ${p.decision ? `
-        <p class="eyebrow" style="margin:var(--space-6) 0 var(--space-3)">Decision</p>
+        <p class="eyebrow label-gap-6">Decision</p>
         <div class="card">${renderValue(p.decision)}</div>` : ''}
       </article>`).join('')}
   `)
@@ -189,11 +189,11 @@ export function profilesPage () {
       <article class="card" id="${attr(p.id)}">
         <p class="mono muted meta-id">${esc(p.id)}</p>
         <h2 class="t-24">${esc(p.name)}</h2>
-        <p class="eyebrow" style="margin:var(--space-5) 0 var(--space-2)">Priority order</p>
-        <ol style="margin:0;padding-left:var(--space-6)">${(p.priority ?? []).map((x) => `<li>${esc(x.replace(/_/g, ' '))}</li>`).join('')}</ol>
-        <p class="eyebrow" style="margin:var(--space-5) 0 var(--space-2)">Active domains (${(p.active_domains ?? []).length})</p>
-        <ul class="chips">${(p.active_domains ?? []).map((d) => `<li><a href="/rules?domain=${attr(d)}" style="text-decoration:none">${chip(d.replace(/_/g, ' '))}</a></li>`).join('')}</ul>
-        <p style="margin:var(--space-5) 0 0"><a href="/engine">Run the engine with this profile →</a></p>
+        <p class="eyebrow label-gap-5">Priority order</p>
+        <ol class="m-0 indent">${(p.priority ?? []).map((x) => `<li>${esc(x.replace(/_/g, ' '))}</li>`).join('')}</ol>
+        <p class="eyebrow label-gap-5">Active domains (${(p.active_domains ?? []).length})</p>
+        <ul class="chips">${(p.active_domains ?? []).map((d) => `<li><a href="/rules?domain=${attr(d)}" class="plain">${chip(d.replace(/_/g, ' '))}</a></li>`).join('')}</ul>
+        <p class="my-5"><a href="/engine">Run the engine with this profile →</a></p>
       </article>`).join('')}
     </div>
   `)
@@ -218,7 +218,7 @@ export function metricsPage () {
       lede: 'Twelve weighted measures, scored nought to four. Four of them are gates: below two, the document fails regardless of the average.'
     })}
 
-    <div class="card"><p class="mono" style="margin:0;color:var(--rp-heading)">${esc(m.formula)}</p></div>
+    <div class="card"><p class="mono m-0 ink">${esc(m.formula)}</p></div>
 
     <h2 class="mt-9">The twelve metrics</h2>
     <div class="table-scroll">
@@ -243,8 +243,8 @@ export function metricsPage () {
 
     <h2 class="mt-9">Hard gates</h2>
     <div class="card">${conditionTree(m.hard_gates?.if)}
-      <p style="margin:var(--space-4) 0 0">Then: <strong class="ink">${esc(String(m.hard_gates?.then ?? '').replace(/_/g, ' '))}</strong></p>
-      <p style="margin:var(--space-1) 0 0" class="muted">Else: ${esc(String(m.hard_gates?.else ?? '').replace(/_/g, ' '))}</p>
+      <p class="my-4">Then: <strong class="ink">${esc(String(m.hard_gates?.then ?? '').replace(/_/g, ' '))}</strong></p>
+      <p class="my-1 muted">Else: ${esc(String(m.hard_gates?.else ?? '').replace(/_/g, ' '))}</p>
     </div>
 
     <h2 class="mt-9">Outcome tests</h2>
@@ -280,7 +280,7 @@ export function sourcesPage () {
     <div class="panel"><p class="m-0">${esc(corpus.byNum.get('29')?.json?.copyright_note ?? '')}</p></div>
 
     ${[...byType.entries()].map(([type, items]) => `
-      <h2 class="mt-9">${esc(String(type).replace(/_/g, ' '))} <span class="muted" style="font-size:0.5em;font-weight:400">${items.length}</span></h2>
+      <h2 class="mt-9">${esc(String(type).replace(/_/g, ' '))} <span class="muted t-count">${items.length}</span></h2>
       <div class="table-scroll">
         <table>
           <caption class="visually-hidden">${esc(type)} sources</caption>
@@ -316,7 +316,7 @@ export function glossaryPage () {
   const body = wrap(`
     ${pageHead({ eyebrow: 'Reference', title: 'Glossary', lede: `${terms.length} terms, defined as this system uses them.` })}
     <dl class="deflist mt-8">${terms.map((t) => `
-      <dt id="${attr(slugify(t.term))}" style="color:var(--rp-heading);text-transform:none;font-size:16px;letter-spacing:0">${esc(t.term)}</dt>
+      <dt id="${attr(slugify(t.term))}" class="term">${esc(t.term)}</dt>
       <dd>${esc(t.definition)}</dd>`).join('')}
     </dl>
   `)
@@ -347,7 +347,7 @@ export function testsPage (run) {
         <div class="stat"><span class="stat__value">${run.decidable}</span><span class="stat__label">Decidable from text alone</span></div>
         <div class="stat"><span class="stat__value">${run.needs_facts}</span><span class="stat__label">Need asserted facts</span></div>
       </div>
-      <p class="muted tight" style="margin:var(--space-6) 0 0;font-size:14px">${esc(run.note)}</p>
+      <p class="muted tight my-6 t-14">${esc(run.note)}</p>
     </div>` : ''}
 
     <div class="table-scroll mt-8">
@@ -386,7 +386,7 @@ export function filesPage () {
       lede: `All ${corpus.files.length} JSON files, in load order. Every page on this site is rendered from these — nothing is added.`
     })}
     <div class="card"><p class="m-0"><strong class="ink">Start here:</strong></p>
-      <ol style="margin:var(--space-3) 0 0;padding-left:var(--space-6)">${(corpus.manifest.start_here ?? []).map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
+      <ol class="my-3 indent">${(corpus.manifest.start_here ?? []).map((s) => `<li>${esc(s)}</li>`).join('')}</ol>
     </div>
     <div class="table-scroll mt-8">
       <table>
@@ -418,7 +418,7 @@ export function filePage (entry) {
 
   const body = wrap(`
     <p class="eyebrow"><a href="/files">Source files</a></p>
-    <h1 style="font-size:clamp(32px,5vw,56px)">${esc(entry.title)}</h1>
+    <h1 class="t-32">${esc(entry.title)}</h1>
     <p class="lede">${esc(role ?? '')}</p>
     <p class="mono muted meta-id">${esc(entry.filename)} · version ${esc(entry.json.version ?? corpus.manifest.version)}</p>
 
@@ -450,7 +450,7 @@ export function searchPage ({ q, results }) {
         <p class="hint" id="q-hint">Rules, glossary terms, templates, pipelines, sources and files. All words must match.</p>
         <input type="search" id="q" name="q" value="${attr(q ?? '')}" aria-describedby="q-hint">
       </div>
-      <button class="pill pill--solid" type="submit" style="margin-top:var(--space-4)">Search</button>
+      <button class="pill pill--solid" type="submit" class="mt-4">Search</button>
     </form>
 
     ${q ? `
@@ -500,7 +500,7 @@ export function apiPage () {
         Every endpoint is public, unauthenticated JSON over HTTPS. Read endpoints are cacheable for
         five minutes; the engine endpoints are never cached.
       </p>
-      <div style="display:flex;gap:var(--space-3);flex-wrap:wrap;margin-top:var(--space-7)">
+      <div class="row mt-7">
         <a class="pill pill--solid" href="/v1/openapi.json">OpenAPI 3.1 document</a>
         <a class="pill" href="/v1">API index</a>
         <a class="pill" href="/llms.txt">Agent guide</a>
@@ -520,7 +520,7 @@ export function apiPage () {
     <div class="wrap stack">
       <h2>Endpoints</h2>
       ${[...grouped.entries()].map(([group, items]) => `
-        <h3 style="margin-top:var(--space-7);font-size:24px">${esc(group)}</h3>
+        <h3 class="mt-7 t-24">${esc(group)}</h3>
         <div class="table-scroll">
           <table>
             <caption class="visually-hidden">${esc(group)} endpoints</caption>
@@ -626,7 +626,7 @@ export function privacyPage () {
 
     <div class="panel">
       <h2 class="t-24">No cookies, no analytics, no tracking</h2>
-      <p style="margin:var(--space-4) 0 0">
+      <p class="my-4">
         This site sets no cookies and uses no local storage. There is no analytics tag, no tag
         manager, no advertising pixel and no third-party tracker of any kind. Nothing here needs a
         consent banner because there is nothing to consent to.
