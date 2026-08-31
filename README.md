@@ -143,3 +143,37 @@ files at load time, not copied from the manifest, and the test suite asserts the
 
 The corpus is original synthesis and paraphrased principle. It does not reproduce the source books;
 source titles remain the property of their authors and publishers.
+
+## Release gate
+
+`POST /v1/audit/site` was run against the deployed site after each change. The first audit of
+all 100 pages returned **BLOCKED** on 162 findings; the current audit returns
+**REVIEW_REQUIRED with zero automated blockers**.
+
+| Audit | Blockers | Warnings |
+| --- | --- | --- |
+| 1 — first deploy | 162 | 1241 |
+| 2 — after the fixes commit | 54 | 366 |
+| 3 — after the spacing-scale fix | 54 | 362 |
+| 4 — after the icon-size fix | 1 | 362 |
+| 5 — after removing all inline styles | **0** | 262 |
+
+CLEAR additionally requires signed evidence for all 17 manual checks (keyboard walkthrough,
+screen-reader testing, rendered-state contrast, reflow and zoom, form error recovery, motion,
+content approval, brand comparison, UI states and inventory, consent, analytics, performance,
+security, compatibility and legal review). Those need a person, not a crawler.
+
+### The two open warning categories, and why
+
+**No shared LAKA JavaScript bundle** (`design-system.shared-js-missing`, `card-contract`,
+`button-contract`). The site is built directly on the LAKA tokens rather than on the embed
+library at `designsystem.bowtiekreative.com/dist/`. Adopting the bundle would satisfy these
+three checks; it would also introduce a stylesheet and script this site does not control, and
+the Content-Security-Policy currently allows scripts only from its own origin. That is a
+deliberate open decision, not an oversight.
+
+**No analytics** (`analytics.missing`, `analytics.form-events`). Nothing is instrumented,
+because LAKA's own rules forbid inventing a tracking ID (`seo.invented-facts`,
+`analytics.no-secrets`) and require consent defaults above the tag (`analytics.consent-first`).
+Wiring this up needs a real GA4 or GTM container ID plus a consent layer. Until then the
+site sets no cookies at all, which is what `/privacy` states.
