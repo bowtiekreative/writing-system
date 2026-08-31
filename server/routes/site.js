@@ -12,7 +12,7 @@ import { layout, MENU, ORIGIN } from '../views/layout.js'
 import { home, rulesIndex, ruleDetail, enginePage, principles, lakaGrid } from '../views/pages.js'
 import {
   logicPage, primitivesPage, templatesPage, pipelinesPage, profilesPage, metricsPage,
-  sourcesPage, glossaryPage, testsPage, filesPage, filePage, searchPage, apiPage
+  sourcesPage, glossaryPage, testsPage, filesPage, filePage, searchPage, apiPage, privacyPage
 } from '../views/reference.js'
 import { filterRules, search } from './api.js'
 import { evaluate, runCorpusTests } from '../engine/evaluate.js'
@@ -96,6 +96,7 @@ export default async function siteRoutes (app) {
   app.get('/sources', async (req, reply) => page(reply, sourcesPage()))
   app.get('/tests', async (req, reply) => page(reply, testsPage(runCorpusTests())))
   app.get('/files', async (req, reply) => page(reply, filesPage()))
+  app.get('/privacy', async (req, reply) => page(reply, privacyPage()))
 
   app.get('/files/:slug', async (req, reply) => {
     const key = String(req.params.slug)
@@ -118,7 +119,8 @@ export default async function siteRoutes (app) {
   app.get('/sitemap.xml', async (req, reply) => {
     const paths = [
       '/', '/principles', '/laka', '/logic', '/primitives', '/rules', '/engine', '/templates',
-      '/pipelines', '/profiles', '/metrics', '/api', '/glossary', '/sources', '/tests', '/files', '/search',
+      '/pipelines', '/profiles', '/metrics', '/api', '/glossary', '/sources', '/tests', '/files',
+      '/search', '/privacy',
       ...corpus.files.map((f) => `/files/${f.slug}`),
       ...corpus.rules.map((r) => `/rules/${r.id}`)
     ]
@@ -129,6 +131,25 @@ export default async function siteRoutes (app) {
       .header('cache-control', 'public, max-age=86400')
       .send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`)
   })
+
+  app.get('/site.webmanifest', async (req, reply) => reply
+    .type('application/manifest+json; charset=utf-8')
+    .header('cache-control', 'public, max-age=86400')
+    .send({
+      name: corpus.manifest.title,
+      short_name: 'Writing System',
+      description: corpus.manifest.purpose,
+      start_url: '/',
+      scope: '/',
+      display: 'standalone',
+      background_color: '#07090D',
+      theme_color: '#07090D',
+      icons: [
+        { src: 'https://designsystem.bowtiekreative.com/brand/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { src: 'https://designsystem.bowtiekreative.com/brand/icon-512.png', sizes: '512x512', type: 'image/png' },
+        { src: 'https://designsystem.bowtiekreative.com/brand/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+      ]
+    }))
 
   app.get('/llms.txt', async (req, reply) => reply
     .type('text/plain; charset=utf-8')

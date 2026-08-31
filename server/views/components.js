@@ -54,7 +54,7 @@ export function actionList (actions, { empty = 'No actions declared.' } = {}) {
     if (a.value !== undefined) bits.push(`value <code>${esc(JSON.stringify(a.value))}</code>`)
     if (a.reason) bits.push(esc(a.reason))
     const rest = bits.length ? ` <span class="muted">— ${bits.join(', ')}</span>` : ''
-    return `<li><strong style="color:var(--rp-heading)">${esc(a.action ?? 'action')}</strong>${rest}</li>`
+    return `<li><strong class="ink">${esc(a.action ?? 'action')}</strong>${rest}</li>`
   }).join('')}</ol>`
 }
 
@@ -75,7 +75,7 @@ export function ruleRow (rule) {
 /** A JSON block with a caption naming where the data came from. */
 export function jsonBlock (value, caption) {
   const body = esc(JSON.stringify(value, null, 2))
-  return `<figure style="margin:0">
+  return `<figure class="m-0">
     ${caption ? `<figcaption class="muted" style="font-size:13px;margin-bottom:var(--space-2)">${esc(caption)}</figcaption>` : ''}
     <pre><code>${body}</code></pre>
   </figure>`
@@ -96,7 +96,7 @@ export function renderValue (value, depth = 0) {
     if (value.length === 0) return '<span class="muted">none</span>'
     const scalar = value.every((v) => typeof v !== 'object' || v === null)
     if (scalar) return `<ul class="chips">${value.map((v) => `<li>${chip(v)}</li>`).join('')}</ul>`
-    return `<ol class="stack" style="padding-left:var(--space-6)">${value.map((v) => `<li>${renderValue(v, depth + 1)}</li>`).join('')}</ol>`
+    return `<ol class="stack indent">${value.map((v) => `<li>${renderValue(v, depth + 1)}</li>`).join('')}</ol>`
   }
   if (typeof value === 'object') {
     const entries = Object.entries(value)
@@ -112,6 +112,6 @@ export function pageHead ({ eyebrow, title, lede, id = 'top' }) {
   return `<div id="${attr(id)}">
     ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
     <h1>${esc(title)}</h1>
-    ${lede ? `<p class="lede" style="margin-top:var(--space-6)">${esc(lede)}</p>` : ''}
+    ${lede ? `<p class="lede mt-6">${esc(lede)}</p>` : ''}
   </div>`
 }

@@ -8,6 +8,7 @@
  */
 
 import { corpus } from '../corpus.js'
+import { ASSETS } from '../assets.js'
 
 const BRAND = 'https://designsystem.bowtiekreative.com/brand'
 export const ORIGIN = process.env.PUBLIC_ORIGIN ?? 'https://writingsystem.bowtiekreative.com'
@@ -130,8 +131,9 @@ function footer () {
       <div class="foot__grid">${cols}
       </div>
       <div class="foot__legal">
-        <p style="margin:0">${esc(corpus.manifest.title)} v${esc(corpus.manifest.version)} · ${corpus.rules.length} base rules · ${corpus.manifest.inventory?.total_operational_rule_records ?? ''} operational records</p>
-        <p style="margin:0">Powered by <a href="https://bowtiekreative.com">Bow Tie Kreative</a></p>
+        <p class="m-0">${esc(corpus.manifest.title)} v${esc(corpus.manifest.version)} · ${corpus.rules.length} base rules · ${corpus.manifest.inventory?.total_operational_rule_records ?? ''} operational records</p>
+        <p class="m-0"><a href="/privacy">Privacy</a> · <a href="/api">API</a> · <a href="https://github.com/bowtiekreative/writing-system" rel="noopener">Source</a></p>
+        <p class="m-0">Powered by <a href="https://bowtiekreative.com">Bow Tie Kreative</a></p>
       </div>
       <p class="muted" style="margin-top:var(--space-6);font-size:13px;max-width:100ch">${esc(corpus.manifest.copyright_note)}</p>
     </div>
@@ -146,12 +148,33 @@ function footer () {
  * @param {string} page.body       page markup, starting with its single <h1>
  * @param {object} [page.jsonLd]   structured data describing content visible on the page
  */
+/** Trim to a whole word at or under `max` characters. */
+export function clampText (text, max) {
+  const t = String(text ?? '').replace(/\s+/g, ' ').trim()
+  if (t.length <= max) return t
+  const cut = t.slice(0, max - 1)
+  const lastSpace = cut.lastIndexOf(' ')
+  return `${(lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).replace(/[,;:.\s]+$/, '')}…`
+}
+
 export function layout (page) {
-  const title = `${page.title} · Writing System`
+  // Search results truncate around 60 characters of title and 160 of description.
+  const suffix = ' · Writing System'
+  const title = `${clampText(page.title, 60 - suffix.length)}${suffix}`
+  const description = clampText(page.description, 158)
   const canonical = `${ORIGIN}${page.path}`
-  const jsonLd = page.jsonLd
-    ? `\n  <script type="application/ld+json">${JSON.stringify(page.jsonLd).replace(/</g, '\\u003c')}</script>`
-    : ''
+
+  // Every page carries structured data describing content that is visible on it (seo.markup-visible).
+  const structured = page.jsonLd ?? {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: page.title,
+    description,
+    url: canonical,
+    isPartOf: { '@type': 'WebSite', name: corpus.manifest.title, url: ORIGIN },
+    publisher: { '@type': 'Organization', name: 'Bow Tie Kreative', url: 'https://bowtiekreative.com' }
+  }
+  const jsonLd = `\n  <script type="application/ld+json">${JSON.stringify(structured).replace(/</g, '\\u003c')}</script>`
 
   return `<!doctype html>
 <html lang="en">
@@ -159,18 +182,18 @@ export function layout (page) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${esc(title)}</title>
-  <meta name="description" content="${attr(page.description)}">
+  <meta name="description" content="${attr(description)}">
   <link rel="canonical" href="${attr(canonical)}">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="LAKA Volumetric Writing Grammar System">
   <meta property="og:title" content="${attr(title)}">
-  <meta property="og:description" content="${attr(page.description)}">
+  <meta property="og:description" content="${attr(description)}">
   <meta property="og:url" content="${attr(canonical)}">
   <meta property="og:image" content="${BRAND}/btk-seal.png">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="${attr(title)}">
-  <meta name="twitter:description" content="${attr(page.description)}">
+  <meta name="twitter:description" content="${attr(description)}">
   <meta name="theme-color" content="#07090D">
   <link rel="icon" href="${BRAND}/favicon-32.png" sizes="32x32">
   <link rel="icon" href="${BRAND}/favicon-48.png" sizes="48x48">
@@ -178,7 +201,8 @@ export function layout (page) {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
-  <link rel="stylesheet" href="/laka.css">
+  <link rel="stylesheet" href="${ASSETS.css.url}">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="alternate" type="application/json" href="${ORIGIN}/v1">${jsonLd}
 </head>
 <body>
@@ -188,7 +212,7 @@ ${header()}
 ${page.body}
   </main>
 ${footer()}
-  <script src="/site.js" defer></script>
+  <script src="${ASSETS.js.url}" defer></script>
 </body>
 </html>`
 }
@@ -210,5 +234,5 @@ export function lattice () {
       dots += `<circle class="pulse" cx="${c * 100}" cy="${r * 60}" r="3" fill="currentColor" stroke="none" opacity="0.4"/>`
     }
   }
-  return `<div class="lattice" aria-hidden="true"><svg viewBox="0 0 1400 420" preserveAspectRatio="xMidYMid slice" style="color:var(--rp-accent)"><g class="drift">${lines}${dots}</g></svg></div>`
+  return `<div class="lattice"><svg viewBox="0 0 1400 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false" role="presentation" class="lattice__svg"><g class="drift">${lines}${dots}</g></svg></div>`
 }
