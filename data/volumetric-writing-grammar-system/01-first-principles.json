@@ -1,0 +1,197 @@
+{
+  "title": "Writing from First Principles",
+  "version": "1.0.0",
+  "core_equation": "writing_quality = decoded_intent_accuracy × reader_usability × contextual_fitness × trust",
+  "zero_rule": "A text succeeds only when the intended reader can recover the intended meaning and use it for the intended purpose in the actual context.",
+  "conservation_rules": [
+    {
+      "id": "FP-01",
+      "rule": "Changing form without checking meaning risks semantic drift."
+    },
+    {
+      "id": "FP-02",
+      "rule": "Every added unit must contribute meaning, relation, navigation, rhythm, credibility, or deliberate effect."
+    },
+    {
+      "id": "FP-03",
+      "rule": "Omission is safe only when the reader can infer the missing element accurately."
+    },
+    {
+      "id": "FP-04",
+      "rule": "A local improvement is rejected when it damages document-level accuracy, voice, cohesion, accessibility, or intent."
+    },
+    {
+      "id": "FP-05",
+      "rule": "Correctness constrains style; context selects among the remaining correct forms."
+    },
+    {
+      "id": "FP-06",
+      "rule": "Rules have domains. A rule for instructions is not automatically a rule for dialogue, poetry, contracts, or advertising."
+    },
+    {
+      "id": "FP-07",
+      "rule": "Reader effort is a limited resource. Spend it on the idea, not preventable decoding work."
+    },
+    {
+      "id": "FP-08",
+      "rule": "Specific claims create evidence debt; stronger claims create larger evidence debt."
+    },
+    {
+      "id": "FP-09",
+      "rule": "Revision should apply the smallest sufficient intervention that fixes the diagnosed failure."
+    },
+    {
+      "id": "FP-10",
+      "rule": "A deliberate deviation names its purpose, audience benefit, scope, and recovery path."
+    }
+  ],
+  "primitives": [
+    {
+      "level": 0,
+      "id": "signal",
+      "formula": "form + contrast",
+      "job": "Create a perceivable difference.",
+      "failure": "The reader cannot detect a meaningful distinction."
+    },
+    {
+      "level": 1,
+      "id": "grapheme",
+      "formula": "mark + writing-system value",
+      "job": "Represent a letter, digit, symbol, or punctuation mark.",
+      "failure": "The mark is missing, confusable, or malformed."
+    },
+    {
+      "level": 2,
+      "id": "morpheme",
+      "formula": "form + minimal meaning_or_function",
+      "job": "Carry the smallest grammatical or lexical contribution.",
+      "failure": "Inflection or word formation expresses the wrong relationship."
+    },
+    {
+      "level": 3,
+      "id": "word",
+      "formula": "one_or_more_morphemes + lexical_role",
+      "job": "Name, relate, modify, quantify, or operate.",
+      "failure": "The selected word is inaccurate, ambiguous, inaccessible, or inconsistent."
+    },
+    {
+      "level": 4,
+      "id": "phrase",
+      "formula": "head + optional_dependents",
+      "job": "Build a unit around a noun, verb, adjective, adverb, or preposition.",
+      "failure": "The head-dependent relationship is unclear or misplaced."
+    },
+    {
+      "level": 5,
+      "id": "clause",
+      "formula": "predicate + participants + optional_circumstances",
+      "job": "Represent an event, state, relation, or proposition.",
+      "failure": "The actor, action, object, time, condition, or logical status is missing or confused."
+    },
+    {
+      "level": 6,
+      "id": "sentence",
+      "formula": "one_or_more_clauses + relation + closure",
+      "job": "Deliver one manageable assertion, question, command, or exclamation.",
+      "failure": "The sentence is incomplete, fused, overloaded, or logically misjoined."
+    },
+    {
+      "level": 7,
+      "id": "paragraph",
+      "formula": "controlling_move + development + coherence",
+      "job": "Advance one main rhetorical move.",
+      "failure": "The point is buried, unsupported, mixed with another point, or disconnected."
+    },
+    {
+      "level": 8,
+      "id": "section",
+      "formula": "reader_question + organized_answer + navigation",
+      "job": "Resolve one meaningful reader need or document function.",
+      "failure": "The section has no clear question, sequence, or usable label."
+    },
+    {
+      "level": 9,
+      "id": "document",
+      "formula": "purpose + audience + ordered_sections + evidence + action_path",
+      "job": "Change what a reader knows, feels, decides, or does.",
+      "failure": "The document is correct locally but fails its audience or purpose globally."
+    },
+    {
+      "level": 10,
+      "id": "content_system",
+      "formula": "documents + taxonomy + reuse + governance + feedback",
+      "job": "Produce consistent, maintainable communication across contexts.",
+      "failure": "Rules conflict, drift accumulates, content duplicates, or feedback never changes the system."
+    }
+  ],
+  "universal_operations": [
+    {
+      "id": "select",
+      "question": "Which signal best expresses the intended meaning?"
+    },
+    {
+      "id": "combine",
+      "question": "Which units belong together?"
+    },
+    {
+      "id": "order",
+      "question": "What must the reader encounter first, next, and last?"
+    },
+    {
+      "id": "connect",
+      "question": "What relationship joins these units?"
+    },
+    {
+      "id": "delimit",
+      "question": "Where does one unit end and another begin?"
+    },
+    {
+      "id": "specify",
+      "question": "What detail reduces ambiguity or increases usefulness?"
+    },
+    {
+      "id": "compress",
+      "question": "What can be removed without losing necessary meaning?"
+    },
+    {
+      "id": "expand",
+      "question": "What must be explained, evidenced, illustrated, or qualified?"
+    },
+    {
+      "id": "emphasize",
+      "question": "What deserves attention, stress, position, or repetition?"
+    },
+    {
+      "id": "vary",
+      "question": "What controlled change improves rhythm, engagement, or fit?"
+    },
+    {
+      "id": "verify",
+      "question": "How will accuracy, comprehension, and outcome be tested?"
+    },
+    {
+      "id": "route",
+      "question": "What should the reader do or read next?"
+    }
+  ],
+  "composition_formulas": {
+    "narrative": "agent + desire + obstacle + consequential_choice + change + meaning",
+    "argument": "claim + grounds + warrant + qualification + counterposition + response",
+    "explanation": "question + known_base + model + example + boundary + check",
+    "instruction": "goal + prerequisites + ordered_actions + expected_results + recovery + verification",
+    "reference": "entity + definition + properties + constraints + examples + links",
+    "persuasive_copy": "audience_desire + problem_or_opportunity + offer + mechanism + proof + objection_resolution + action_minus_friction",
+    "paragraph": "controlling_move + support + relationship_signals + transition_or_closure",
+    "document": "rhetorical_situation + information_architecture + usable_units + evidence + next_action"
+  },
+  "source_ids": [
+    "WEB-001",
+    "WEB-002",
+    "WEB-008",
+    "WEB-009",
+    "WEB-010",
+    "BK-008",
+    "BK-013",
+    "BK-024"
+  ]
+}

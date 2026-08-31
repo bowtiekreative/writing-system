@@ -1,0 +1,1125 @@
+{
+  "title": "Syntax and Sentence Construction Rules",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "SYN-001",
+      "name": "Complete clause for formal prose",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a unit is presented as a formal prose sentence AND lacks an independent clause, THEN attach it, complete it, or label it as a fragment ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.presented_as_complete",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.independent_clause_count",
+            "operator": "eq",
+            "value": 0
+          },
+          {
+            "path": "context.genre",
+            "operator": "not_in",
+            "value": [
+              "dialogue",
+              "poetry",
+              "advertising_headline",
+              "ui_label"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "sentence",
+          "options": [
+            "attach_to_neighbor",
+            "supply_missing_subject_or_predicate",
+            "convert_to_label"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A complete sentence normally needs an independent predication.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-004",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-002",
+      "name": "Separate fused independent clauses",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF adjacent independent clauses have no valid boundary, THEN add a coordinator and punctuation, a semicolon, or a period ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.independent_clause_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "sentence.valid_boundary_count",
+            "operator": "lt",
+            "value": 1
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "sentence.clause_boundary",
+          "options": [
+            "comma_plus_coordinator",
+            "semicolon",
+            "period"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Clause boundaries keep propositions from collapsing into a run-on.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-003",
+      "name": "Prefer visible actor–action order",
+      "domain": "syntax",
+      "layer": "clause",
+      "strength": "context_default",
+      "human_logic": "IF the reader must act or identify responsibility AND no stronger reason favors passive voice, THEN place the actor before the action ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "any": [
+              {
+                "path": "context.purpose",
+                "operator": "eq",
+                "value": "instruct"
+              },
+              {
+                "path": "content.responsibility_critical",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          },
+          {
+            "path": "clause.passive_justification",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "convert",
+          "target": "clause.voice",
+          "value": "active",
+          "order": "actor_action_object"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Visible actors reduce ambiguity about responsibility.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "WEB-006",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-004",
+      "name": "Use passive voice for a reason",
+      "domain": "syntax",
+      "layer": "clause",
+      "strength": "context_default",
+      "human_logic": "IF a clause is passive, THEN retain it only when the receiver is the topic, the actor is unknown or irrelevant, blame should be softened, or domain convention requires it ELSE convert to active.",
+      "when": {
+        "path": "clause.voice",
+        "operator": "eq",
+        "value": "passive"
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "clause.passive_justification",
+          "allowed": [
+            "receiver_is_topic",
+            "actor_unknown",
+            "actor_irrelevant",
+            "tact_or_error_message",
+            "domain_convention"
+          ]
+        },
+        {
+          "action": "convert",
+          "target": "clause.voice",
+          "when": "justification_missing",
+          "value": "active"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Passive voice is a tool for information structure, not an automatic error.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-005",
+      "name": "Put conditions before instructions",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF an instruction applies only under a condition, THEN state the condition before the imperative ELSE give the action directly.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.function",
+            "operator": "eq",
+            "value": "instruction"
+          },
+          {
+            "path": "sentence.condition",
+            "operator": "exists"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "sentence.condition",
+          "destination": "before_instruction"
+        },
+        {
+          "action": "label",
+          "target": "sentence.condition",
+          "when": "high_stakes",
+          "prefix": "If"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers should know whether an action applies before they perform it.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-006",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-006",
+      "name": "One principal action per procedural step",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF a step contains multiple independently verifiable actions, THEN split them into ordered steps ELSE retain a tightly coupled action.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.function",
+            "operator": "eq",
+            "value": "procedure_step"
+          },
+          {
+            "path": "sentence.independent_action_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "sentence.actions_tightly_coupled",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "sentence",
+          "by": "independently_verifiable_action"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "One principal action per step improves scanning, recovery, and testability.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-004",
+        "WEB-006",
+        "WEB-008",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-007",
+      "name": "Limit nested clauses for general audiences",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF clause nesting exceeds two levels AND the audience is not expert-only, THEN split or promote a buried clause ELSE retain necessary complexity.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.clause_nesting_depth",
+            "operator": "gt",
+            "value": 2
+          },
+          {
+            "path": "context.audience_role",
+            "operator": "neq",
+            "value": "expert"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "sentence",
+          "preserve": "logical_connectors"
+        },
+        {
+          "action": "promote",
+          "target": "sentence.buried_main_point"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Deep nesting overloads working memory and hides logical status.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006",
+        "BK-008",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-008",
+      "name": "Given information before new information",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF a sentence introduces new information before the anchor it depends on, THEN reorder from shared context to new contribution ELSE retain a deliberate surprise.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.given_new_order",
+            "operator": "eq",
+            "value": "new_before_given"
+          },
+          {
+            "path": "sentence.surprise_intended",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "reorder",
+          "target": "sentence.information_structure",
+          "order": [
+            "given",
+            "new"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers integrate unfamiliar material more easily when it attaches to an available anchor.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-009",
+      "name": "End-weight complex material",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF a long complex phrase separates subject from verb OR delays the core relation, THEN move that weight later when meaning permits ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.heavy_constituent.position",
+            "operator": "eq",
+            "value": "before_core_relation"
+          },
+          {
+            "path": "sentence.heavy_constituent.word_count",
+            "operator": "gte",
+            "value": 8
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "sentence.heavy_constituent",
+          "destination": "later"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "English prose often processes more smoothly when long new material arrives after the core clause.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-010",
+      "name": "Convert avoidable nominalizations",
+      "domain": "syntax",
+      "layer": "clause",
+      "strength": "heuristic",
+      "human_logic": "IF an abstract noun hides a clear actor and action AND the noun is not a stable technical term, THEN convert it to a verb ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "clause.nominalization_count",
+            "operator": "gt",
+            "value": 0
+          },
+          {
+            "path": "clause.actor_hidden",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "clause.nominalization_is_term",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "convert",
+          "target": "clause.nominalization",
+          "to": "actor_plus_active_verb"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Verbs often expose agency and reduce unnecessary support words.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-013",
+        "WEB-002",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-011",
+      "name": "Remove empty openings",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF THERE IS/IT IS delays a concrete subject without serving information structure, THEN make the concrete subject the grammatical subject ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.opening",
+            "operator": "in",
+            "value": [
+              "there_is",
+              "it_is"
+            ]
+          },
+          {
+            "path": "sentence.expletive_has_discourse_function",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "promote",
+          "target": "sentence.logical_subject",
+          "to": "grammatical_subject"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A direct subject lets the sentence reach its point sooner.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-012",
+      "name": "Preserve logical connector meaning",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF two propositions are joined, THEN choose a connector whose relation matches addition, contrast, cause, condition, concession, sequence, example, or result ELSE state the relation explicitly.",
+      "when": {
+        "path": "sentence.proposition_count",
+        "operator": "gte",
+        "value": 2
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "sentence.connector",
+          "value_from": "sentence.intended_discourse_relation"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Connectors are logical operators; the wrong one changes the argument.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-013",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-013",
+      "name": "Coordinate equals; subordinate dependencies",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF two ideas have equal rhetorical rank, THEN coordinate them; IF one supplies cause, condition, time, concession, or support, THEN subordinate it ELSE use separate sentences.",
+      "when": {
+        "path": "sentence.idea_count",
+        "operator": "gte",
+        "value": 2
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.clause_relation",
+          "map": {
+            "equal": "coordination",
+            "dependent": "subordination",
+            "independent_move": "separate_sentences"
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Syntax should reveal the hierarchy the author intends.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-008",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-014",
+      "name": "Avoid ambiguous scope of only, not, and even",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a focusing or negative operator can modify more than one constituent, THEN move it directly before the intended scope ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "operator.token",
+            "operator": "in",
+            "value": [
+              "only",
+              "not",
+              "even",
+              "almost",
+              "nearly"
+            ]
+          },
+          {
+            "path": "operator.scope_ambiguous",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "operator",
+          "destination": "immediately_before_intended_scope"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Operator position can change the truth conditions of a sentence.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-007",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-015",
+      "name": "Resolve misplaced relative clause",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a relative clause can attach to the wrong noun, THEN move it beside the intended antecedent or repeat the noun ELSE retain.",
+      "when": {
+        "path": "relative_clause.attachment_ambiguous",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "relative_clause",
+          "destination": "after_antecedent"
+        },
+        {
+          "action": "replace",
+          "target": "relative_pronoun",
+          "when": "movement_insufficient",
+          "with": "antecedent_noun_phrase"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Relative-clause attachment determines which entity receives the description.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-016",
+      "name": "Keep correlative pairs balanced",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF BOTH/AND, EITHER/OR, NEITHER/NOR, or NOT ONLY/BUT ALSO joins items, THEN place each half before parallel units ELSE retain.",
+      "when": {
+        "path": "coordination.correlative_pair",
+        "operator": "exists",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "coordination.correlative_positions",
+          "require": "parallel_constituent_boundaries"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Balanced correlatives show exactly which units are alternatives or additions.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-017",
+      "name": "Avoid accidental garden paths",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF the opening strongly invites a wrong parse that must be revised later, THEN add a boundary, determiner, complementizer, or reorder ELSE retain intentional suspense.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.garden_path_risk",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.suspense_intended",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "disambiguate",
+          "target": "sentence.opening",
+          "options": [
+            "punctuate",
+            "add_marker",
+            "reorder"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Preventable reanalysis consumes attention without adding meaning.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-018",
+      "name": "Match sentence force to intent",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF the intended speech act is command, question, assertion, offer, or warning, THEN select a grammatical form that makes that act clear ELSE request intent.",
+      "when": {
+        "path": "sentence.intended_speech_act",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "sentence.mood_and_form",
+          "value_from": "sentence.intended_speech_act"
+        }
+      ],
+      "else": [
+        {
+          "action": "request_context",
+          "target": "sentence.intended_speech_act"
+        }
+      ],
+      "unless": [],
+      "because": "Readers act on what the sentence is doing, not just what its words denote.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-010",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-019",
+      "name": "Use fragments deliberately",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "creative_option",
+      "human_logic": "IF a fragment improves pace, voice, emphasis, dialogue realism, headline force, or UI economy AND its meaning is recoverable, THEN allow it ELSE complete it.",
+      "when": {
+        "path": "sentence.fragment",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "sentence.fragment_purpose",
+          "allowed": [
+            "pace",
+            "voice",
+            "emphasis",
+            "dialogue",
+            "headline",
+            "ui_label"
+          ]
+        },
+        {
+          "action": "retain",
+          "target": "sentence",
+          "when": "purpose_valid_and_meaning_recoverable"
+        },
+        {
+          "action": "complete",
+          "target": "sentence",
+          "when": "purpose_invalid_or_ambiguous"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Fragments can be effective style choices when the context supplies what grammar omits.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-005",
+        "BK-011",
+        "BK-019",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "SYN-020",
+      "name": "Split overloaded sentences by proposition",
+      "domain": "syntax",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF a sentence contains more than three major propositions OR more than one unrelated rhetorical move, THEN split at the strongest logical boundary ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "sentence.major_proposition_count",
+            "operator": "gt",
+            "value": 3
+          },
+          {
+            "path": "sentence.rhetorical_move_count",
+            "operator": "gt",
+            "value": 1
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "sentence",
+          "by": "rhetorical_move_then_logical_boundary"
+        },
+        {
+          "action": "insert",
+          "target": "new_sentence.connective",
+          "when": "relation_would_be_lost"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A sentence can be grammatical yet too dense to be usable.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-013",
+        "WEB-002",
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

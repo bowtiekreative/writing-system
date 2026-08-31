@@ -1,0 +1,263 @@
+{
+  "title": "Application Profiles",
+  "version": "1.0.0",
+  "profile_count": 7,
+  "profiles": [
+    {
+      "id": "PROFILE-GENERAL",
+      "name": "General nonfiction",
+      "priority": [
+        "accuracy",
+        "clarity",
+        "structure",
+        "evidence",
+        "voice_fit"
+      ],
+      "active_domains": [
+        "grammar",
+        "punctuation",
+        "syntax",
+        "structure",
+        "clarity",
+        "voice",
+        "argument",
+        "editing",
+        "ethics"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-GENERAL"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    },
+    {
+      "id": "PROFILE-PLAIN",
+      "name": "Plain and accessible public content",
+      "priority": [
+        "accuracy",
+        "usability",
+        "accessibility",
+        "clarity",
+        "ethics"
+      ],
+      "active_domains": [
+        "grammar",
+        "syntax",
+        "structure",
+        "clarity",
+        "accessibility",
+        "editing",
+        "ethics"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-PLAIN"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    },
+    {
+      "id": "PROFILE-TECH",
+      "name": "Technical documentation",
+      "priority": [
+        "accuracy",
+        "usability",
+        "maintainability",
+        "accessibility",
+        "clarity"
+      ],
+      "active_domains": [
+        "grammar",
+        "punctuation",
+        "syntax",
+        "structure",
+        "clarity",
+        "technical_writing",
+        "accessibility",
+        "editing",
+        "ethics"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-TECH"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    },
+    {
+      "id": "PROFILE-NARRATIVE",
+      "name": "Narrative prose",
+      "priority": [
+        "outcome",
+        "voice_fit",
+        "rhythm",
+        "structure",
+        "accuracy"
+      ],
+      "active_domains": [
+        "grammar",
+        "punctuation",
+        "syntax",
+        "voice",
+        "narrative",
+        "editing",
+        "ethics"
+      ],
+      "default_exceptions": [
+        "fragments_for_effect",
+        "dialogue_dialect",
+        "delayed_reveal",
+        "nonlinear_order"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-NARRATIVE"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    },
+    {
+      "id": "PROFILE-COPY",
+      "name": "Persuasive copy",
+      "priority": [
+        "ethics",
+        "evidence",
+        "outcome",
+        "clarity",
+        "voice_fit"
+      ],
+      "active_domains": [
+        "grammar",
+        "syntax",
+        "structure",
+        "clarity",
+        "voice",
+        "copywriting",
+        "accessibility",
+        "ethics",
+        "editing"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-COPY"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    },
+    {
+      "id": "PROFILE-SAFETY",
+      "name": "Safety-critical instruction",
+      "priority": [
+        "accuracy",
+        "ethics",
+        "usability",
+        "accessibility",
+        "evidence"
+      ],
+      "active_domains": [
+        "grammar",
+        "punctuation",
+        "syntax",
+        "structure",
+        "clarity",
+        "technical_writing",
+        "accessibility",
+        "ethics",
+        "editing"
+      ],
+      "hard_overrides": [
+        "no_figurative_ambiguity",
+        "condition_before_action",
+        "warning_before_hazard",
+        "human_review",
+        "execution_test"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-SAFETY"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    },
+    {
+      "id": "PROFILE-UI",
+      "name": "UX microcopy",
+      "priority": [
+        "usability",
+        "accessibility",
+        "clarity",
+        "voice_fit",
+        "accuracy"
+      ],
+      "active_domains": [
+        "grammar",
+        "syntax",
+        "clarity",
+        "voice",
+        "technical_writing",
+        "accessibility",
+        "ethics"
+      ],
+      "default_exceptions": [
+        "fragments_as_labels",
+        "omit_recoverable_subject"
+      ],
+      "activation": {
+        "if": {
+          "path": "context.profile_id",
+          "operator": "eq",
+          "value": "PROFILE-UI"
+        },
+        "then": [
+          "load active domains",
+          "apply priority weights",
+          "load declared exceptions"
+        ],
+        "else": "ignore profile"
+      }
+    }
+  ]
+}

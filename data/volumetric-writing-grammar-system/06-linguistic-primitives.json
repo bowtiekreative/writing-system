@@ -1,0 +1,303 @@
+{
+  "title": "Machine-Readable Linguistic Primitives",
+  "version": "1.0.0",
+  "model": "Universal Dependencies compatible surface analysis",
+  "parts_of_speech": [
+    {
+      "tag": "ADJ",
+      "name": "adjective",
+      "function": "Modifies or predicates a property."
+    },
+    {
+      "tag": "ADP",
+      "name": "adposition",
+      "function": "Marks a noun phrase relation; includes prepositions and postpositions."
+    },
+    {
+      "tag": "ADV",
+      "name": "adverb",
+      "function": "Modifies a verb, adjective, adverb, clause, or discourse relation."
+    },
+    {
+      "tag": "AUX",
+      "name": "auxiliary",
+      "function": "Adds tense, aspect, mood, voice, or related grammatical information."
+    },
+    {
+      "tag": "CCONJ",
+      "name": "coordinating_conjunction",
+      "function": "Joins units of equal syntactic status."
+    },
+    {
+      "tag": "DET",
+      "name": "determiner",
+      "function": "Marks reference, quantity, definiteness, or possession within a noun phrase."
+    },
+    {
+      "tag": "INTJ",
+      "name": "interjection",
+      "function": "Expresses reaction, greeting, or discourse signal with loose syntactic attachment."
+    },
+    {
+      "tag": "NOUN",
+      "name": "common_noun",
+      "function": "Names a class of entity, substance, event, state, or abstraction."
+    },
+    {
+      "tag": "NUM",
+      "name": "numeral",
+      "function": "Expresses number, quantity, sequence, or measure."
+    },
+    {
+      "tag": "PART",
+      "name": "particle",
+      "function": "Performs a grammatical function not covered by other closed classes."
+    },
+    {
+      "tag": "PRON",
+      "name": "pronoun",
+      "function": "Points to participants or entities without repeating a full noun phrase."
+    },
+    {
+      "tag": "PROPN",
+      "name": "proper_noun",
+      "function": "Names a specific person, place, organization, work, or other entity."
+    },
+    {
+      "tag": "PUNCT",
+      "name": "punctuation",
+      "function": "Delimits, groups, relates, or emphasizes written units."
+    },
+    {
+      "tag": "SCONJ",
+      "name": "subordinating_conjunction",
+      "function": "Marks one clause as dependent on another."
+    },
+    {
+      "tag": "SYM",
+      "name": "symbol",
+      "function": "Represents a non-word sign such as a currency or mathematical symbol."
+    },
+    {
+      "tag": "VERB",
+      "name": "verb",
+      "function": "Predicates an event, process, action, or state."
+    },
+    {
+      "tag": "X",
+      "name": "other",
+      "function": "Covers items whose part of speech cannot be determined or falls outside the inventory."
+    }
+  ],
+  "dependency_relations": [
+    {
+      "relation": "acl",
+      "name": "clausal modifier of noun"
+    },
+    {
+      "relation": "advcl",
+      "name": "adverbial clause modifier"
+    },
+    {
+      "relation": "advmod",
+      "name": "adverbial modifier"
+    },
+    {
+      "relation": "amod",
+      "name": "adjectival modifier"
+    },
+    {
+      "relation": "appos",
+      "name": "appositional modifier"
+    },
+    {
+      "relation": "aux",
+      "name": "auxiliary"
+    },
+    {
+      "relation": "case",
+      "name": "case marker"
+    },
+    {
+      "relation": "cc",
+      "name": "coordinating conjunction"
+    },
+    {
+      "relation": "ccomp",
+      "name": "clausal complement"
+    },
+    {
+      "relation": "clf",
+      "name": "classifier"
+    },
+    {
+      "relation": "compound",
+      "name": "compound relation"
+    },
+    {
+      "relation": "conj",
+      "name": "conjunct"
+    },
+    {
+      "relation": "cop",
+      "name": "copula"
+    },
+    {
+      "relation": "csubj",
+      "name": "clausal subject"
+    },
+    {
+      "relation": "dep",
+      "name": "unspecified dependency"
+    },
+    {
+      "relation": "det",
+      "name": "determiner"
+    },
+    {
+      "relation": "discourse",
+      "name": "discourse element"
+    },
+    {
+      "relation": "dislocated",
+      "name": "dislocated element"
+    },
+    {
+      "relation": "expl",
+      "name": "expletive"
+    },
+    {
+      "relation": "fixed",
+      "name": "fixed multiword expression"
+    },
+    {
+      "relation": "flat",
+      "name": "flat multiword expression"
+    },
+    {
+      "relation": "goeswith",
+      "name": "split word relation"
+    },
+    {
+      "relation": "iobj",
+      "name": "indirect object"
+    },
+    {
+      "relation": "list",
+      "name": "list relation"
+    },
+    {
+      "relation": "mark",
+      "name": "subordination marker"
+    },
+    {
+      "relation": "nmod",
+      "name": "nominal modifier"
+    },
+    {
+      "relation": "nsubj",
+      "name": "nominal subject"
+    },
+    {
+      "relation": "nummod",
+      "name": "numeric modifier"
+    },
+    {
+      "relation": "obj",
+      "name": "object"
+    },
+    {
+      "relation": "obl",
+      "name": "oblique nominal"
+    },
+    {
+      "relation": "orphan",
+      "name": "orphan in ellipsis"
+    },
+    {
+      "relation": "parataxis",
+      "name": "loosely joined clause"
+    },
+    {
+      "relation": "punct",
+      "name": "punctuation"
+    },
+    {
+      "relation": "reparandum",
+      "name": "overridden disfluency"
+    },
+    {
+      "relation": "root",
+      "name": "sentence root"
+    },
+    {
+      "relation": "vocative",
+      "name": "direct address"
+    },
+    {
+      "relation": "xcomp",
+      "name": "open clausal complement"
+    }
+  ],
+  "morphology_features": [
+    "person",
+    "number",
+    "gender",
+    "case",
+    "tense",
+    "aspect",
+    "mood",
+    "voice",
+    "verb_form",
+    "degree",
+    "definiteness",
+    "polarity",
+    "possessive",
+    "pronoun_type"
+  ],
+  "clause_roles": [
+    "predicate",
+    "agent",
+    "experiencer",
+    "patient",
+    "theme",
+    "recipient",
+    "beneficiary",
+    "instrument",
+    "location",
+    "source",
+    "goal",
+    "time",
+    "manner",
+    "cause",
+    "purpose",
+    "condition",
+    "concession"
+  ],
+  "information_structure": [
+    "topic",
+    "focus",
+    "given",
+    "new",
+    "contrast",
+    "background"
+  ],
+  "discourse_relations": [
+    "addition",
+    "sequence",
+    "cause",
+    "effect",
+    "contrast",
+    "concession",
+    "condition",
+    "example",
+    "elaboration",
+    "restatement",
+    "comparison",
+    "purpose",
+    "summary"
+  ],
+  "source_ids": [
+    "WEB-001"
+  ]
+}

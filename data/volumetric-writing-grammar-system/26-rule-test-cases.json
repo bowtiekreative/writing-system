@@ -1,0 +1,407 @@
+{
+  "title": "Rule Test Cases and Minimal Pairs",
+  "version": "1.0.0",
+  "test_count": 25,
+  "tests": [
+    {
+      "id": "TST-001",
+      "rule_id": "GRM-001",
+      "before": "The list of items are ready.",
+      "after": "The list of items is ready.",
+      "reason": "The head subject is singular.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "The list of items is ready."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-002",
+      "rule_id": "GRM-005",
+      "before": "Maya told Priya that she had won.",
+      "after": "Maya told Priya, “You won.”",
+      "reason": "The intended referent is made explicit; another intended meaning would require a different repair.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Maya told Priya, “You won.”"
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-003",
+      "rule_id": "GRM-018",
+      "before": "After reviewing the proposal, the price seemed high.",
+      "after": "After reviewing the proposal, we thought the price seemed high.",
+      "reason": "The reviewer becomes the subject.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "After reviewing the proposal, we thought the price seemed high."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-004",
+      "rule_id": "PUN-002",
+      "before": "The server stopped, the queue kept growing.",
+      "after": "The server stopped, and the queue kept growing.",
+      "reason": "Two independent clauses receive a valid boundary.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "The server stopped, and the queue kept growing."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-005",
+      "rule_id": "PUN-005",
+      "before": "My brother who lives in Calgary called.",
+      "after": "My brother, who lives in Calgary, called.",
+      "reason": "Use only when the speaker has one contextually identified brother; restrictiveness changes punctuation.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "My brother, who lives in Calgary, called."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-006",
+      "rule_id": "SYN-005",
+      "before": "Select Delete if you no longer need the file.",
+      "after": "If you no longer need the file, select Delete.",
+      "reason": "The condition appears before the potentially destructive action.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "If you no longer need the file, select Delete."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-007",
+      "rule_id": "SYN-010",
+      "before": "The implementation of the update was performed by the team.",
+      "after": "The team implemented the update.",
+      "reason": "Actor and action become visible.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "The team implemented the update."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-008",
+      "rule_id": "STR-008",
+      "before": "Heading: More information; section: Reset your password.",
+      "after": "Heading: Reset your password",
+      "reason": "The heading predicts the task.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Heading: Reset your password"
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-009",
+      "rule_id": "CLR-007",
+      "before": "We will reply soon.",
+      "after": "We will reply within two business days.",
+      "reason": "A decision-relevant time becomes testable.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "We will reply within two business days."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-010",
+      "rule_id": "CLR-014",
+      "before": "This treatment works.",
+      "after": "In the cited trial, this treatment improved the measured outcome for the studied group.",
+      "reason": "Scope and evidence boundaries are restored.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "In the cited trial, this treatment improved the measured outcome for the studied group."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-011",
+      "rule_id": "VOI-003",
+      "before": "The user should enter their email.",
+      "after": "Enter your email.",
+      "reason": "The reader is addressed directly.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Enter your email."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-012",
+      "rule_id": "NAR-005",
+      "before": "She entered the room, looked around, and left unchanged.",
+      "after": "She entered to apologize; she left after discovering the letter was gone.",
+      "reason": "The scene changes goal-relevant knowledge and plan.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "She entered to apologize; she left after discovering the letter was gone."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-013",
+      "rule_id": "ARG-008",
+      "before": "People who carry umbrellas are near rain; umbrellas cause rain.",
+      "after": "Umbrella use is associated with rain because people carry umbrellas when rain is likely.",
+      "reason": "The causal claim becomes an association with a plausible direction.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Umbrella use is associated with rain because people carry umbrellas when rain is likely."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-014",
+      "rule_id": "TEC-005",
+      "before": "1. Open Settings. Requirement: You need administrator access.",
+      "after": "Prerequisite: Administrator access. 1. Open Settings.",
+      "reason": "The prerequisite precedes execution.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Prerequisite: Administrator access. 1. Open Settings."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-015",
+      "rule_id": "TEC-011",
+      "before": "Click Save.",
+      "after": "Select Save.",
+      "reason": "The instruction works across input methods.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Select Save."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-016",
+      "rule_id": "TEC-009",
+      "before": "Cause: The token expired. Fix it.",
+      "after": "Symptom: Sign-in returns “token expired.” Generate a new token, retry sign-in, and confirm the account page opens.",
+      "reason": "Troubleshooting starts from observation and ends with verification.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Symptom: Sign-in returns “token expired.” Generate a new token, retry sign-in, and confirm the account page opens."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-017",
+      "rule_id": "CPY-006",
+      "before": "The best analytics platform.",
+      "after": "See conversion sources by campaign, page, and form in one report.",
+      "reason": "Generic superiority becomes a specific verifiable capability, not an unsupported ranking.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "See conversion sources by campaign, page, and form in one report."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-018",
+      "rule_id": "CPY-013",
+      "before": "Only three spots left!",
+      "after": "Three onboarding appointments remain for September; booking closes when they are filled.",
+      "reason": "Use only when operations verify the capacity and period.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Three onboarding appointments remain for September; booking closes when they are filled."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-019",
+      "rule_id": "ACC-006",
+      "before": "Heading: Details",
+      "after": "Heading: Eligibility requirements",
+      "reason": "The heading works out of context.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Heading: Eligibility requirements"
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-020",
+      "rule_id": "ACC-009",
+      "before": "Choose the green button on the right.",
+      "after": "Select Submit order.",
+      "reason": "The label survives color perception and reflow.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Select Submit order."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-021",
+      "rule_id": "ACC-010",
+      "before": "Invalid input.",
+      "after": "Enter an email in the format name@example.com. Your other form entries are still saved.",
+      "reason": "The error explains recovery and state.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Enter an email in the format name@example.com. Your other form entries are still saved."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-022",
+      "rule_id": "ETH-004",
+      "before": "Plans start at $10.",
+      "after": "Plans start at $10 per month for one user; taxes are extra.",
+      "reason": "Material price conditions appear with the price.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Plans start at $10 per month for one user; taxes are extra."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-023",
+      "rule_id": "EDT-003",
+      "before": "Source: The result may reduce risk. Edit: The result prevents harm.",
+      "after": "The result may reduce risk.",
+      "reason": "The edit must not inflate modality or evidence.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "The result may reduce risk."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-024",
+      "rule_id": "EDT-007",
+      "before": "Jordan asked Lee to revise their section.",
+      "after": "Query: Does “their” refer to Jordan, Lee, or a jointly owned section?",
+      "reason": "The system asks rather than inventing the referent.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Query: Does “their” refer to Jordan, Lee, or a jointly owned section?"
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    },
+    {
+      "id": "TST-025",
+      "rule_id": "LTX-005",
+      "before": "Revision is shorter but removes a safety condition.",
+      "after": "Reject the revision and restore the condition.",
+      "reason": "Outcome gates override local concision.",
+      "assertion": {
+        "if": {
+          "path": "output",
+          "operator": "eq",
+          "value": "Reject the revision and restore the condition."
+        },
+        "then": "pass",
+        "else": "review"
+      }
+    }
+  ]
+}

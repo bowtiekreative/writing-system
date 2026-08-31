@@ -1,0 +1,1172 @@
+{
+  "title": "Clarity, Precision, and Plain-Language Rules",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "CLR-001",
+      "name": "Prefer the precise familiar word",
+      "domain": "clarity",
+      "layer": "word",
+      "strength": "context_default",
+      "human_logic": "IF two words are equally accurate AND one is more familiar to the audience, THEN use the familiar word ELSE keep the precision-bearing term.",
+      "when": {
+        "all": [
+          {
+            "path": "word.candidate_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "word.candidates.equal_accuracy",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "word",
+          "by": "audience_familiarity"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Familiarity reduces decoding effort when precision is unchanged.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-004",
+        "WEB-006",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-002",
+      "name": "Define necessary jargon",
+      "domain": "clarity",
+      "layer": "word",
+      "strength": "context_default",
+      "human_logic": "IF a domain term is necessary AND the intended reader may not know it, THEN define it at first use and use it consistently ELSE replace it with plain language.",
+      "when": {
+        "all": [
+          {
+            "path": "term.domain_specific",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "term.necessary",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "audience.term_familiarity",
+            "operator": "in",
+            "value": [
+              "low",
+              "unknown"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "define",
+          "target": "term",
+          "position": "first_use"
+        },
+        {
+          "action": "retain",
+          "target": "term",
+          "require": "consistent_use"
+        }
+      ],
+      "else": [
+        {
+          "action": "replace",
+          "target": "term",
+          "with": "plain_equivalent"
+        }
+      ],
+      "unless": [],
+      "because": "A necessary term can teach; unnecessary jargon only transfers work to the reader.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-003",
+        "WEB-004",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-003",
+      "name": "Expand unfamiliar abbreviations",
+      "domain": "clarity",
+      "layer": "word",
+      "strength": "context_default",
+      "human_logic": "IF an abbreviation is not universally familiar to the audience, THEN spell it out at first use and pair it with the abbreviation ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "abbreviation.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "audience.abbreviation_familiarity",
+            "operator": "in",
+            "value": [
+              "low",
+              "unknown"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "expand",
+          "target": "abbreviation",
+          "position": "first_use",
+          "format": "full_term (ABBR)"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Expansion creates a stable mapping before the shortened form is reused.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-004",
+      "name": "One term per concept",
+      "domain": "clarity",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF multiple terms refer to the same technical concept without rhetorical need, THEN select one preferred term and replace the variants ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "concept.label_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "concept.synonym_variation_needed",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "normalize",
+          "target": "concept.labels",
+          "value_from": "terminology.preferred_term"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Terminology variation can look like conceptual variation in technical and translated content.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-004",
+        "BK-024",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-005",
+      "name": "One concept per term",
+      "domain": "clarity",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF the same term denotes multiple concepts in one context, THEN rename or qualify the concepts ELSE retain.",
+      "when": {
+        "path": "term.concept_count_in_context",
+        "operator": "gt",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "disambiguate",
+          "target": "term",
+          "options": [
+            "rename",
+            "qualify",
+            "define_scoped_senses"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Polysemy becomes a defect when readers cannot tell which sense applies.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-004",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-006",
+      "name": "Replace vague reference words",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF THIS, THAT, IT, THEY, FORMER, or LATTER has an uncertain referent, THEN repeat or summarize the referent ELSE retain.",
+      "when": {
+        "path": "reference_expression.ambiguity",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "reference_expression",
+          "value_from": "intended_referent.concise_label"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Reference words save space only when the antecedent is obvious.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-008",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-007",
+      "name": "Quantify actionable vagueness",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF vague quantity, frequency, time, or probability affects a decision, THEN provide a range, threshold, date, or defined category ELSE retain approximate language.",
+      "when": {
+        "all": [
+          {
+            "path": "expression.type",
+            "operator": "in",
+            "value": [
+              "quantity",
+              "frequency",
+              "time",
+              "probability"
+            ]
+          },
+          {
+            "path": "expression.vague",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "expression.affects_decision",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "specify",
+          "target": "expression",
+          "options": [
+            "range",
+            "threshold",
+            "exact_date",
+            "defined_category"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Decision-relevant vagueness prevents consistent action.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-024",
+        "BK-025",
+        "WEB-002"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-008",
+      "name": "Use concrete examples after abstractions",
+      "domain": "clarity",
+      "layer": "paragraph",
+      "strength": "heuristic",
+      "human_logic": "IF a central abstraction lacks a concrete instance AND the audience knowledge gap is moderate or large, THEN add one representative example ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.central_abstraction",
+            "operator": "exists",
+            "value": true
+          },
+          {
+            "path": "paragraph.example_count",
+            "operator": "eq",
+            "value": 0
+          },
+          {
+            "path": "context.knowledge_gap",
+            "operator": "in",
+            "value": [
+              "moderate",
+              "large",
+              "unknown"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "paragraph.example",
+          "require": [
+            "representative",
+            "clearly_labeled",
+            "boundary_not_overgeneralized"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Examples let readers test an abstract model against a concrete case.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-013",
+        "BK-037"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-009",
+      "name": "State implied steps for novice readers",
+      "domain": "clarity",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF success requires an unstated inference that a novice may not make, THEN state the step or prerequisite ELSE retain expert compression.",
+      "when": {
+        "all": [
+          {
+            "path": "content.required_inference",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "context.audience_role",
+            "operator": "in",
+            "value": [
+              "novice",
+              "learner"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "expand",
+          "target": "content",
+          "include": "missing_inference_or_step"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Expertise hides intermediate steps that novices still need.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006",
+        "BK-020",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-010",
+      "name": "Prefer positive formulation",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF a negative construction can be stated positively with the same meaning and no safety loss, THEN use the positive form ELSE retain necessary prohibitions.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.negative_form",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.positive_equivalent_same_meaning",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.prohibition_needed",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "sentence.polarity",
+          "value": "positive_equivalent"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Positive statements often reduce mental reversal.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "WEB-002",
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-011",
+      "name": "Put the main point before qualifications",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF qualifications delay the main clause beyond easy recovery, THEN state the core point first and attach the qualifications clearly ELSE retain legally necessary order.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.pre_main_clause_word_count",
+            "operator": "gt",
+            "value": 20
+          },
+          {
+            "path": "sentence.main_point_delayed",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "context.required_legal_order",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "sentence.main_clause",
+          "destination": "earlier"
+        },
+        {
+          "action": "attach",
+          "target": "sentence.qualifications",
+          "with": "explicit_scope"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers need the proposition before they can correctly interpret its limits.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-013",
+        "WEB-002"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-012",
+      "name": "Delete redundant meaning",
+      "domain": "clarity",
+      "layer": "phrase",
+      "strength": "heuristic",
+      "human_logic": "IF two adjacent elements express the same necessary meaning AND repetition adds no emphasis, rhythm, definition, or legal precision, THEN delete the weaker duplicate ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "phrase.semantic_duplication",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "phrase.repetition_function",
+            "operator": "eq",
+            "value": "none"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "delete",
+          "target": "phrase.weaker_duplicate"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Redundancy increases length without increasing usable information.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-005",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-013",
+      "name": "Compress throat-clearing",
+      "domain": "clarity",
+      "layer": "paragraph",
+      "strength": "heuristic",
+      "human_logic": "IF an opening comments on the act of writing rather than advancing the subject, THEN delete it or replace it with the point ELSE retain necessary framing.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.opening.type",
+            "operator": "eq",
+            "value": "metadiscourse"
+          },
+          {
+            "path": "paragraph.opening.necessary_for_navigation",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "delete",
+          "target": "paragraph.opening"
+        },
+        {
+          "action": "promote",
+          "target": "paragraph.point"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Unnecessary preambles delay value and weaken authority.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-013",
+        "WEB-002"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-014",
+      "name": "Retain necessary qualifiers",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF removing a qualifier changes claim truth, scope, uncertainty, population, or time, THEN retain or strengthen it ELSE it may be compressed.",
+      "when": {
+        "all": [
+          {
+            "path": "qualifier.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "path": "qualifier.affects_truth",
+                "operator": "eq",
+                "value": true
+              },
+              {
+                "path": "qualifier.affects_scope",
+                "operator": "eq",
+                "value": true
+              },
+              {
+                "path": "qualifier.affects_uncertainty",
+                "operator": "eq",
+                "value": true
+              },
+              {
+                "path": "qualifier.affects_time",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "retain",
+          "target": "qualifier"
+        },
+        {
+          "action": "move",
+          "target": "qualifier",
+          "when": "scope_ambiguous",
+          "destination": "next_to_claim"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Concision must not turn a bounded claim into a false universal.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-026",
+        "WEB-012"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-015",
+      "name": "Use readability scores diagnostically",
+      "domain": "clarity",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF a readability metric flags difficulty, THEN inspect vocabulary, syntax, concepts, and assumed knowledge; do not simplify solely to hit a number ELSE retain.",
+      "when": {
+        "path": "document.readability_metric.flag",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "diagnose",
+          "target": "document",
+          "dimensions": [
+            "vocabulary",
+            "syntax",
+            "concept_density",
+            "knowledge_gap"
+          ]
+        },
+        {
+          "action": "test_with_reader",
+          "target": "document"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A formula estimates surface difficulty but cannot judge accuracy, dignity, or conceptual necessity.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-006",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-016",
+      "name": "Match specificity to decision need",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF the reader must choose or act, THEN include the distinctions that can change that choice and omit distinctions that cannot ELSE select detail for understanding or experience.",
+      "when": {
+        "path": "document.expected_outcome",
+        "operator": "in",
+        "value": [
+          "decision",
+          "action"
+        ]
+      },
+      "then": [
+        {
+          "action": "filter",
+          "target": "sentence.details",
+          "keep_when": "can_change_reader_choice_or_execution"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Useful detail changes comprehension, judgment, or action.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-024",
+        "BK-026",
+        "WEB-009"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-017",
+      "name": "Make dates and units unambiguous",
+      "domain": "clarity",
+      "layer": "word",
+      "strength": "hard_constraint",
+      "human_logic": "IF a date, time, quantity, currency, or unit could be interpreted differently by locale, THEN use an unambiguous format and label ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "value.type",
+            "operator": "in",
+            "value": [
+              "date",
+              "time",
+              "quantity",
+              "currency",
+              "unit"
+            ]
+          },
+          {
+            "path": "value.locale_ambiguity",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "normalize",
+          "target": "value",
+          "standard": "declared_locale_or_ISO_compatible"
+        },
+        {
+          "action": "label",
+          "target": "value.unit_or_zone"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Ambiguous measurements create operational and financial errors.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-018",
+      "name": "Test instructions by execution",
+      "domain": "clarity",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF content instructs a real task, THEN have a representative reader or test environment execute it and record failures ELSE review semantically.",
+      "when": {
+        "path": "section.topic_type",
+        "operator": "eq",
+        "value": "task"
+      },
+      "then": [
+        {
+          "action": "test",
+          "target": "section",
+          "method": "representative_execution"
+        },
+        {
+          "action": "record",
+          "target": "section.test_failures"
+        },
+        {
+          "action": "revise",
+          "target": "section",
+          "from": "observed_failures"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "An instruction is usable only if it produces the intended result in practice.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-008",
+        "BK-021",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-019",
+      "name": "Prefer literal language in critical content",
+      "domain": "clarity",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF content is safety-critical, translated, or for a broad cognitive-accessibility audience, THEN replace figurative idiom with literal language ELSE retain purposeful imagery.",
+      "when": {
+        "path": "context.reading_condition",
+        "operator": "in",
+        "value": [
+          "translated",
+          "under_stress"
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "sentence.idiom_or_metaphor",
+          "with": "literal_equivalent",
+          "when": "misread_risk"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Idioms and figurative shortcuts may not transfer across language, culture, or cognitive profile.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006",
+        "WEB-003",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CLR-020",
+      "name": "Separate fact, inference, and opinion",
+      "domain": "clarity",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF a paragraph contains facts, inferences, or opinions, THEN mark each proposition’s epistemic status when confusion would affect trust or decisions ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.epistemic_type_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "paragraph.status_confusion_consequential",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "label",
+          "target": "paragraph.propositions",
+          "labels": [
+            "documented_fact",
+            "inference",
+            "opinion",
+            "prediction"
+          ]
+        },
+        {
+          "action": "cite",
+          "target": "documented_facts"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers should know what is observed, concluded, believed, or forecast.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

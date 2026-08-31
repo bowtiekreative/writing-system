@@ -1,0 +1,1170 @@
+{
+  "title": "Paragraph, Section, and Document Architecture",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "STR-001",
+      "name": "One controlling move per paragraph",
+      "domain": "structure",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF a paragraph performs more than one unrelated rhetorical move, THEN split it at the move boundary ELSE retain.",
+      "when": {
+        "path": "paragraph.unrelated_rhetorical_move_count",
+        "operator": "gt",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "paragraph",
+          "by": "rhetorical_move"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Paragraph boundaries tell readers when the discourse changes jobs.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-013",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-002",
+      "name": "Expose the paragraph point",
+      "domain": "structure",
+      "layer": "paragraph",
+      "strength": "heuristic",
+      "human_logic": "IF the paragraph’s controlling point is absent or recoverable only after rereading, THEN state or move it to a strategic position ELSE retain an intentional delayed reveal.",
+      "when": {
+        "all": [
+          {
+            "any": [
+              {
+                "path": "paragraph.controlling_point",
+                "operator": "missing",
+                "value": true
+              },
+              {
+                "path": "paragraph.point_requires_reread",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          },
+          {
+            "path": "paragraph.delayed_reveal_intended",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "paragraph.controlling_sentence",
+          "position": "first_or_contextually_emphatic"
+        },
+        {
+          "action": "move",
+          "target": "paragraph.existing_point",
+          "when": "present_but_buried",
+          "destination": "strategic_position"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers need a frame for interpreting details.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-013",
+        "WEB-002"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-003",
+      "name": "Support consequential claims",
+      "domain": "structure",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF a paragraph makes a consequential factual claim, THEN provide evidence, cite it, qualify it, or remove the claim ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.claim.type",
+            "operator": "eq",
+            "value": "factual"
+          },
+          {
+            "path": "paragraph.claim.consequence",
+            "operator": "in",
+            "value": [
+              "medium",
+              "high"
+            ]
+          },
+          {
+            "path": "paragraph.claim.support_status",
+            "operator": "neq",
+            "value": "adequate"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "request_evidence",
+          "target": "paragraph.claim"
+        },
+        {
+          "action": "qualify",
+          "target": "paragraph.claim",
+          "when": "partial_evidence"
+        },
+        {
+          "action": "delete",
+          "target": "paragraph.claim",
+          "when": "unsupported"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Claim strength must not exceed available support.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-004",
+      "name": "Keep evidence beside the claim",
+      "domain": "structure",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF evidence is separated from the claim it supports by unrelated material, THEN move it closer or label the relation ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "evidence.supported_claim_id",
+            "operator": "exists"
+          },
+          {
+            "path": "evidence.distance_from_claim",
+            "operator": "gt",
+            "value": 1
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "evidence",
+          "destination": "adjacent_to_supported_claim"
+        },
+        {
+          "action": "insert",
+          "target": "evidence.relationship_label"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Proximity reduces the risk that readers attach evidence to the wrong proposition.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-025",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-005",
+      "name": "Use transitions that name the relation",
+      "domain": "structure",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF adjacent paragraphs have a meaningful but unstated relation, THEN add a transition that expresses that relation ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.previous",
+            "operator": "exists"
+          },
+          {
+            "path": "paragraph.relation_to_previous",
+            "operator": "neq",
+            "value": "none"
+          },
+          {
+            "path": "paragraph.relation_signaled",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "paragraph.transition",
+          "value_from": "paragraph.relation_to_previous"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A transition should encode logic, not merely occupy the opening.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-013",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-006",
+      "name": "Delete orphan paragraphs",
+      "domain": "structure",
+      "layer": "paragraph",
+      "strength": "heuristic",
+      "human_logic": "IF a paragraph neither advances the purpose nor supports another necessary move, THEN delete or relocate it ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.advances_document_purpose",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "paragraph.supports_required_move",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "delete",
+          "target": "paragraph"
+        },
+        {
+          "action": "move",
+          "target": "paragraph",
+          "when": "useful_elsewhere",
+          "destination": "appropriate_section"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Interesting material is still noise when it does not serve the document.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-011",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-007",
+      "name": "Section answers one reader question",
+      "domain": "structure",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF a section answers multiple unrelated reader questions, THEN split and label them ELSE retain.",
+      "when": {
+        "path": "section.unrelated_reader_question_count",
+        "operator": "gt",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "section",
+          "by": "reader_question"
+        },
+        {
+          "action": "generate",
+          "target": "section.headings",
+          "from": "reader_questions"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Question-based sections improve findability and reuse.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-008",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-008",
+      "name": "Heading predicts content",
+      "domain": "structure",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a heading does not accurately predict its section, THEN rename the heading or repair the section ELSE retain.",
+      "when": {
+        "path": "section.heading_content_match",
+        "operator": "eq",
+        "value": false
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "section.heading",
+          "value_from": "section.primary_reader_question"
+        },
+        {
+          "action": "flag",
+          "target": "section",
+          "message": "Choose whether the heading or content represents intended scope."
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A misleading heading damages navigation and trust.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-005",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-009",
+      "name": "Maintain heading hierarchy",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF heading levels skip or reflect visual size rather than logical nesting, THEN repair the hierarchy ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "document.heading_level_skip",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "document.headings_used_for_visual_style",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "document.heading_tree",
+          "require": "logical_nesting"
+        },
+        {
+          "action": "separate",
+          "target": "presentation_from_semantics"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Assistive technology and scanning readers depend on a coherent outline.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-010",
+      "name": "Front-load user value",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF scanning readers must pass background before reaching the answer, action, or benefit, THEN move the needed content earlier ELSE retain intentional narrative suspense.",
+      "when": {
+        "all": [
+          {
+            "path": "context.reading_condition",
+            "operator": "in",
+            "value": [
+              "scanning",
+              "mobile",
+              "interrupted",
+              "under_stress"
+            ]
+          },
+          {
+            "path": "document.primary_value_position",
+            "operator": "neq",
+            "value": "early"
+          },
+          {
+            "path": "context.genre",
+            "operator": "neq",
+            "value": "narrative"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "document.primary_value",
+          "destination": "early"
+        },
+        {
+          "action": "compress",
+          "target": "document.preamble"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Scanning readers decide quickly whether the content serves their need.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-004",
+        "WEB-005"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-011",
+      "name": "Order by reader task",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF the document supports an action, THEN order information by the reader’s task rather than the organization’s internal structure ELSE select chronological, causal, spatial, or importance order.",
+      "when": {
+        "path": "document.supports_reader_action",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "reorder",
+          "target": "document.sections",
+          "by": "reader_task_sequence"
+        }
+      ],
+      "else": [
+        {
+          "action": "select",
+          "target": "document.organizing_principle",
+          "options": [
+            "chronology",
+            "causality",
+            "space",
+            "importance",
+            "comparison"
+          ]
+        }
+      ],
+      "unless": [],
+      "because": "Reader-centered order makes information usable.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-008",
+        "BK-020",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-012",
+      "name": "Introduce lists with a clear purpose",
+      "domain": "structure",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF a list appears, THEN make its category or task clear in a heading or lead-in ELSE retain.",
+      "when": {
+        "path": "list.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "list.introduction",
+          "require": "clear_category_or_task"
+        },
+        {
+          "action": "insert",
+          "target": "list.lead_in",
+          "when": "missing"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers need to know what the items have in common.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-013",
+      "name": "Use numbered lists for order or rank",
+      "domain": "structure",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF list order changes meaning, sequence, priority, or reference, THEN number the items ELSE use bullets or a table.",
+      "when": {
+        "path": "list.order_semantic",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "list.marker",
+          "value": "numbered"
+        }
+      ],
+      "else": [
+        {
+          "action": "select",
+          "target": "list.structure",
+          "options": [
+            "bulleted",
+            "definition_list",
+            "table"
+          ]
+        }
+      ],
+      "unless": [],
+      "because": "Numbering asserts order; bullets assert membership without order.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-014",
+      "name": "Keep list items parallel",
+      "domain": "structure",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF list items perform the same role but begin with mismatched grammatical forms, THEN align them ELSE retain justified variation.",
+      "when": {
+        "all": [
+          {
+            "path": "list.item_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "list.items_same_role",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "list.grammatical_parallelism",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "list.item_openings",
+          "value_from": "clearest_item_pattern"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Parallel structure makes lists faster to scan and compare.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-004",
+        "BK-001",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-015",
+      "name": "Choose table only for cross-comparison",
+      "domain": "structure",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF readers must compare repeated fields across three or more items, THEN use a table; IF order or action matters, use a list ELSE use prose.",
+      "when": {
+        "all": [
+          {
+            "path": "content.entity_count",
+            "operator": "gte",
+            "value": 3
+          },
+          {
+            "path": "content.repeated_field_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "content.comparison_task",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "convert",
+          "target": "content.structure",
+          "to": "table"
+        }
+      ],
+      "else": [
+        {
+          "action": "select",
+          "target": "content.structure",
+          "by": "reader_task",
+          "map": {
+            "sequence": "numbered_list",
+            "simple_set": "bullets",
+            "explanation": "prose"
+          }
+        }
+      ],
+      "unless": [],
+      "because": "Tables reveal repeated-field comparisons but impede linear reading when comparison is not the task.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-025",
+        "BK-026",
+        "WEB-005"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-016",
+      "name": "Provide a long-document summary",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF a document is long, high-stakes, or cognitively dense, THEN add an accurate summary and navigation ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "document.word_count",
+            "operator": "gte",
+            "value": 2500
+          },
+          {
+            "path": "context.stakes",
+            "operator": "in",
+            "value": [
+              "high",
+              "safety_critical"
+            ]
+          },
+          {
+            "path": "document.concept_density",
+            "operator": "eq",
+            "value": "high"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "document.summary",
+          "position": "front",
+          "include": [
+            "purpose",
+            "key_points",
+            "actions_or_decisions"
+          ]
+        },
+        {
+          "action": "insert",
+          "target": "document.navigation",
+          "when": "multiple_sections"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A summary supports orientation, memory, and selective reading.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-017",
+      "name": "End with the intended next state",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF the document expects a decision or action, THEN end with the next action, owner, timing, and success condition ELSE close by reinforcing the controlling meaning.",
+      "when": {
+        "path": "document.expected_outcome",
+        "operator": "in",
+        "value": [
+          "decision",
+          "action"
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "document.close",
+          "include": [
+            "next_action",
+            "owner",
+            "timing",
+            "success_condition"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "align",
+          "target": "document.close",
+          "with": "controlling_meaning"
+        }
+      ],
+      "unless": [],
+      "because": "A document should route the reader into the intended outcome.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-025",
+        "BK-026",
+        "BK-034"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-018",
+      "name": "Separate reusable topics",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF a unit has one subject, independent value, and repeated reuse, THEN make it a standalone topic with links ELSE keep it in context.",
+      "when": {
+        "all": [
+          {
+            "path": "content.single_subject",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "content.independent_value",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "content.reuse_frequency",
+            "operator": "gte",
+            "value": 2
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "extract",
+          "target": "content",
+          "to": "reusable_topic"
+        },
+        {
+          "action": "link",
+          "target": "original_locations",
+          "to": "reusable_topic"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Topic-level reuse reduces duplication and drift.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-023",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-019",
+      "name": "Preserve document promise and payoff",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF the opening promises information, transformation, evidence, or entertainment, THEN deliver or revise that promise ELSE retain.",
+      "when": {
+        "path": "document.opening_promise",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "document.promise_payoff_match"
+        },
+        {
+          "action": "repair",
+          "target": "document",
+          "when": "mismatch",
+          "options": [
+            "deliver_missing_payoff",
+            "narrow_promise"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A broken promise damages coherence and trust.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-016",
+        "BK-030",
+        "BK-031"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "STR-020",
+      "name": "Apply progressive disclosure",
+      "domain": "structure",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF novice and expert readers share a document, THEN put the essential path first and route detail to optional layers ELSE match one depth to the known audience.",
+      "when": {
+        "all": [
+          {
+            "path": "document.audience_role_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "document.audience_roles",
+            "operator": "contains",
+            "value": "novice"
+          },
+          {
+            "path": "document.audience_roles",
+            "operator": "contains",
+            "value": "expert"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "layer",
+          "target": "document",
+          "levels": [
+            "essential",
+            "explanation",
+            "reference_detail"
+          ]
+        },
+        {
+          "action": "link",
+          "target": "layers"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Layering lets readers choose depth without forcing one group through another group’s material.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-008",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

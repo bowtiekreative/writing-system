@@ -1,0 +1,1131 @@
+{
+  "title": "Technical Writing and Documentation Rules",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "TEC-001",
+      "name": "Choose an information type",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a technical topic is being created, THEN classify it as concept, task, reference, troubleshooting, glossary, or mixed with explicit boundaries ELSE do not draft a generic blob.",
+      "when": {
+        "path": "section.domain",
+        "operator": "eq",
+        "value": "technical"
+      },
+      "then": [
+        {
+          "action": "classify",
+          "target": "section.topic_type",
+          "types": [
+            "concept",
+            "task",
+            "reference",
+            "troubleshooting",
+            "glossary",
+            "mixed"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Information types align structure with the reader’s question.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-023",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-002",
+      "name": "Concept answers what and why",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF the reader asks what something is or why it matters, THEN use a concept topic with definition, model, relationship, boundary, and example ELSE select another type.",
+      "when": {
+        "path": "section.reader_question",
+        "operator": "in",
+        "value": [
+          "what_is",
+          "why_does_it_matter",
+          "how_does_it_work"
+        ]
+      },
+      "then": [
+        {
+          "action": "select_template",
+          "target": "section",
+          "template": "concept",
+          "slots": [
+            "definition",
+            "model",
+            "relationships",
+            "boundaries",
+            "example"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Concept topics build the mental model needed for later action or reference.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-003",
+      "name": "Task answers how to achieve a goal",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF the reader wants to achieve an outcome, THEN use a task topic with goal, prerequisites, steps, results, recovery, and verification ELSE select another type.",
+      "when": {
+        "path": "section.reader_question",
+        "operator": "eq",
+        "value": "how_do_i"
+      },
+      "then": [
+        {
+          "action": "select_template",
+          "target": "section",
+          "template": "task",
+          "slots": [
+            "goal",
+            "prerequisites",
+            "steps",
+            "expected_results",
+            "recovery",
+            "verification"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Task structure follows execution.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-021",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-004",
+      "name": "Reference supports lookup",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF the reader needs facts about an entity or interface, THEN use stable repeated fields, valid values, defaults, constraints, examples, and links ELSE select another type.",
+      "when": {
+        "path": "section.reader_question",
+        "operator": "in",
+        "value": [
+          "what_are_the_fields",
+          "what_values_are_valid",
+          "what_does_this_mean"
+        ]
+      },
+      "then": [
+        {
+          "action": "select_template",
+          "target": "section",
+          "template": "reference",
+          "slots": [
+            "definition",
+            "syntax",
+            "fields",
+            "valid_values",
+            "defaults",
+            "constraints",
+            "examples",
+            "related"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Reference content optimizes exact lookup and comparison.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-023",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-005",
+      "name": "Prerequisites before steps",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a task requires permissions, state, tools, knowledge, inputs, or safety conditions, THEN list them before step 1 ELSE state that none are required only when useful.",
+      "when": {
+        "path": "section.topic_type",
+        "operator": "eq",
+        "value": "task"
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "section.prerequisites",
+          "destination": "before_steps"
+        },
+        {
+          "action": "complete",
+          "target": "section.prerequisites",
+          "fields": [
+            "permissions",
+            "state",
+            "tools",
+            "knowledge",
+            "inputs",
+            "safety"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A task can fail before it starts when preconditions are hidden.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-021",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-006",
+      "name": "Imperative starts the step",
+      "domain": "technical_writing",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF the reader performs a procedural action, THEN start with a specific imperative verb and name the object ELSE name the actual actor.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.function",
+            "operator": "eq",
+            "value": "procedure_step"
+          },
+          {
+            "path": "sentence.actor",
+            "operator": "eq",
+            "value": "reader"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "reorder",
+          "target": "sentence",
+          "pattern": "imperative_verb + object + necessary_parameters + expected_result"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Action-first steps are scannable and unambiguous.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-007",
+      "name": "Expected result follows uncertain action",
+      "domain": "technical_writing",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF a step’s success is not self-evident, THEN state the observable result immediately after it ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.function",
+            "operator": "eq",
+            "value": "procedure_step"
+          },
+          {
+            "path": "sentence.success_self_evident",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "sentence.expected_result",
+          "position": "immediately_after_action"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Observable results let users detect divergence early.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-021",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-008",
+      "name": "Recovery follows known failure",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF a step has a common or consequential failure mode, THEN provide symptom, cause or check, corrective action, and verification ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "task_step.failure_mode.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "path": "task_step.failure_mode.frequency",
+                "operator": "in",
+                "value": [
+                  "common",
+                  "intermittent"
+                ]
+              },
+              {
+                "path": "task_step.failure_mode.consequence",
+                "operator": "in",
+                "value": [
+                  "high",
+                  "critical"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "task_step.recovery",
+          "include": [
+            "symptom",
+            "cause_or_check",
+            "corrective_action",
+            "verification"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Recovery content is part of task completion, not an optional appendix.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-020",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-009",
+      "name": "Troubleshooting begins with observable symptom",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF troubleshooting advice begins with an assumed cause, THEN reframe from the user-observable symptom and branch by tests ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "section.topic_type",
+            "operator": "eq",
+            "value": "troubleshooting"
+          },
+          {
+            "path": "section.entry_point",
+            "operator": "eq",
+            "value": "assumed_cause"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "section",
+          "pattern": "symptom -> discriminating_check -> cause -> fix -> verification"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Users know what they observe, not necessarily what caused it.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-010",
+      "name": "Safety warning precedes the hazard",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF an action can cause injury, loss, security exposure, or irreversible damage, THEN place a severity-labeled warning before the action and state avoidance ELSE block release.",
+      "when": {
+        "path": "task_step.hazard",
+        "operator": "in",
+        "value": [
+          "injury",
+          "data_loss",
+          "security_exposure",
+          "irreversible_damage"
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "task_step.warning",
+          "position": "before_action",
+          "include": [
+            "severity",
+            "hazard",
+            "consequence",
+            "avoidance"
+          ]
+        },
+        {
+          "action": "block_publication",
+          "target": "task_step",
+          "when": "warning_or_avoidance_missing"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A warning after the action cannot prevent the harm.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-024",
+        "BK-025",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-011",
+      "name": "UI verb works across input methods",
+      "domain": "technical_writing",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF an instruction refers to a generic interface action, THEN prefer input-neutral verbs such as SELECT, OPEN, ENTER, or CHOOSE; use CLICK only for mouse-specific action ELSE retain.",
+      "when": {
+        "path": "sentence.ui_action",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.action_verb",
+          "by": "input_method",
+          "default": "input_neutral"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Input-neutral language supports touch, keyboard, voice, assistive technology, and mouse use.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-004",
+        "WEB-005"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-012",
+      "name": "Interface labels match exactly",
+      "domain": "technical_writing",
+      "layer": "word",
+      "strength": "hard_constraint",
+      "human_logic": "IF documentation names a visible label, command, field, endpoint, or code identifier, THEN match its current spelling and capitalization exactly ELSE flag version mismatch.",
+      "when": {
+        "path": "token.represents_interface_or_code",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "token.surface_form",
+          "against": "current_product_source"
+        },
+        {
+          "action": "flag",
+          "target": "token",
+          "when": "mismatch",
+          "message": "Possible product-version drift."
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Exact labels let readers find the control or symbol.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-013",
+      "name": "Code examples are runnable or explicitly partial",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a code example is presented, THEN test it in the declared environment OR label omitted setup and placeholders ELSE do not imply it runs.",
+      "when": {
+        "path": "section.code_example.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "test",
+          "target": "section.code_example",
+          "environment_from": "section.requirements"
+        },
+        {
+          "action": "label",
+          "target": "section.code_example",
+          "when": "partial",
+          "include": [
+            "omitted_setup",
+            "placeholders",
+            "expected_output"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers copy examples as executable claims.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-020",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-014",
+      "name": "API reference exposes contract",
+      "domain": "technical_writing",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF an endpoint, function, event, or schema is documented, THEN specify inputs, types, requiredness, constraints, outputs, errors, examples, and version ELSE mark incomplete.",
+      "when": {
+        "path": "section.reference_entity_type",
+        "operator": "in",
+        "value": [
+          "endpoint",
+          "function",
+          "event",
+          "schema"
+        ]
+      },
+      "then": [
+        {
+          "action": "complete",
+          "target": "section.contract",
+          "fields": [
+            "inputs",
+            "types",
+            "requiredness",
+            "constraints",
+            "outputs",
+            "errors",
+            "examples",
+            "version"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A technical reference is a contract between producer and consumer.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-023",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-015",
+      "name": "Version-sensitive statement declares scope",
+      "domain": "technical_writing",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF behavior varies by version, platform, plan, locale, or configuration, THEN state the applicable scope beside the claim ELSE retain.",
+      "when": {
+        "path": "claim.behavior_varies_by_environment",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "qualify",
+          "target": "claim",
+          "include": [
+            "version",
+            "platform",
+            "plan",
+            "locale",
+            "configuration"
+          ],
+          "only": "material_dimensions"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Unscoped technical truth becomes false outside its environment.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-016",
+      "name": "Links describe destination or action",
+      "domain": "technical_writing",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF link text is generic, duplicated, or meaningful only from surrounding visual position, THEN replace it with a concise destination or action ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "link.text",
+            "operator": "in",
+            "value": [
+              "click here",
+              "read more",
+              "here",
+              "more"
+            ]
+          },
+          {
+            "path": "link.text_duplicate_destinations",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "link.depends_on_visual_position",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "link.text",
+          "value_from": "destination_or_action"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Descriptive links remain understandable when scanned or announced out of context.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-017",
+      "name": "Terms and examples globalize safely",
+      "domain": "technical_writing",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF content will be translated or read globally, THEN avoid culture-bound idioms, ambiguous dates, concatenated fragments, and unstable synonyms ELSE retain.",
+      "when": {
+        "path": "context.reading_condition",
+        "operator": "eq",
+        "value": "translated"
+      },
+      "then": [
+        {
+          "action": "scan",
+          "target": "document",
+          "flags": [
+            "idiom",
+            "ambiguous_date",
+            "concatenated_fragment",
+            "synonym_drift"
+          ]
+        },
+        {
+          "action": "repair",
+          "target": "flagged_content"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Stable literal structures translate more reliably.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-018",
+      "name": "Document ownership and freshness",
+      "domain": "technical_writing",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF technical content can change with the product or policy, THEN record owner, applicable version, review trigger, and last verified date ELSE retain.",
+      "when": {
+        "path": "document.change_dependency",
+        "operator": "in",
+        "value": [
+          "product",
+          "policy",
+          "api",
+          "configuration"
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "document.maintenance_metadata",
+          "fields": [
+            "owner",
+            "applicable_version",
+            "review_trigger",
+            "last_verified_date"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Maintenance metadata turns drift into a governed condition.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-027",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-019",
+      "name": "Reuse single-source facts",
+      "domain": "technical_writing",
+      "layer": "content_system",
+      "strength": "heuristic",
+      "human_logic": "IF the same volatile fact appears in multiple documents, THEN centralize it or generate references from one source ELSE retain independent stable statements.",
+      "when": {
+        "all": [
+          {
+            "path": "fact.duplicate_location_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "fact.volatility",
+            "operator": "in",
+            "value": [
+              "medium",
+              "high"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "centralize",
+          "target": "fact",
+          "to": "single_source"
+        },
+        {
+          "action": "reference",
+          "target": "duplicate_locations"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Single sourcing reduces inconsistent updates.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-008",
+        "BK-023",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "TEC-020",
+      "name": "Validate documentation as a system",
+      "domain": "technical_writing",
+      "layer": "content_system",
+      "strength": "hard_constraint",
+      "human_logic": "IF a release changes interfaces, behavior, permissions, errors, or prerequisites, THEN run impact search and documentation regression checks ELSE retain.",
+      "when": {
+        "path": "release.changed_dimension",
+        "operator": "in",
+        "value": [
+          "interface",
+          "behavior",
+          "permission",
+          "error",
+          "prerequisite"
+        ]
+      },
+      "then": [
+        {
+          "action": "search",
+          "target": "content_system",
+          "for": "affected_terms_and_contracts"
+        },
+        {
+          "action": "test",
+          "target": "affected_documentation",
+          "checks": [
+            "links",
+            "labels",
+            "steps",
+            "examples",
+            "scope",
+            "version"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Product change propagates across documentation dependencies.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-027",
+        "BK-024"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

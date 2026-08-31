@@ -1,0 +1,3725 @@
+{
+  "title": "LAKA Transformation State Rules",
+  "version": "1.0.0",
+  "rule_count": 56,
+  "rules": [
+    {
+      "id": "MAGNITUDE-0",
+      "axis": "magnitude",
+      "state": "none",
+      "code": "M0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.magnitude.state",
+              "operator": "eq",
+              "value": "none"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "magnitude",
+            "state": "none"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.magnitude"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How large is the difference or intervention?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "MAGNITUDE-1",
+      "axis": "magnitude",
+      "state": "minor",
+      "code": "M1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.magnitude.state",
+              "operator": "eq",
+              "value": "minor"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "magnitude",
+            "state": "minor"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.magnitude"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How large is the difference or intervention?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "MAGNITUDE-2",
+      "axis": "magnitude",
+      "state": "substantial",
+      "code": "M2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.magnitude.state",
+              "operator": "eq",
+              "value": "substantial"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "magnitude",
+            "state": "substantial"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.magnitude"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How large is the difference or intervention?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "MAGNITUDE-3",
+      "axis": "magnitude",
+      "state": "dominant",
+      "code": "M3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.magnitude.state",
+              "operator": "eq",
+              "value": "dominant"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "magnitude",
+            "state": "dominant"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.magnitude"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How large is the difference or intervention?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "RATE-0",
+      "axis": "rate",
+      "state": "static",
+      "code": "R0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.rate.state",
+              "operator": "eq",
+              "value": "static"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "rate",
+            "state": "static"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.rate"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How quickly is the text or reader state changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "RATE-1",
+      "axis": "rate",
+      "state": "gradual",
+      "code": "R1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.rate.state",
+              "operator": "eq",
+              "value": "gradual"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "rate",
+            "state": "gradual"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.rate"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How quickly is the text or reader state changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "RATE-2",
+      "axis": "rate",
+      "state": "steady",
+      "code": "R2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.rate.state",
+              "operator": "eq",
+              "value": "steady"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "rate",
+            "state": "steady"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.rate"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How quickly is the text or reader state changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "RATE-3",
+      "axis": "rate",
+      "state": "rapid",
+      "code": "R3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.rate.state",
+              "operator": "eq",
+              "value": "rapid"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "rate",
+            "state": "rapid"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.rate"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How quickly is the text or reader state changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DIRECTION-0",
+      "axis": "direction",
+      "state": "neutral",
+      "code": "D0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.direction.state",
+              "operator": "eq",
+              "value": "neutral"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "direction",
+            "state": "neutral"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.direction"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "Where is meaning or performance moving?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DIRECTION-1",
+      "axis": "direction",
+      "state": "converging",
+      "code": "D1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.direction.state",
+              "operator": "eq",
+              "value": "converging"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "direction",
+            "state": "converging"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.direction"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "Where is meaning or performance moving?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DIRECTION-2",
+      "axis": "direction",
+      "state": "diverging",
+      "code": "D2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.direction.state",
+              "operator": "eq",
+              "value": "diverging"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "direction",
+            "state": "diverging"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.direction"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "Where is meaning or performance moving?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DIRECTION-3",
+      "axis": "direction",
+      "state": "oscillating_or_mixed",
+      "code": "D3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.direction.state",
+              "operator": "eq",
+              "value": "oscillating_or_mixed"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "direction",
+            "state": "oscillating_or_mixed"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.direction"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "Where is meaning or performance moving?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE-0",
+      "axis": "scope",
+      "state": "token",
+      "code": "S0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.scope.state",
+              "operator": "eq",
+              "value": "token"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "scope",
+            "state": "token"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.scope"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How much of the content is affected?",
+        "preferred_interventions": [
+          "replace_word",
+          "fix_inflection",
+          "add_or_remove_mark"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE-1",
+      "axis": "scope",
+      "state": "sentence",
+      "code": "S1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.scope.state",
+              "operator": "eq",
+              "value": "sentence"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "scope",
+            "state": "sentence"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.scope"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How much of the content is affected?",
+        "preferred_interventions": [
+          "reorder_constituent",
+          "split_or_merge_clause",
+          "clarify_actor_or_scope"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE-2",
+      "axis": "scope",
+      "state": "passage",
+      "code": "S2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.scope.state",
+              "operator": "eq",
+              "value": "passage"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "scope",
+            "state": "passage"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.scope"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How much of the content is affected?",
+        "preferred_interventions": [
+          "split_paragraph",
+          "move_evidence",
+          "add_transition",
+          "normalize_term"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE-3",
+      "axis": "scope",
+      "state": "document_or_system",
+      "code": "S3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.scope.state",
+              "operator": "eq",
+              "value": "document_or_system"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "scope",
+            "state": "document_or_system"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.scope"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How much of the content is affected?",
+        "preferred_interventions": [
+          "restructure_sections",
+          "change_strategy",
+          "centralize_source",
+          "create_governance_rule"
+        ]
+      }
+    },
+    {
+      "id": "DEPTH-0",
+      "axis": "depth",
+      "state": "surface",
+      "code": "DP0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.depth.state",
+              "operator": "eq",
+              "value": "surface"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "depth",
+            "state": "surface"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.depth"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "At what layer does the issue exist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DEPTH-1",
+      "axis": "depth",
+      "state": "syntactic",
+      "code": "DP1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.depth.state",
+              "operator": "eq",
+              "value": "syntactic"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "depth",
+            "state": "syntactic"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.depth"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "At what layer does the issue exist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DEPTH-2",
+      "axis": "depth",
+      "state": "semantic",
+      "code": "DP2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.depth.state",
+              "operator": "eq",
+              "value": "semantic"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "depth",
+            "state": "semantic"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.depth"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "At what layer does the issue exist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DEPTH-3",
+      "axis": "depth",
+      "state": "world_model_or_strategy",
+      "code": "DP3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.depth.state",
+              "operator": "eq",
+              "value": "world_model_or_strategy"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "depth",
+            "state": "world_model_or_strategy"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.depth"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "At what layer does the issue exist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DURATION-0",
+      "axis": "duration",
+      "state": "momentary",
+      "code": "DU0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.duration.state",
+              "operator": "eq",
+              "value": "momentary"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "duration",
+            "state": "momentary"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.duration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How long does the effect persist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DURATION-1",
+      "axis": "duration",
+      "state": "temporary",
+      "code": "DU1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.duration.state",
+              "operator": "eq",
+              "value": "temporary"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "duration",
+            "state": "temporary"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.duration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How long does the effect persist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DURATION-2",
+      "axis": "duration",
+      "state": "sustained",
+      "code": "DU2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.duration.state",
+              "operator": "eq",
+              "value": "sustained"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "duration",
+            "state": "sustained"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.duration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How long does the effect persist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DURATION-3",
+      "axis": "duration",
+      "state": "persistent",
+      "code": "DU3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.duration.state",
+              "operator": "eq",
+              "value": "persistent"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "duration",
+            "state": "persistent"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.duration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How long does the effect persist?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "FREQUENCY-0",
+      "axis": "frequency",
+      "state": "never",
+      "code": "F0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.frequency.state",
+              "operator": "eq",
+              "value": "never"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "frequency",
+            "state": "never"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.frequency"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How often does the pattern occur?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "FREQUENCY-1",
+      "axis": "frequency",
+      "state": "rare",
+      "code": "F1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.frequency.state",
+              "operator": "eq",
+              "value": "rare"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "frequency",
+            "state": "rare"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.frequency"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How often does the pattern occur?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "FREQUENCY-2",
+      "axis": "frequency",
+      "state": "intermittent",
+      "code": "F2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.frequency.state",
+              "operator": "eq",
+              "value": "intermittent"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "frequency",
+            "state": "intermittent"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.frequency"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How often does the pattern occur?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "FREQUENCY-3",
+      "axis": "frequency",
+      "state": "continuous_or_systematic",
+      "code": "F3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.frequency.state",
+              "operator": "eq",
+              "value": "continuous_or_systematic"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "frequency",
+            "state": "continuous_or_systematic"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.frequency"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How often does the pattern occur?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCELERATION-0",
+      "axis": "acceleration",
+      "state": "none",
+      "code": "A0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.acceleration.state",
+              "operator": "eq",
+              "value": "none"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "acceleration",
+            "state": "none"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.acceleration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How is the rate itself changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCELERATION-1",
+      "axis": "acceleration",
+      "state": "decelerating",
+      "code": "A1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.acceleration.state",
+              "operator": "eq",
+              "value": "decelerating"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "acceleration",
+            "state": "decelerating"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.acceleration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How is the rate itself changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCELERATION-2",
+      "axis": "acceleration",
+      "state": "linear",
+      "code": "A2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.acceleration.state",
+              "operator": "eq",
+              "value": "linear"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "acceleration",
+            "state": "linear"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.acceleration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How is the rate itself changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCELERATION-3",
+      "axis": "acceleration",
+      "state": "accelerating",
+      "code": "A3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.acceleration.state",
+              "operator": "eq",
+              "value": "accelerating"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "acceleration",
+            "state": "accelerating"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.acceleration"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How is the rate itself changing?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "VARIABILITY-0",
+      "axis": "variability",
+      "state": "fixed",
+      "code": "V0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.variability.state",
+              "operator": "eq",
+              "value": "fixed"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "variability",
+            "state": "fixed"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.variability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How stable is the pattern across samples?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "VARIABILITY-1",
+      "axis": "variability",
+      "state": "low",
+      "code": "V1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.variability.state",
+              "operator": "eq",
+              "value": "low"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "variability",
+            "state": "low"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.variability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How stable is the pattern across samples?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "VARIABILITY-2",
+      "axis": "variability",
+      "state": "mixed",
+      "code": "V2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.variability.state",
+              "operator": "eq",
+              "value": "mixed"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "variability",
+            "state": "mixed"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.variability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How stable is the pattern across samples?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "VARIABILITY-3",
+      "axis": "variability",
+      "state": "high",
+      "code": "V3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.variability.state",
+              "operator": "eq",
+              "value": "high"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "variability",
+            "state": "high"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.variability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How stable is the pattern across samples?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DETECTABILITY-0",
+      "axis": "detectability",
+      "state": "obvious",
+      "code": "DE0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.detectability.state",
+              "operator": "eq",
+              "value": "obvious"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "detectability",
+            "state": "obvious"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.detectability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easy is the issue to notice?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DETECTABILITY-1",
+      "axis": "detectability",
+      "state": "visible_on_review",
+      "code": "DE1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.detectability.state",
+              "operator": "eq",
+              "value": "visible_on_review"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "detectability",
+            "state": "visible_on_review"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.detectability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easy is the issue to notice?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DETECTABILITY-2",
+      "axis": "detectability",
+      "state": "latent",
+      "code": "DE2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.detectability.state",
+              "operator": "eq",
+              "value": "latent"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "detectability",
+            "state": "latent"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.detectability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easy is the issue to notice?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "DETECTABILITY-3",
+      "axis": "detectability",
+      "state": "hidden_without_testing",
+      "code": "DE3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.detectability.state",
+              "operator": "eq",
+              "value": "hidden_without_testing"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "detectability",
+            "state": "hidden_without_testing"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.detectability"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easy is the issue to notice?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "REVERSIBILITY-0",
+      "axis": "reversibility",
+      "state": "trivial",
+      "code": "RV0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.reversibility.state",
+              "operator": "eq",
+              "value": "trivial"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "reversibility",
+            "state": "trivial"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.reversibility"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easily can the change be undone?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "REVERSIBILITY-1",
+      "axis": "reversibility",
+      "state": "easy",
+      "code": "RV1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.reversibility.state",
+              "operator": "eq",
+              "value": "easy"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "reversibility",
+            "state": "easy"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.reversibility"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easily can the change be undone?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "REVERSIBILITY-2",
+      "axis": "reversibility",
+      "state": "costly",
+      "code": "RV2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.reversibility.state",
+              "operator": "eq",
+              "value": "costly"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "reversibility",
+            "state": "costly"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.reversibility"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easily can the change be undone?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "REVERSIBILITY-3",
+      "axis": "reversibility",
+      "state": "effectively_irreversible",
+      "code": "RV3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.reversibility.state",
+              "operator": "eq",
+              "value": "effectively_irreversible"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "reversibility",
+            "state": "effectively_irreversible"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.reversibility"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How easily can the change be undone?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "PROPAGATION-0",
+      "axis": "propagation",
+      "state": "isolated",
+      "code": "P0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.propagation.state",
+              "operator": "eq",
+              "value": "isolated"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "propagation",
+            "state": "isolated"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.propagation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How far does the effect travel?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "PROPAGATION-1",
+      "axis": "propagation",
+      "state": "local",
+      "code": "P1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.propagation.state",
+              "operator": "eq",
+              "value": "local"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "propagation",
+            "state": "local"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.propagation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How far does the effect travel?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "PROPAGATION-2",
+      "axis": "propagation",
+      "state": "cascading",
+      "code": "P2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.propagation.state",
+              "operator": "eq",
+              "value": "cascading"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "propagation",
+            "state": "cascading"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.propagation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How far does the effect travel?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "PROPAGATION-3",
+      "axis": "propagation",
+      "state": "system_wide",
+      "code": "P3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.propagation.state",
+              "operator": "eq",
+              "value": "system_wide"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "propagation",
+            "state": "system_wide"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.propagation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How far does the effect travel?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "AMPLIFICATION-0",
+      "axis": "amplification",
+      "state": "damped",
+      "code": "AM0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.amplification.state",
+              "operator": "eq",
+              "value": "damped"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "amplification",
+            "state": "damped"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.amplification"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "What happens as the effect is repeated or transmitted?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "AMPLIFICATION-1",
+      "axis": "amplification",
+      "state": "neutral",
+      "code": "AM1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.amplification.state",
+              "operator": "eq",
+              "value": "neutral"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "amplification",
+            "state": "neutral"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.amplification"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "What happens as the effect is repeated or transmitted?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "AMPLIFICATION-2",
+      "axis": "amplification",
+      "state": "reinforced",
+      "code": "AM2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.amplification.state",
+              "operator": "eq",
+              "value": "reinforced"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "amplification",
+            "state": "reinforced"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.amplification"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "What happens as the effect is repeated or transmitted?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "AMPLIFICATION-3",
+      "axis": "amplification",
+      "state": "runaway",
+      "code": "AM3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.amplification.state",
+              "operator": "eq",
+              "value": "runaway"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "amplification",
+            "state": "runaway"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.amplification"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "What happens as the effect is repeated or transmitted?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCUMULATION-0",
+      "axis": "accumulation",
+      "state": "no_buildup",
+      "code": "AC0",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.accumulation.state",
+              "operator": "eq",
+              "value": "no_buildup"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "accumulation",
+            "state": "no_buildup"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.accumulation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How does the effect build over time?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCUMULATION-1",
+      "axis": "accumulation",
+      "state": "episodic",
+      "code": "AC1",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.accumulation.state",
+              "operator": "eq",
+              "value": "episodic"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "accumulation",
+            "state": "episodic"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.accumulation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How does the effect build over time?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCUMULATION-2",
+      "axis": "accumulation",
+      "state": "compounding",
+      "code": "AC2",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.accumulation.state",
+              "operator": "eq",
+              "value": "compounding"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "accumulation",
+            "state": "compounding"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.accumulation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How does the effect build over time?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    },
+    {
+      "id": "ACCUMULATION-3",
+      "axis": "accumulation",
+      "state": "saturated_or_entrenched",
+      "code": "AC3",
+      "interrogative_prompts": [
+        "who is affected?",
+        "what changes?",
+        "when does it occur?",
+        "where is it visible?",
+        "why does it matter?",
+        "how can it be tested?"
+      ],
+      "evaluation": {
+        "if": {
+          "all": [
+            {
+              "path": "laka.accumulation.state",
+              "operator": "eq",
+              "value": "saturated_or_entrenched"
+            },
+            {
+              "path": "diagnosis.target_unit",
+              "operator": "exists"
+            }
+          ]
+        },
+        "then": [
+          {
+            "action": "generate",
+            "target": "candidate_interventions",
+            "axis": "accumulation",
+            "state": "saturated_or_entrenched"
+          },
+          {
+            "action": "rank",
+            "target": "candidate_interventions",
+            "by": [
+              "outcome_gain",
+              "scope",
+              "depth",
+              "magnitude",
+              "reversibility"
+            ]
+          }
+        ],
+        "else": [
+          {
+            "action": "measure",
+            "target": "laka.accumulation"
+          }
+        ]
+      },
+      "writing_application": {
+        "diagnostic_question": "How does the effect build over time?",
+        "preferred_interventions": [
+          "observe",
+          "compare",
+          "test",
+          "apply_smallest_sufficient_change"
+        ]
+      }
+    }
+  ],
+  "cross_axis_rules": [
+    {
+      "id": "LTX-001",
+      "if": {
+        "all": [
+          {
+            "path": "laka.propagation.state",
+            "operator": "in",
+            "value": [
+              "cascading",
+              "system_wide"
+            ]
+          },
+          {
+            "path": "laka.reversibility.state",
+            "operator": "in",
+            "value": [
+              "costly",
+              "effectively_irreversible"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "require",
+          "target": "change_plan",
+          "include": [
+            "dependency_map",
+            "backup",
+            "review",
+            "rollback_or_mitigation"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ]
+    },
+    {
+      "id": "LTX-002",
+      "if": {
+        "all": [
+          {
+            "path": "laka.detectability.state",
+            "operator": "in",
+            "value": [
+              "latent",
+              "hidden_without_testing"
+            ]
+          },
+          {
+            "path": "laka.frequency.state",
+            "operator": "in",
+            "value": [
+              "intermittent",
+              "continuous_or_systematic"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "design",
+          "target": "test",
+          "include": [
+            "multiple_samples",
+            "representative_readers",
+            "task_observation"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ]
+    },
+    {
+      "id": "LTX-003",
+      "if": {
+        "all": [
+          {
+            "path": "laka.accumulation.state",
+            "operator": "in",
+            "value": [
+              "compounding",
+              "saturated_or_entrenched"
+            ]
+          },
+          {
+            "path": "laka.scope.state",
+            "operator": "eq",
+            "value": "document_or_system"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "escalate",
+          "target": "intervention",
+          "to": "governance_or_architecture"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ]
+    },
+    {
+      "id": "LTX-004",
+      "if": {
+        "all": [
+          {
+            "path": "laka.magnitude.state",
+            "operator": "eq",
+            "value": "minor"
+          },
+          {
+            "path": "laka.scope.state",
+            "operator": "eq",
+            "value": "token"
+          },
+          {
+            "path": "laka.reversibility.state",
+            "operator": "in",
+            "value": [
+              "trivial",
+              "easy"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "apply",
+          "target": "intervention",
+          "mode": "direct_with_regression_check"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ]
+    },
+    {
+      "id": "LTX-005",
+      "if": {
+        "any": [
+          {
+            "path": "outcome.accuracy_change",
+            "operator": "lt",
+            "value": 0
+          },
+          {
+            "path": "outcome.accessibility_change",
+            "operator": "lt",
+            "value": 0
+          },
+          {
+            "path": "outcome.trust_change",
+            "operator": "lt",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "reject",
+          "target": "intervention"
+        }
+      ],
+      "else": [
+        {
+          "action": "compare",
+          "target": "outcome.task_success"
+        }
+      ]
+    }
+  ]
+}

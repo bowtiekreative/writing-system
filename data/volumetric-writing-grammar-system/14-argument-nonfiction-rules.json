@@ -1,0 +1,922 @@
+{
+  "title": "Argument and Nonfiction Reasoning Rules",
+  "version": "1.0.0",
+  "rule_count": 16,
+  "rules": [
+    {
+      "id": "ARG-001",
+      "name": "Define the rhetorical situation",
+      "domain": "argument",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF author, audience, purpose, text, or setting is unknown, THEN define the missing element before drafting strategy ELSE proceed.",
+      "when": {
+        "any": [
+          {
+            "path": "context.author",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "context.audience",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "context.purpose",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "context.channel",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "context.setting",
+            "operator": "missing",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "request_context",
+          "target": "rhetorical_situation",
+          "fields": [
+            "author",
+            "audience",
+            "purpose",
+            "text",
+            "setting"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Arguments work inside situations, not in a vacuum.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-010",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-002",
+      "name": "One controlling thesis",
+      "domain": "argument",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF a document makes multiple unrelated controlling claims, THEN narrow, subordinate, or split them ELSE retain.",
+      "when": {
+        "path": "document.unrelated_controlling_claim_count",
+        "operator": "gt",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "document.thesis",
+          "options": [
+            "narrow",
+            "subordinate",
+            "split_documents"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A controlling claim gives evidence and sections a shared destination.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-013",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-003",
+      "name": "Classify claim before selecting evidence",
+      "domain": "argument",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF a claim is present, THEN classify it as factual, causal, evaluative, definitional, predictive, or policy before choosing support ELSE do not infer support requirements.",
+      "when": {
+        "path": "paragraph.claim",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "classify",
+          "target": "paragraph.claim",
+          "types": [
+            "factual",
+            "causal",
+            "evaluative",
+            "definitional",
+            "predictive",
+            "policy"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Different claims require different evidence and warrants.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-004",
+      "name": "Evidence matches claim type",
+      "domain": "argument",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF evidence type does not support the claim type, THEN replace, supplement, narrow, or remove the claim ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.claim.type",
+            "operator": "exists"
+          },
+          {
+            "path": "paragraph.evidence.compatible_with_claim_type",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "repair",
+          "target": "paragraph",
+          "options": [
+            "replace_evidence",
+            "supplement_evidence",
+            "narrow_claim",
+            "remove_claim"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "An anecdote, measurement, authority, mechanism, and comparison answer different questions.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-005",
+      "name": "Make the warrant available",
+      "domain": "argument",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF evidence does not obviously entail the claim for the intended audience, THEN state the connecting warrant ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.claim",
+            "operator": "exists"
+          },
+          {
+            "path": "paragraph.evidence",
+            "operator": "exists"
+          },
+          {
+            "path": "paragraph.warrant_obvious_to_audience",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "paragraph.warrant",
+          "position": "between_or_after_evidence_and_claim"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Evidence supports a claim only through a reasoning bridge.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-006",
+      "name": "Qualify to the evidence boundary",
+      "domain": "argument",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF claim scope exceeds evidence population, conditions, time, or uncertainty, THEN narrow or qualify the claim ELSE retain.",
+      "when": {
+        "path": "claim.scope_exceeds_evidence",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "qualify",
+          "target": "claim",
+          "match": [
+            "population",
+            "conditions",
+            "time",
+            "uncertainty"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Generalization beyond the evidence turns support into overclaim.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-026",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-007",
+      "name": "Address strongest relevant counterargument",
+      "domain": "argument",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF a reasonable reader has a strong relevant objection, THEN represent it fairly and respond with evidence or concession ELSE omit peripheral objections.",
+      "when": {
+        "all": [
+          {
+            "path": "argument.counterargument.strength",
+            "operator": "eq",
+            "value": "strong"
+          },
+          {
+            "path": "argument.counterargument.relevance",
+            "operator": "eq",
+            "value": "high"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "argument.counterargument",
+          "representation": "fair"
+        },
+        {
+          "action": "respond",
+          "target": "argument.counterargument",
+          "options": [
+            "rebut",
+            "concede",
+            "limit_claim",
+            "integrate"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A fair response improves both reasoning and credibility.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-008",
+      "name": "Distinguish correlation from causation",
+      "domain": "argument",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF evidence is correlational AND the claim is causal, THEN add causal evidence, state a mechanism with tests, or change the claim to association ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "evidence.design",
+            "operator": "eq",
+            "value": "correlational"
+          },
+          {
+            "path": "claim.type",
+            "operator": "eq",
+            "value": "causal"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "repair",
+          "target": "claim",
+          "options": [
+            "add_causal_evidence",
+            "state_testable_mechanism",
+            "change_to_association"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Co-movement alone does not establish cause.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-009",
+      "name": "Name uncertainty and limitations",
+      "domain": "argument",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF evidence has material uncertainty, missing data, selection limits, or alternative explanations, THEN disclose them near the conclusion ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "evidence.material_uncertainty",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "evidence.missing_data_material",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "evidence.selection_limit_material",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "evidence.alternative_explanation_strength",
+            "operator": "in",
+            "value": [
+              "medium",
+              "high"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "section.limitations",
+          "include": [
+            "uncertainty",
+            "missing_data",
+            "selection",
+            "alternatives"
+          ]
+        },
+        {
+          "action": "align",
+          "target": "section.conclusion_strength",
+          "with": "limitations"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Trustworthy analysis exposes what could change its conclusion.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-010",
+      "name": "Cite at the point of use",
+      "domain": "argument",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF a factual claim depends on an external source, THEN cite near the claim and make the supported scope clear ELSE retain common knowledge according to policy.",
+      "when": {
+        "all": [
+          {
+            "path": "claim.depends_on_external_source",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "claim.citation",
+            "operator": "missing",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "cite",
+          "target": "claim",
+          "position": "near_claim",
+          "include": "source_id"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Local citations make evidence relationships auditable.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-025",
+        "BK-026",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-011",
+      "name": "Source quality matches stakes",
+      "domain": "argument",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF a claim is high-stakes, technical, medical, legal, financial, or scientific, THEN prefer primary authoritative evidence and independent corroboration ELSE use proportionate sourcing.",
+      "when": {
+        "path": "claim.domain_or_stakes",
+        "operator": "in",
+        "value": [
+          "high",
+          "technical",
+          "medical",
+          "legal",
+          "financial",
+          "scientific"
+        ]
+      },
+      "then": [
+        {
+          "action": "filter",
+          "target": "claim.sources",
+          "require": [
+            "primary_or_authoritative",
+            "current",
+            "directly_relevant"
+          ]
+        },
+        {
+          "action": "corroborate",
+          "target": "claim",
+          "when": "consequence_high"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Evidence standards rise with consequence and specialization.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-012",
+      "name": "Separate premise from conclusion",
+      "domain": "argument",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF the conclusion is presented as a premise OR circularly restates it, THEN add independent support or acknowledge assumption ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "argument.circularity",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "argument.conclusion_used_as_premise",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "repair",
+          "target": "argument",
+          "options": [
+            "add_independent_premise",
+            "mark_assumption",
+            "withdraw_conclusion"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A conclusion cannot gain support solely by being restated.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-010",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-013",
+      "name": "Avoid false binary",
+      "domain": "argument",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a claim presents two options as exhaustive AND other viable options exist, THEN add them or explain the constraint ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "claim.option_count_presented",
+            "operator": "eq",
+            "value": 2
+          },
+          {
+            "path": "claim.other_viable_options_exist",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "expand",
+          "target": "claim.options",
+          "include": "material_alternatives"
+        },
+        {
+          "action": "qualify",
+          "target": "claim",
+          "when": "scope_intentionally_binary"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A binary frame is valid only when the alternatives are exhaustive in the stated scope.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-014",
+      "name": "Compare like with like",
+      "domain": "argument",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF compared items differ on an uncontrolled dimension that drives the result, THEN normalize, qualify, or reject the comparison ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "comparison.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "comparison.confounder_drives_result",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "repair",
+          "target": "comparison",
+          "options": [
+            "normalize",
+            "qualify",
+            "reject"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A comparison cannot isolate a difference when another major dimension varies with it.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-015",
+      "name": "Recommendation includes decision rule",
+      "domain": "argument",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF analysis recommends an option, THEN state criteria, tradeoffs, rejected alternatives, and the condition that would change the recommendation ELSE retain.",
+      "when": {
+        "path": "section.function",
+        "operator": "eq",
+        "value": "recommendation"
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "section.decision_rule",
+          "include": [
+            "criteria",
+            "tradeoffs",
+            "rejected_alternatives",
+            "change_condition"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A recommendation becomes reusable when readers can see how it was chosen.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ARG-016",
+      "name": "Conclusion does not outrun premises",
+      "domain": "argument",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF the conclusion adds a stronger, broader, or different claim than the argument established, THEN narrow it or add the missing support ELSE retain.",
+      "when": {
+        "path": "document.conclusion.entailment_status",
+        "operator": "eq",
+        "value": "outruns_premises"
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "document.conclusion",
+          "with": "supported_claim_boundary"
+        },
+        {
+          "action": "insert",
+          "target": "missing_support",
+          "when": "stronger_conclusion_required"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The final claim inherits the limits of the premises and evidence.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

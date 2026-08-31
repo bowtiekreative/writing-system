@@ -1,0 +1,874 @@
+{
+  "title": "Editing, Diagnosis, and Quality-Control Rules",
+  "version": "1.0.0",
+  "rule_count": 15,
+  "rules": [
+    {
+      "id": "EDT-001",
+      "name": "Do not polish before purpose is stable",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF audience, purpose, outcome, or controlling idea is unresolved, THEN perform strategy or developmental editing before line editing ELSE continue.",
+      "when": {
+        "any": [
+          {
+            "path": "document.audience",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "document.purpose",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "document.expected_outcome",
+            "operator": "missing",
+            "value": true
+          },
+          {
+            "path": "document.controlling_idea",
+            "operator": "missing",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "route",
+          "target": "document",
+          "to": "strategy_or_developmental_edit"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Sentence polish cannot rescue a document aimed at the wrong reader or outcome.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-013",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-002",
+      "name": "Separate editing passes",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF one pass attempts strategy, structure, evidence, style, mechanics, and proofing simultaneously, THEN separate the passes ELSE retain.",
+      "when": {
+        "path": "edit.pass.concern_count",
+        "operator": "gt",
+        "value": 2
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "edit.pass",
+          "order": [
+            "strategy",
+            "structure",
+            "evidence",
+            "paragraph",
+            "sentence",
+            "word",
+            "mechanics",
+            "proof"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Separate passes reduce attentional switching and prevent local edits from hiding global problems.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-017",
+        "BK-021"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-003",
+      "name": "Protect meaning before changing form",
+      "domain": "editing",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF an edit changes denotation, scope, polarity, actor, time, modality, evidence strength, or legal effect without authorization, THEN reject or escalate it ELSE retain.",
+      "when": {
+        "path": "edit.semantic_change",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "compare",
+          "target": "edit",
+          "dimensions": [
+            "denotation",
+            "scope",
+            "polarity",
+            "actor",
+            "time",
+            "modality",
+            "evidence_strength",
+            "legal_effect"
+          ]
+        },
+        {
+          "action": "reject_or_escalate",
+          "target": "edit",
+          "when": "unauthorized_material_change"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Editing improves expression without silently rewriting the author’s claim.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-004",
+      "name": "Apply smallest sufficient intervention",
+      "domain": "editing",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF a diagnosed failure can be fixed at a lower layer without creating another failure, THEN use that lower-layer fix ELSE escalate one layer.",
+      "when": {
+        "path": "diagnosis.failure",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "edit.intervention",
+          "order": [
+            "token",
+            "phrase",
+            "sentence",
+            "paragraph",
+            "section",
+            "document"
+          ],
+          "criterion": "first_layer_that_fully_resolves_failure"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Minimal adequate edits preserve voice, intent, and reviewability.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-005",
+      "name": "Track the reason for substantive edits",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF an edit changes argument, order, emphasis, evidence, obligation, or reader action, THEN attach a concise rationale ELSE silent mechanical correction is allowed by policy.",
+      "when": {
+        "path": "edit.type",
+        "operator": "in",
+        "value": [
+          "argument",
+          "order",
+          "emphasis",
+          "evidence",
+          "obligation",
+          "reader_action"
+        ]
+      },
+      "then": [
+        {
+          "action": "annotate",
+          "target": "edit",
+          "include": [
+            "diagnosis",
+            "rule_id",
+            "intended_outcome"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Rationales make consequential changes reviewable.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-006",
+      "name": "Style sheet records local decisions",
+      "domain": "editing",
+      "layer": "content_system",
+      "strength": "context_default",
+      "human_logic": "IF spelling, capitalization, hyphenation, numerals, terminology, citation, locale, or exceptions repeat, THEN record the decision in a style sheet ELSE retain.",
+      "when": {
+        "path": "edit.repeated_decision_dimension",
+        "operator": "in",
+        "value": [
+          "spelling",
+          "capitalization",
+          "hyphenation",
+          "numerals",
+          "terminology",
+          "citation",
+          "locale",
+          "exception"
+        ]
+      },
+      "then": [
+        {
+          "action": "record",
+          "target": "content_system.style_sheet",
+          "fields": [
+            "decision",
+            "example",
+            "scope",
+            "source",
+            "exception"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A style sheet prevents repeated rediscovery and drift.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-007",
+      "name": "Query instead of guessing intent",
+      "domain": "editing",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF two plausible interpretations require different edits and context cannot resolve them, THEN ask a focused query ELSE edit.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.plausible_interpretation_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "context.resolves_ambiguity",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "request_context",
+          "target": "sentence",
+          "include": [
+            "two_interpretations",
+            "decision_impact"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A confident correction can be worse than visible ambiguity when intent is unknown.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-008",
+      "name": "Verify facts outside copyediting scope",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF names, dates, numbers, citations, quotations, links, calculations, or cross-references are present, THEN verify according to assignment scope and flag the rest ELSE retain.",
+      "when": {
+        "path": "document.verifiable_element_count",
+        "operator": "gt",
+        "value": 0
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "document.elements",
+          "types": [
+            "names",
+            "dates",
+            "numbers",
+            "citations",
+            "quotations",
+            "links",
+            "calculations",
+            "cross_references"
+          ],
+          "scope_from": "edit.assignment"
+        },
+        {
+          "action": "flag",
+          "target": "unverified_elements"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Mechanical correctness does not guarantee factual correctness.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-025"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-009",
+      "name": "Read at multiple scales",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF reviewing a document, THEN inspect outline, section, paragraph, sentence, word, and rendered page views ELSE retain.",
+      "when": {
+        "path": "edit.review_active",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "inspect",
+          "target": "document",
+          "scales": [
+            "outline",
+            "section",
+            "paragraph",
+            "sentence",
+            "word",
+            "rendered_page"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Different failures become visible at different scales.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-010",
+      "name": "Reverse proofread for surface errors",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF content is structurally final and proofreading is active, THEN inspect sentences or lines in reverse order for local mechanics ELSE do not use reverse order for meaning review.",
+      "when": {
+        "all": [
+          {
+            "path": "document.structure_final",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "edit.pass",
+            "operator": "eq",
+            "value": "proofread"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "inspect",
+          "target": "document",
+          "order": "reverse",
+          "focus": [
+            "spelling",
+            "punctuation",
+            "formatting",
+            "duplication"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Reverse order weakens semantic prediction and exposes local surface errors.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-011",
+      "name": "Compare before and after metrics",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF a substantive revision is proposed, THEN compare accuracy, comprehension, task success, length, voice, accessibility, and evidence status ELSE retain.",
+      "when": {
+        "path": "edit.substantive",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "measure",
+          "target": "edit.before_after",
+          "dimensions": [
+            "accuracy",
+            "comprehension",
+            "task_success",
+            "length",
+            "voice",
+            "accessibility",
+            "evidence_status"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A revision can improve one metric while damaging another.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-024",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-012",
+      "name": "Regression-check dependent text",
+      "domain": "editing",
+      "layer": "content_system",
+      "strength": "hard_constraint",
+      "human_logic": "IF terminology, fact, interface label, promise, or structural link changes, THEN search and test dependent occurrences ELSE retain.",
+      "when": {
+        "path": "edit.changed_dimension",
+        "operator": "in",
+        "value": [
+          "terminology",
+          "fact",
+          "interface_label",
+          "promise",
+          "structural_link"
+        ]
+      },
+      "then": [
+        {
+          "action": "search",
+          "target": "content_system.dependencies"
+        },
+        {
+          "action": "test",
+          "target": "affected_occurrences"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Local changes propagate through reused and cross-referenced content.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-027",
+        "WEB-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-013",
+      "name": "Preserve intentional voice variation",
+      "domain": "editing",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF a nonstandard construction consistently marks character, narrator, brand, culture, or genre AND remains comprehensible, THEN preserve it unless the assignment requires normalization ELSE correct accidental inconsistency.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.nonstandard_construction",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "paragraph.voice_function",
+            "operator": "in",
+            "value": [
+              "character",
+              "narrator",
+              "brand",
+              "culture",
+              "genre"
+            ]
+          },
+          {
+            "path": "paragraph.comprehensible",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "retain",
+          "target": "paragraph.nonstandard_construction"
+        },
+        {
+          "action": "record",
+          "target": "content_system.style_sheet",
+          "as": "intentional_exception"
+        }
+      ],
+      "else": [
+        {
+          "action": "normalize",
+          "target": "paragraph.nonstandard_construction"
+        }
+      ],
+      "unless": [],
+      "because": "Editing should not erase meaningful identity or craft.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-005",
+        "BK-007",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-014",
+      "name": "Stop when outcome is met",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF all required outcomes pass AND further changes are preference-only with regression risk, THEN stop editing ELSE continue the diagnosed pass.",
+      "when": {
+        "all": [
+          {
+            "path": "document.required_outcomes_pass",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "edit.remaining_changes",
+            "operator": "eq",
+            "value": "preference_only"
+          },
+          {
+            "path": "edit.regression_risk",
+            "operator": "in",
+            "value": [
+              "medium",
+              "high"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "stop",
+          "target": "edit"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "More intervention is not automatically more quality.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "EDT-015",
+      "name": "Record unresolved risk",
+      "domain": "editing",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF deadline or authority prevents resolving a material ambiguity, factual gap, accessibility barrier, or legal issue, THEN record it with owner and consequence; do not silently approve ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "edit.material_issue_unresolved",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "path": "edit.deadline_blocks_fix",
+                "operator": "eq",
+                "value": true
+              },
+              {
+                "path": "edit.authority_blocks_fix",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "record",
+          "target": "edit.risk_register",
+          "fields": [
+            "issue",
+            "consequence",
+            "owner",
+            "recommended_action"
+          ]
+        },
+        {
+          "action": "withhold",
+          "target": "edit.unqualified_approval"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Visible unresolved risk is safer than false completion.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-027"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

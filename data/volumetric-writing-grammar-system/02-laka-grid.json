@@ -1,0 +1,444 @@
+{
+  "title": "LAKA Volumetric Writing Grid",
+  "version": "1.0.0",
+  "purpose": "Diagnose, generate, compare, eliminate, prescribe, route, and review writing alternatives across multiple interacting dimensions.",
+  "structural_dimensions": [
+    "object",
+    "condition",
+    "action",
+    "tool",
+    "resource",
+    "outcome",
+    "stakeholder",
+    "dependency"
+  ],
+  "six_by_six_by_six": {
+    "interrogatives": [
+      "who",
+      "what",
+      "when",
+      "where",
+      "why",
+      "how"
+    ],
+    "relational_modifiers": [
+      "direction",
+      "scope",
+      "depth",
+      "duration",
+      "frequency",
+      "reversibility"
+    ],
+    "quantitative_scale": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "combinations": 216
+  },
+  "transformation_dynamics": [
+    {
+      "id": "magnitude",
+      "key_question": "How large is the difference or intervention?",
+      "states": [
+        {
+          "index": 0,
+          "code": "M0",
+          "name": "none"
+        },
+        {
+          "index": 1,
+          "code": "M1",
+          "name": "minor"
+        },
+        {
+          "index": 2,
+          "code": "M2",
+          "name": "substantial"
+        },
+        {
+          "index": 3,
+          "code": "M3",
+          "name": "dominant"
+        }
+      ]
+    },
+    {
+      "id": "rate",
+      "key_question": "How quickly is the text or reader state changing?",
+      "states": [
+        {
+          "index": 0,
+          "code": "R0",
+          "name": "static"
+        },
+        {
+          "index": 1,
+          "code": "R1",
+          "name": "gradual"
+        },
+        {
+          "index": 2,
+          "code": "R2",
+          "name": "steady"
+        },
+        {
+          "index": 3,
+          "code": "R3",
+          "name": "rapid"
+        }
+      ]
+    },
+    {
+      "id": "direction",
+      "key_question": "Where is meaning or performance moving?",
+      "states": [
+        {
+          "index": 0,
+          "code": "D0",
+          "name": "neutral"
+        },
+        {
+          "index": 1,
+          "code": "D1",
+          "name": "converging"
+        },
+        {
+          "index": 2,
+          "code": "D2",
+          "name": "diverging"
+        },
+        {
+          "index": 3,
+          "code": "D3",
+          "name": "oscillating_or_mixed"
+        }
+      ]
+    },
+    {
+      "id": "scope",
+      "key_question": "How much of the content is affected?",
+      "states": [
+        {
+          "index": 0,
+          "code": "S0",
+          "name": "token"
+        },
+        {
+          "index": 1,
+          "code": "S1",
+          "name": "sentence"
+        },
+        {
+          "index": 2,
+          "code": "S2",
+          "name": "passage"
+        },
+        {
+          "index": 3,
+          "code": "S3",
+          "name": "document_or_system"
+        }
+      ]
+    },
+    {
+      "id": "depth",
+      "key_question": "At what layer does the issue exist?",
+      "states": [
+        {
+          "index": 0,
+          "code": "DP0",
+          "name": "surface"
+        },
+        {
+          "index": 1,
+          "code": "DP1",
+          "name": "syntactic"
+        },
+        {
+          "index": 2,
+          "code": "DP2",
+          "name": "semantic"
+        },
+        {
+          "index": 3,
+          "code": "DP3",
+          "name": "world_model_or_strategy"
+        }
+      ]
+    },
+    {
+      "id": "duration",
+      "key_question": "How long does the effect persist?",
+      "states": [
+        {
+          "index": 0,
+          "code": "DU0",
+          "name": "momentary"
+        },
+        {
+          "index": 1,
+          "code": "DU1",
+          "name": "temporary"
+        },
+        {
+          "index": 2,
+          "code": "DU2",
+          "name": "sustained"
+        },
+        {
+          "index": 3,
+          "code": "DU3",
+          "name": "persistent"
+        }
+      ]
+    },
+    {
+      "id": "frequency",
+      "key_question": "How often does the pattern occur?",
+      "states": [
+        {
+          "index": 0,
+          "code": "F0",
+          "name": "never"
+        },
+        {
+          "index": 1,
+          "code": "F1",
+          "name": "rare"
+        },
+        {
+          "index": 2,
+          "code": "F2",
+          "name": "intermittent"
+        },
+        {
+          "index": 3,
+          "code": "F3",
+          "name": "continuous_or_systematic"
+        }
+      ]
+    },
+    {
+      "id": "acceleration",
+      "key_question": "How is the rate itself changing?",
+      "states": [
+        {
+          "index": 0,
+          "code": "A0",
+          "name": "none"
+        },
+        {
+          "index": 1,
+          "code": "A1",
+          "name": "decelerating"
+        },
+        {
+          "index": 2,
+          "code": "A2",
+          "name": "linear"
+        },
+        {
+          "index": 3,
+          "code": "A3",
+          "name": "accelerating"
+        }
+      ]
+    },
+    {
+      "id": "variability",
+      "key_question": "How stable is the pattern across samples?",
+      "states": [
+        {
+          "index": 0,
+          "code": "V0",
+          "name": "fixed"
+        },
+        {
+          "index": 1,
+          "code": "V1",
+          "name": "low"
+        },
+        {
+          "index": 2,
+          "code": "V2",
+          "name": "mixed"
+        },
+        {
+          "index": 3,
+          "code": "V3",
+          "name": "high"
+        }
+      ]
+    },
+    {
+      "id": "detectability",
+      "key_question": "How easy is the issue to notice?",
+      "states": [
+        {
+          "index": 0,
+          "code": "DE0",
+          "name": "obvious"
+        },
+        {
+          "index": 1,
+          "code": "DE1",
+          "name": "visible_on_review"
+        },
+        {
+          "index": 2,
+          "code": "DE2",
+          "name": "latent"
+        },
+        {
+          "index": 3,
+          "code": "DE3",
+          "name": "hidden_without_testing"
+        }
+      ]
+    },
+    {
+      "id": "reversibility",
+      "key_question": "How easily can the change be undone?",
+      "states": [
+        {
+          "index": 0,
+          "code": "RV0",
+          "name": "trivial"
+        },
+        {
+          "index": 1,
+          "code": "RV1",
+          "name": "easy"
+        },
+        {
+          "index": 2,
+          "code": "RV2",
+          "name": "costly"
+        },
+        {
+          "index": 3,
+          "code": "RV3",
+          "name": "effectively_irreversible"
+        }
+      ]
+    },
+    {
+      "id": "propagation",
+      "key_question": "How far does the effect travel?",
+      "states": [
+        {
+          "index": 0,
+          "code": "P0",
+          "name": "isolated"
+        },
+        {
+          "index": 1,
+          "code": "P1",
+          "name": "local"
+        },
+        {
+          "index": 2,
+          "code": "P2",
+          "name": "cascading"
+        },
+        {
+          "index": 3,
+          "code": "P3",
+          "name": "system_wide"
+        }
+      ]
+    },
+    {
+      "id": "amplification",
+      "key_question": "What happens as the effect is repeated or transmitted?",
+      "states": [
+        {
+          "index": 0,
+          "code": "AM0",
+          "name": "damped"
+        },
+        {
+          "index": 1,
+          "code": "AM1",
+          "name": "neutral"
+        },
+        {
+          "index": 2,
+          "code": "AM2",
+          "name": "reinforced"
+        },
+        {
+          "index": 3,
+          "code": "AM3",
+          "name": "runaway"
+        }
+      ]
+    },
+    {
+      "id": "accumulation",
+      "key_question": "How does the effect build over time?",
+      "states": [
+        {
+          "index": 0,
+          "code": "AC0",
+          "name": "no_buildup"
+        },
+        {
+          "index": 1,
+          "code": "AC1",
+          "name": "episodic"
+        },
+        {
+          "index": 2,
+          "code": "AC2",
+          "name": "compounding"
+        },
+        {
+          "index": 3,
+          "code": "AC3",
+          "name": "saturated_or_entrenched"
+        }
+      ]
+    }
+  ],
+  "diagnostic_protocol": [
+    "symptom",
+    "decomposition",
+    "variety",
+    "elimination",
+    "prescription",
+    "routing",
+    "review"
+  ],
+  "intervention_policy": {
+    "name": "smallest_sufficient_intervention",
+    "rule": "Select the lowest-magnitude, narrowest-scope, shallowest-depth, most reversible change that reaches the desired outcome without creating a higher-level failure.",
+    "escalation": [
+      "token_edit",
+      "phrase_edit",
+      "sentence_edit",
+      "paragraph_restructure",
+      "section_restructure",
+      "document_restrategy"
+    ]
+  },
+  "outcome_separation": "Transformation degree measures how much changed; outcome quality measures whether the writing works. Never treat a larger change as a better outcome.",
+  "volumetric_address": "unit × genre × audience × purpose × channel × stakes × diagnostic_modifier × dynamic_state × rule",
+  "generation_example": {
+    "input": "A technical instruction is accurate but users miss the prerequisite.",
+    "coordinates": {
+      "object": "prerequisite",
+      "where": "before_step_1",
+      "scope": "section",
+      "depth": "information_architecture",
+      "frequency": "systematic",
+      "detectability": "latent",
+      "propagation": "cascading"
+    },
+    "smallest_change": "Move and label the prerequisite before the ordered steps; do not rewrite unrelated prose."
+  }
+}

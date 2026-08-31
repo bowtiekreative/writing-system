@@ -1,0 +1,476 @@
+{
+  "title": "Source Bibliography and Influence Map",
+  "version": "1.0.0",
+  "generated_at": "2026-08-31",
+  "copyright_note": "This system paraphrases general principles and does not reproduce copyrighted book text. Consult the original works for full context.",
+  "sources": [
+    {
+      "id": "BK-001",
+      "title": "The Elements of Style",
+      "creator": "William Strunk Jr.; E. B. White",
+      "domain": "grammar_style",
+      "type": "Book",
+      "note": "Conciseness, conventional usage, and composition principles.",
+      "url": null
+    },
+    {
+      "id": "BK-002",
+      "title": "The Blue Book of Grammar and Punctuation",
+      "creator": "Jane Straus; Lester Kaufman",
+      "domain": "grammar_reference",
+      "type": "Book",
+      "note": "Accessible grammar, punctuation, examples, and exercises.",
+      "url": null
+    },
+    {
+      "id": "BK-003",
+      "title": "Garner's Modern English Usage",
+      "creator": "Bryan A. Garner",
+      "domain": "usage_reference",
+      "type": "Book",
+      "note": "Modern American usage and editorial judgment.",
+      "url": null
+    },
+    {
+      "id": "BK-004",
+      "title": "English Grammar in Use",
+      "creator": "Raymond Murphy",
+      "domain": "learner_grammar",
+      "type": "Book",
+      "note": "Self-study explanations and practice for core English grammar.",
+      "url": null
+    },
+    {
+      "id": "BK-005",
+      "title": "Dreyer's English",
+      "creator": "Benjamin Dreyer",
+      "domain": "copyediting_style",
+      "type": "Book",
+      "note": "Practical modern editorial advice and stylistic judgment.",
+      "url": null
+    },
+    {
+      "id": "BK-006",
+      "title": "Woe Is I",
+      "creator": "Patricia T. O'Conner",
+      "domain": "grammar_reference",
+      "type": "Book",
+      "note": "Plain-language explanations of confusing usage questions.",
+      "url": null
+    },
+    {
+      "id": "BK-007",
+      "title": "The Copyeditor's Handbook",
+      "creator": "Amy Einsohn; Marilyn Schwartz",
+      "domain": "copyediting",
+      "type": "Book",
+      "note": "Professional copyediting practice, grammar, and editorial process.",
+      "url": null
+    },
+    {
+      "id": "BK-008",
+      "title": "The Sense of Style",
+      "creator": "Steven Pinker",
+      "domain": "cognitive_style",
+      "type": "Book",
+      "note": "Reader-centered clarity informed by linguistics and cognition.",
+      "url": null
+    },
+    {
+      "id": "BK-009",
+      "title": "Eats, Shoots & Leaves",
+      "creator": "Lynne Truss",
+      "domain": "punctuation",
+      "type": "Book",
+      "note": "Punctuation and the effect of marks on meaning.",
+      "url": null
+    },
+    {
+      "id": "BK-010",
+      "title": "Practical English Usage",
+      "creator": "Michael Swan",
+      "domain": "usage_reference",
+      "type": "Book",
+      "note": "Advanced grammar and usage reference for learners and teachers.",
+      "url": null
+    },
+    {
+      "id": "BK-011",
+      "title": "On Writing: A Memoir of the Craft",
+      "creator": "Stephen King",
+      "domain": "creative_writing",
+      "type": "Book",
+      "note": "Writing habits, revision, description, and storytelling craft.",
+      "url": null
+    },
+    {
+      "id": "BK-012",
+      "title": "Bird by Bird",
+      "creator": "Anne Lamott",
+      "domain": "creative_process",
+      "type": "Book",
+      "note": "Drafting, perfectionism, observation, and incremental practice.",
+      "url": null
+    },
+    {
+      "id": "BK-013",
+      "title": "On Writing Well",
+      "creator": "William Zinsser",
+      "domain": "nonfiction_style",
+      "type": "Book",
+      "note": "Clarity, simplicity, voice, and nonfiction craft.",
+      "url": null
+    },
+    {
+      "id": "BK-014",
+      "title": "Writing Down the Bones",
+      "creator": "Natalie Goldberg",
+      "domain": "creative_process",
+      "type": "Book",
+      "note": "Generative practice, observation, and fluency.",
+      "url": null
+    },
+    {
+      "id": "BK-015",
+      "title": "The War of Art",
+      "creator": "Steven Pressfield",
+      "domain": "creative_process",
+      "type": "Book",
+      "note": "Resistance, discipline, and completing creative work.",
+      "url": null
+    },
+    {
+      "id": "BK-016",
+      "title": "Story",
+      "creator": "Robert McKee",
+      "domain": "narrative",
+      "type": "Book",
+      "note": "Scene design, causality, conflict, and narrative structure.",
+      "url": null
+    },
+    {
+      "id": "BK-017",
+      "title": "Self-Editing for Fiction Writers",
+      "creator": "Renni Browne; Dave King",
+      "domain": "fiction_editing",
+      "type": "Book",
+      "note": "Dialogue, viewpoint, exposition, scene, and revision.",
+      "url": null
+    },
+    {
+      "id": "BK-018",
+      "title": "Zen in the Art of Writing",
+      "creator": "Ray Bradbury",
+      "domain": "creative_process",
+      "type": "Book",
+      "note": "Energy, curiosity, association, and creative practice.",
+      "url": null
+    },
+    {
+      "id": "BK-019",
+      "title": "Steering the Craft",
+      "creator": "Ursula K. Le Guin",
+      "domain": "prose_craft",
+      "type": "Book",
+      "note": "Sound, rhythm, syntax, point of view, and exercises.",
+      "url": null
+    },
+    {
+      "id": "BK-020",
+      "title": "The Insider's Guide to Technical Writing",
+      "creator": "Krista Van Laan",
+      "domain": "technical_writing",
+      "type": "Book",
+      "note": "Documentation practice, careers, projects, and users.",
+      "url": null
+    },
+    {
+      "id": "BK-021",
+      "title": "Technical Writing Process",
+      "creator": "Kieran Morgan",
+      "domain": "technical_writing",
+      "type": "Book",
+      "note": "A repeatable process for planning and producing documentation.",
+      "url": null
+    },
+    {
+      "id": "BK-022",
+      "title": "Technical Writing For Dummies",
+      "creator": "Sheryl Lindsell-Roberts",
+      "domain": "technical_writing",
+      "type": "Book",
+      "note": "Accessible introduction to technical documents and workflows.",
+      "url": null
+    },
+    {
+      "id": "BK-023",
+      "title": "Technical Writing 101",
+      "creator": "Alan Pringle; Sarah O’Keefe",
+      "domain": "technical_writing",
+      "type": "Book",
+      "note": "Real-world documentation and structured authoring.",
+      "url": null
+    },
+    {
+      "id": "BK-024",
+      "title": "Developing Quality Technical Information",
+      "creator": "Michelle Carey; Moira Lanyi; Deirdre Longo; et al.",
+      "domain": "technical_writing",
+      "type": "Book",
+      "note": "Quality dimensions for usable technical information.",
+      "url": null
+    },
+    {
+      "id": "BK-025",
+      "title": "Handbook of Technical Writing",
+      "creator": "Gerald J. Alred; Charles T. Brusaw; Walter E. Oliu",
+      "domain": "technical_reference",
+      "type": "Book",
+      "note": "Grammar, mechanics, formats, and workplace documents.",
+      "url": null
+    },
+    {
+      "id": "BK-026",
+      "title": "Technical Communication",
+      "creator": "Mike Markel; Stuart A. Selber",
+      "domain": "technical_communication",
+      "type": "Book",
+      "note": "Audience, design, ethics, research, and technical genres.",
+      "url": null
+    },
+    {
+      "id": "BK-027",
+      "title": "Managing Your Documentation Projects",
+      "creator": "JoAnn T. Hackos",
+      "domain": "documentation_management",
+      "type": "Book",
+      "note": "Planning, resourcing, and managing documentation systems.",
+      "url": null
+    },
+    {
+      "id": "BK-028",
+      "title": "The Essentials of Technical Communication",
+      "creator": "Elizabeth Tebeaux; Sam Dragga",
+      "domain": "technical_communication",
+      "type": "Book",
+      "note": "Concise technical communication with examples and exercises.",
+      "url": null
+    },
+    {
+      "id": "BK-029",
+      "title": "The Adweek Copywriting Handbook",
+      "creator": "Joseph Sugarman",
+      "domain": "copywriting",
+      "type": "Book",
+      "note": "Direct-response copy principles, sequencing, and engagement.",
+      "url": null
+    },
+    {
+      "id": "BK-030",
+      "title": "Breakthrough Advertising",
+      "creator": "Eugene M. Schwartz",
+      "domain": "copywriting",
+      "type": "Book",
+      "note": "Market awareness, sophistication, desire, and message strategy.",
+      "url": null
+    },
+    {
+      "id": "BK-031",
+      "title": "Great Leads",
+      "creator": "Michael Masterson; John Forde",
+      "domain": "copywriting",
+      "type": "Book",
+      "note": "Lead selection and opening structures for sales messages.",
+      "url": null
+    },
+    {
+      "id": "BK-032",
+      "title": "The Copywriter's Handbook",
+      "creator": "Robert W. Bly",
+      "domain": "copywriting",
+      "type": "Book",
+      "note": "Benefits, headlines, offers, direct response, and business copy.",
+      "url": null
+    },
+    {
+      "id": "BK-033",
+      "title": "Scientific Advertising",
+      "creator": "Claude C. Hopkins",
+      "domain": "advertising",
+      "type": "Book",
+      "note": "Testing, measurement, offers, and accountable advertising.",
+      "url": null
+    },
+    {
+      "id": "BK-034",
+      "title": "The Ultimate Sales Letter",
+      "creator": "Dan S. Kennedy",
+      "domain": "copywriting",
+      "type": "Book",
+      "note": "Direct-response structure, offer presentation, and action.",
+      "url": null
+    },
+    {
+      "id": "BK-035",
+      "title": "Influence: The Psychology of Persuasion",
+      "creator": "Robert B. Cialdini",
+      "domain": "persuasion",
+      "type": "Book",
+      "note": "Evidence-based principles of influence and ethical persuasion.",
+      "url": null
+    },
+    {
+      "id": "BK-036",
+      "title": "Ogilvy on Advertising",
+      "creator": "David Ogilvy",
+      "domain": "advertising",
+      "type": "Book",
+      "note": "Research, clarity, headlines, layouts, and brand communication.",
+      "url": null
+    },
+    {
+      "id": "BK-037",
+      "title": "Made to Stick",
+      "creator": "Chip Heath; Dan Heath",
+      "domain": "communication",
+      "type": "Book",
+      "note": "Simple, unexpected, concrete, credible, emotional stories.",
+      "url": null
+    },
+    {
+      "id": "BK-038",
+      "title": "Sell with a Story",
+      "creator": "Paul Smith",
+      "domain": "sales_storytelling",
+      "type": "Book",
+      "note": "Using relevant stories in sales and business communication.",
+      "url": null
+    },
+    {
+      "id": "BK-039",
+      "title": "The Chicago Manual of Style",
+      "creator": "The University of Chicago Press Editorial Staff",
+      "domain": "editorial_style",
+      "type": "Book",
+      "note": "Comprehensive editorial style, grammar, documentation, and publishing.",
+      "url": null
+    },
+    {
+      "id": "WEB-001",
+      "title": "Universal Dependencies",
+      "creator": "Universal Dependencies community",
+      "domain": "linguistic_annotation",
+      "type": "Web standard",
+      "note": "Cross-linguistic parts of speech, morphology, and syntactic dependencies.",
+      "url": "https://universaldependencies.org/"
+    },
+    {
+      "id": "WEB-002",
+      "title": "Principles of plain language",
+      "creator": "Digital.gov / U.S. General Services Administration",
+      "domain": "plain_language",
+      "type": "Government guidance",
+      "note": "Design content so the intended audience can find, understand, and use it.",
+      "url": "https://www.plainlanguage.gov/"
+    },
+    {
+      "id": "WEB-003",
+      "title": "Google Developer Documentation Style Guide",
+      "creator": "Google",
+      "domain": "technical_style",
+      "type": "Official style guide",
+      "note": "Clear, consistent, audience-directed technical documentation.",
+      "url": "https://developers.google.com/style"
+    },
+    {
+      "id": "WEB-004",
+      "title": "Microsoft Writing Style Guide",
+      "creator": "Microsoft",
+      "domain": "technical_style",
+      "type": "Official style guide",
+      "note": "Warm, clear, concise, helpful technical communication.",
+      "url": "https://learn.microsoft.com/en-us/style-guide/welcome/"
+    },
+    {
+      "id": "WEB-005",
+      "title": "Writing for Web Accessibility",
+      "creator": "W3C Web Accessibility Initiative",
+      "domain": "accessibility",
+      "type": "Web standard guidance",
+      "note": "Clear structure, descriptive labels, alternatives, and understandable content.",
+      "url": "https://www.w3.org/WAI/tips/writing/"
+    },
+    {
+      "id": "WEB-006",
+      "title": "Making Content Usable for People with Cognitive and Learning Disabilities",
+      "creator": "W3C",
+      "domain": "cognitive_accessibility",
+      "type": "W3C Working Group Note",
+      "note": "Clear words, simple voice and tense, explicit instructions, and supportive structure.",
+      "url": "https://www.w3.org/TR/coga-usable/"
+    },
+    {
+      "id": "WEB-007",
+      "title": "Web Content Accessibility Guidelines 2.2",
+      "creator": "W3C",
+      "domain": "accessibility",
+      "type": "W3C Recommendation",
+      "note": "Testable accessibility requirements for web content.",
+      "url": "https://www.w3.org/TR/WCAG22/"
+    },
+    {
+      "id": "WEB-008",
+      "title": "DITA 1.3 Technical Content Specification",
+      "creator": "OASIS",
+      "domain": "structured_authoring",
+      "type": "OASIS Standard",
+      "note": "Topic-based concept, task, reference, troubleshooting, and reuse architecture.",
+      "url": "https://docs.oasis-open.org/dita/dita/v1.3/os/part2-tech-content/dita-v1.3-os-part2-tech-content.html"
+    },
+    {
+      "id": "WEB-009",
+      "title": "ISO 24495-1:2023 Plain language — Part 1",
+      "creator": "ISO",
+      "domain": "plain_language",
+      "type": "International standard",
+      "note": "Governing principles for documents readers can find, understand, and use.",
+      "url": "https://www.iso.org/standard/78907.html"
+    },
+    {
+      "id": "WEB-010",
+      "title": "Rhetorical Situations",
+      "creator": "Purdue Online Writing Lab",
+      "domain": "rhetoric",
+      "type": "University writing resource",
+      "note": "Author, audience, purpose, text, and setting as communication constraints.",
+      "url": "https://owl.purdue.edu/owl/general_writing/academic_writing/rhetorical_situation/index.html"
+    },
+    {
+      "id": "WEB-011",
+      "title": "Grammar, Punctuation, and Sentence Structure",
+      "creator": "Purdue Online Writing Lab",
+      "domain": "grammar_reference",
+      "type": "University writing resource",
+      "note": "Practical mechanics, clause, sentence, punctuation, and style guidance.",
+      "url": "https://owl.purdue.edu/owl/general_writing/index.html"
+    },
+    {
+      "id": "WEB-012",
+      "title": "Advertising and Marketing Basics",
+      "creator": "U.S. Federal Trade Commission",
+      "domain": "advertising_compliance",
+      "type": "Regulatory guidance",
+      "note": "Advertising claims must be truthful, non-deceptive, fair, and appropriately substantiated.",
+      "url": "https://www.ftc.gov/business-guidance/advertising-marketing"
+    },
+    {
+      "id": "WEB-013",
+      "title": "Advertising Substantiation Policy Statement",
+      "creator": "U.S. Federal Trade Commission",
+      "domain": "claim_substantiation",
+      "type": "Regulatory policy",
+      "note": "Objective claims require a reasonable evidentiary basis before dissemination.",
+      "url": "https://www.ftc.gov/legal-library/browse/ftc-policy-statement-regarding-advertising-substantiation"
+    }
+  ]
+}

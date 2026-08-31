@@ -1,0 +1,809 @@
+{
+  "title": "Accessible and Cognitively Usable Writing Rules",
+  "version": "1.0.0",
+  "rule_count": 15,
+  "rules": [
+    {
+      "id": "ACC-001",
+      "name": "Use clear words for the actual audience",
+      "domain": "accessibility",
+      "layer": "word",
+      "strength": "context_default",
+      "human_logic": "IF a simpler word is equally accurate, respectful, and familiar, THEN use it ELSE retain the necessary precise term with support.",
+      "when": {
+        "path": "word.simple_equivalent.equal_accuracy",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "word",
+          "with": "simple_equivalent"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Plain language reduces preventable barriers without removing necessary ideas.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-002",
+        "WEB-006",
+        "WEB-009"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-002",
+      "name": "Simple tense and voice when possible",
+      "domain": "accessibility",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF present active construction expresses the real time and actor, THEN prefer it ELSE use the tense and voice accuracy requires.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.present_active_possible",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.present_active_preserves_accuracy",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "convert",
+          "target": "sentence",
+          "tense": "present",
+          "voice": "active"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Simple tense and visible agency often improve comprehension.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-003",
+      "name": "No nested double negatives",
+      "domain": "accessibility",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a double negative or negative inside another condition obscures polarity, THEN rewrite with one explicit positive or negative operation ELSE retain a necessary legal distinction with explanation.",
+      "when": {
+        "path": "sentence.polarity_nesting_depth",
+        "operator": "gt",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "rewrite",
+          "target": "single_explicit_polarity"
+        },
+        {
+          "action": "explain",
+          "target": "sentence",
+          "when": "legal_distinction_required"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Polarity nesting raises the chance of reversing the intended action.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-004",
+      "name": "Separate each instruction",
+      "domain": "accessibility",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF multiple actions appear in one block and can be completed separately, THEN make each a separate step ELSE retain a single compound action.",
+      "when": {
+        "all": [
+          {
+            "path": "section.instruction_action_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "section.actions_separately_completable",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "split",
+          "target": "section.instructions",
+          "one": "principal_action_per_step"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Separated actions support focus, memory, and recovery.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-005",
+      "name": "Explain implied meaning when consequential",
+      "domain": "accessibility",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF humor, irony, metaphor, convention, or context carries a consequential instruction or conclusion, THEN state the literal meaning too ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.implied_meaning_device",
+            "operator": "in",
+            "value": [
+              "humor",
+              "irony",
+              "metaphor",
+              "convention",
+              "context"
+            ]
+          },
+          {
+            "path": "paragraph.implied_meaning_consequential",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "paragraph.literal_meaning"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Important meaning should not depend entirely on inference.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-006",
+      "name": "Headings and labels are unique and descriptive",
+      "domain": "accessibility",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF repeated or vague headings prevent out-of-context identification, THEN rename them by topic or task ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "document.duplicate_heading_count",
+            "operator": "gt",
+            "value": 0
+          },
+          {
+            "path": "document.vague_heading_count",
+            "operator": "gt",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "rename",
+          "target": "document.headings",
+          "pattern": "specific_topic_or_task"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Screen-reader and scanning navigation often presents headings out of surrounding context.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-007",
+      "name": "Text alternatives convey function or information",
+      "domain": "accessibility",
+      "layer": "signal",
+      "strength": "hard_constraint",
+      "human_logic": "IF meaningful non-text content appears, THEN provide a concise equivalent of its purpose and relevant information; IF decorative, mark it ignorable ELSE block release.",
+      "when": {
+        "path": "content.non_text.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "classify",
+          "target": "content.non_text",
+          "types": [
+            "meaningful",
+            "functional",
+            "decorative",
+            "complex"
+          ]
+        },
+        {
+          "action": "provide",
+          "target": "content.non_text.text_alternative",
+          "when": "meaningful_or_functional"
+        },
+        {
+          "action": "mark",
+          "target": "content.non_text",
+          "when": "decorative",
+          "value": "ignored_by_assistive_technology"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Equivalent text lets the information or function survive a change of sensory mode.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-008",
+      "name": "Do not encode meaning by color alone",
+      "domain": "accessibility",
+      "layer": "signal",
+      "strength": "hard_constraint",
+      "human_logic": "IF color distinguishes status, category, instruction, or error, THEN add text, shape, icon, pattern, or position with an accessible label ELSE retain.",
+      "when": {
+        "path": "content.meaning_by_color_only",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "add",
+          "target": "content.redundant_cue",
+          "options": [
+            "text",
+            "shape",
+            "icon",
+            "pattern",
+            "position"
+          ],
+          "require": "accessible_label"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers may not perceive or distinguish the color cue.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-009",
+      "name": "Avoid directional text without structural anchor",
+      "domain": "accessibility",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF instructions say above, below, left, right, or color-only location and layout can reflow, THEN name the control, section, or landmark ELSE retain stable spatial instruction.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.spatial_reference",
+            "operator": "in",
+            "value": [
+              "above",
+              "below",
+              "left",
+              "right",
+              "color_only"
+            ]
+          },
+          {
+            "path": "interface.layout_can_reflow",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "sentence.spatial_reference",
+          "with": "named_control_section_or_landmark"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Responsive layouts and assistive presentation can change spatial relationships.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-010",
+      "name": "Error message states problem and recovery",
+      "domain": "accessibility",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF an error message appears, THEN state what happened, what remains safe or changed, and the next corrective action in non-blaming language ELSE retain.",
+      "when": {
+        "path": "section.type",
+        "operator": "eq",
+        "value": "error_message"
+      },
+      "then": [
+        {
+          "action": "complete",
+          "target": "section.error_message",
+          "fields": [
+            "problem",
+            "state_or_consequence",
+            "corrective_action"
+          ],
+          "tone": "non_blame"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "An error is useful only when the reader can recover.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-004",
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-011",
+      "name": "Respect user dignity",
+      "domain": "accessibility",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF language stereotypes, infantilizes, blames, or defines people solely by a condition without contextual reason, THEN replace it with accurate respectful language ELSE retain self-identified terms.",
+      "when": {
+        "path": "document.dignity_risk",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "document.flagged_language",
+          "with": "accurate_respectful_contextual_language"
+        },
+        {
+          "action": "defer_to",
+          "target": "person_or_community_self_identification",
+          "when": "known"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Accessibility includes social and cognitive safety, not only mechanical readability.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "WEB-005"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-012",
+      "name": "Support orientation in long processes",
+      "domain": "accessibility",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF a process has many steps, branches, or waits, THEN show current position, total or remaining stages, completion state, and safe exit ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "process.step_count",
+            "operator": "gt",
+            "value": 7
+          },
+          {
+            "path": "process.branch_count",
+            "operator": "gt",
+            "value": 2
+          },
+          {
+            "path": "process.includes_wait",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "process.orientation",
+          "fields": [
+            "current_position",
+            "stages",
+            "completion_state",
+            "safe_exit"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Orientation reduces memory demand and uncertainty.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-006",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-013",
+      "name": "Allow enough reading and response time",
+      "domain": "accessibility",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF content disappears or a task times out, THEN let users extend, pause, resume, or retrieve it unless a documented safety or real-time exception applies ELSE retain.",
+      "when": {
+        "path": "experience.time_limit.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "provide",
+          "target": "experience.time_control",
+          "options": [
+            "extend",
+            "pause",
+            "resume",
+            "retrieve"
+          ]
+        },
+        {
+          "action": "document",
+          "target": "experience.exception",
+          "when": "essential_time_limit"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "People read, understand, and respond at different speeds.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-014",
+      "name": "Design for screen-reader linearization",
+      "domain": "accessibility",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF visual layout changes reading order or relationships, THEN define a semantic linear order that preserves meaning ELSE retain.",
+      "when": {
+        "path": "document.visual_order_differs_from_semantic_order",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "reorder",
+          "target": "document.semantic_sequence",
+          "preserve": "meaning_and_relationships"
+        },
+        {
+          "action": "test",
+          "target": "document",
+          "method": "screen_reader_linearization"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A visual grid becomes a sequence when read nonvisually.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ACC-015",
+      "name": "Test with representative disabled users",
+      "domain": "accessibility",
+      "layer": "content_system",
+      "strength": "context_default",
+      "human_logic": "IF content is consequential or broadly used, THEN combine standards checks with representative user testing and track barriers ELSE perform proportionate review.",
+      "when": {
+        "any": [
+          {
+            "path": "context.stakes",
+            "operator": "in",
+            "value": [
+              "high",
+              "safety_critical"
+            ]
+          },
+          {
+            "path": "document.audience_size",
+            "operator": "eq",
+            "value": "broad"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "test_with_reader",
+          "target": "content",
+          "include": "representative_disabled_users"
+        },
+        {
+          "action": "track",
+          "target": "barriers_and_fixes"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Conformance cannot predict every real interaction or support need.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-005",
+        "WEB-006",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

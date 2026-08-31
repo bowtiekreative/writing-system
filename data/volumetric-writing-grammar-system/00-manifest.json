@@ -1,0 +1,240 @@
+{
+  "title": "LAKA Volumetric Writing Grammar System",
+  "short_name": "LVWGS",
+  "version": "1.0.0",
+  "generated_at": "2026-08-31",
+  "creator_context": "Built for Ryan Perez and the evolving LAKA system.",
+  "purpose": "Break writing into first principles and expose machine-readable IF / ELSE / AND / OR rules across grammar, style, narrative, nonfiction, technical writing, copywriting, accessibility, ethics, and editing.",
+  "start_here": [
+    "Read 01-first-principles.json.",
+    "Load 02-laka-grid.json and 03-context-axes.json.",
+    "Implement 04-logic-operators.json using 05-rule-schema.json.",
+    "Load the relevant application profile and rule domains.",
+    "Execute 23-rule-engine.json and validate against 26-rule-test-cases.json."
+  ],
+  "inventory": {
+    "json_file_count": 30,
+    "base_rule_count": 228,
+    "laka_state_rule_count": 56,
+    "laka_cross_axis_rule_count": 5,
+    "total_operational_rule_records": 289,
+    "composition_template_count": 19,
+    "pipeline_count": 7,
+    "generation_recipe_count": 8,
+    "test_case_count": 25,
+    "source_count": 52,
+    "glossary_term_count": 47,
+    "rule_count_by_domain": {
+      "grammar": 20,
+      "punctuation": 20,
+      "syntax": 20,
+      "structure": 20,
+      "clarity": 20,
+      "voice": 6,
+      "rhythm": 6,
+      "narrative": 18,
+      "argument": 16,
+      "technical_writing": 20,
+      "copywriting": 20,
+      "accessibility": 15,
+      "ethics": 12,
+      "editing": 15
+    },
+    "rule_count_by_strength": {
+      "hard_constraint": 103,
+      "context_default": 79,
+      "creative_option": 6,
+      "heuristic": 40
+    },
+    "rule_count_by_layer": {
+      "clause": 8,
+      "sentence": 68,
+      "paragraph": 27,
+      "phrase": 16,
+      "word": 8,
+      "section": 47,
+      "document": 43,
+      "content_system": 9,
+      "signal": 2
+    }
+  },
+  "architecture": {
+    "first_principles": "signal → grapheme → morpheme → word → phrase → clause → sentence → paragraph → section → document → content system",
+    "rule_logic": "conditions are Boolean ASTs using all/any/not and predicates; branches are explicit then/else actions; exceptions live in unless.",
+    "LAKA": "6 interrogatives × 6 relational modifiers × 6 scales, plus 14 transformation dynamics × 4 states.",
+    "selection_policy": "Choose the smallest sufficient intervention and reject any change that damages a hard gate.",
+    "outcome_model": "Decoded intent, reader usability, contextual fit, trust, and measured task or communication outcome."
+  },
+  "load_order": [
+    "01-first-principles.json",
+    "02-laka-grid.json",
+    "03-context-axes.json",
+    "04-logic-operators.json",
+    "05-rule-schema.json",
+    "06-linguistic-primitives.json",
+    "07-core-grammar-rules.json",
+    "08-punctuation-rules.json",
+    "09-syntax-and-sentence-rules.json",
+    "10-paragraph-document-rules.json",
+    "11-clarity-style-rules.json",
+    "12-voice-rhythm-rules.json",
+    "13-narrative-rules.json",
+    "14-argument-nonfiction-rules.json",
+    "15-technical-writing-rules.json",
+    "16-copywriting-rules.json",
+    "17-accessibility-rules.json",
+    "18-ethics-and-claims-rules.json",
+    "19-editing-diagnostic-rules.json",
+    "20-laka-transformation-rules.json",
+    "21-composition-templates.json",
+    "22-writing-pipelines.json",
+    "23-rule-engine.json",
+    "24-quality-metrics.json",
+    "25-volumetric-generation-recipes.json",
+    "26-rule-test-cases.json",
+    "27-application-profiles.json",
+    "28-glossary.json",
+    "29-source-bibliography.json"
+  ],
+  "files": [
+    {
+      "name": "00-manifest.json",
+      "role": "entrypoint and counts"
+    },
+    {
+      "name": "01-first-principles.json",
+      "role": "Writing from First Principles"
+    },
+    {
+      "name": "02-laka-grid.json",
+      "role": "LAKA Volumetric Writing Grid"
+    },
+    {
+      "name": "03-context-axes.json",
+      "role": "Rhetorical and Production Context Axes"
+    },
+    {
+      "name": "04-logic-operators.json",
+      "role": "Boolean and Decision Logic"
+    },
+    {
+      "name": "05-rule-schema.json",
+      "role": "LAKA Writing Rule"
+    },
+    {
+      "name": "06-linguistic-primitives.json",
+      "role": "Machine-Readable Linguistic Primitives"
+    },
+    {
+      "name": "07-core-grammar-rules.json",
+      "role": "Core Grammar Rules"
+    },
+    {
+      "name": "08-punctuation-rules.json",
+      "role": "Punctuation as Meaning and Boundary"
+    },
+    {
+      "name": "09-syntax-and-sentence-rules.json",
+      "role": "Syntax and Sentence Construction Rules"
+    },
+    {
+      "name": "10-paragraph-document-rules.json",
+      "role": "Paragraph, Section, and Document Architecture"
+    },
+    {
+      "name": "11-clarity-style-rules.json",
+      "role": "Clarity, Precision, and Plain-Language Rules"
+    },
+    {
+      "name": "12-voice-rhythm-rules.json",
+      "role": "Voice, Tone, and Rhythm Rules"
+    },
+    {
+      "name": "13-narrative-rules.json",
+      "role": "Narrative and Story Grammar"
+    },
+    {
+      "name": "14-argument-nonfiction-rules.json",
+      "role": "Argument and Nonfiction Reasoning Rules"
+    },
+    {
+      "name": "15-technical-writing-rules.json",
+      "role": "Technical Writing and Documentation Rules"
+    },
+    {
+      "name": "16-copywriting-rules.json",
+      "role": "Persuasive and Direct-Response Copy Rules"
+    },
+    {
+      "name": "17-accessibility-rules.json",
+      "role": "Accessible and Cognitively Usable Writing Rules"
+    },
+    {
+      "name": "18-ethics-and-claims-rules.json",
+      "role": "Ethics, Truth, and Claim-Safety Rules"
+    },
+    {
+      "name": "19-editing-diagnostic-rules.json",
+      "role": "Editing, Diagnosis, and Quality-Control Rules"
+    },
+    {
+      "name": "20-laka-transformation-rules.json",
+      "role": "LAKA Transformation State Rules"
+    },
+    {
+      "name": "21-composition-templates.json",
+      "role": "Conditional Composition Templates"
+    },
+    {
+      "name": "22-writing-pipelines.json",
+      "role": "End-to-End Writing Pipelines"
+    },
+    {
+      "name": "23-rule-engine.json",
+      "role": "Reference Rule Engine"
+    },
+    {
+      "name": "24-quality-metrics.json",
+      "role": "Writing Quality Measurement Model"
+    },
+    {
+      "name": "25-volumetric-generation-recipes.json",
+      "role": "Volumetric Generation Recipes"
+    },
+    {
+      "name": "26-rule-test-cases.json",
+      "role": "Rule Test Cases and Minimal Pairs"
+    },
+    {
+      "name": "27-application-profiles.json",
+      "role": "Application Profiles"
+    },
+    {
+      "name": "28-glossary.json",
+      "role": "Volumetric Writing Grammar Glossary"
+    },
+    {
+      "name": "29-source-bibliography.json",
+      "role": "Source Bibliography and Influence Map"
+    }
+  ],
+  "compatibility": {
+    "json": "RFC 8259",
+    "json_schema": "Draft 2020-12",
+    "text_model": "Universal Dependencies compatible",
+    "encoding": "UTF-8"
+  },
+  "validation": {
+    "status": "passed_at_build_time",
+    "checks": [
+      "all JSON serializable",
+      "unique base rule IDs",
+      "required rule fields present",
+      "nonempty then and else branches",
+      "all rule source IDs resolve",
+      "declared counts derived from source arrays"
+    ]
+  },
+  "usage_note": "This is a decision system, not a universal command to make all prose plain or uniform. Apply genre, audience, stakes, dialect, locale, and deliberate exceptions while preserving truth, safety, accessibility, and intended meaning.",
+  "copyright_note": "The package contains original synthesis and paraphrased principles. It does not reproduce the source books. Source titles remain the property of their respective authors and publishers."
+}

@@ -1,0 +1,629 @@
+{
+  "title": "Voice, Tone, and Rhythm Rules",
+  "version": "1.0.0",
+  "rule_count": 12,
+  "rules": [
+    {
+      "id": "VOI-001",
+      "name": "Declare voice before polishing",
+      "domain": "voice",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF a document lacks a voice profile, THEN define relationship, formality, energy, warmth, confidence, and permitted vocabulary ELSE use the profile.",
+      "when": {
+        "path": "document.voice_profile",
+        "operator": "missing",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "define",
+          "target": "document.voice_profile",
+          "dimensions": [
+            "relationship",
+            "formality",
+            "energy",
+            "warmth",
+            "confidence",
+            "vocabulary"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Voice becomes consistent when its variables are explicit.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-002",
+      "name": "Tone responds to reader state",
+      "domain": "voice",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF reader emotion changes, THEN adjust directness, warmth, pace, and reassurance without changing facts ELSE maintain baseline tone.",
+      "when": {
+        "path": "context.emotional_temperature",
+        "operator": "in",
+        "value": [
+          "anxious",
+          "angry",
+          "grieving",
+          "urgent"
+        ]
+      },
+      "then": [
+        {
+          "action": "adjust",
+          "target": "paragraph.tone",
+          "preserve": [
+            "facts",
+            "requirements"
+          ],
+          "dimensions": [
+            "directness",
+            "warmth",
+            "pace",
+            "reassurance"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Tone is the local adaptation of a stable voice to the reader’s situation.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-003",
+      "name": "Address the reader directly in instructions",
+      "domain": "voice",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF the reader performs the action, THEN use an imperative or YOU; do not call the reader THE USER ELSE name the actual actor.",
+      "when": {
+        "path": "sentence.actor",
+        "operator": "eq",
+        "value": "reader"
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.person",
+          "value": "second_person_or_imperative"
+        }
+      ],
+      "else": [
+        {
+          "action": "name",
+          "target": "sentence.actor"
+        }
+      ],
+      "unless": [],
+      "because": "Direct address makes responsibility clear and supports a helpful tone.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-004",
+      "name": "Vary sentence length for function",
+      "domain": "rhythm",
+      "layer": "paragraph",
+      "strength": "heuristic",
+      "human_logic": "IF sentence lengths are mechanically uniform, THEN vary them according to emphasis, explanation, transition, and pace ELSE retain.",
+      "when": {
+        "path": "paragraph.sentence_length_variance",
+        "operator": "eq",
+        "value": "near_zero"
+      },
+      "then": [
+        {
+          "action": "vary",
+          "target": "paragraph.sentence_lengths",
+          "by_function": {
+            "short": "emphasis_or_transition",
+            "medium": "core_explanation",
+            "long": "qualified_relationship"
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Controlled variation creates rhythm and maps length to cognitive function.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-013",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-005",
+      "name": "Short sentence after complexity",
+      "domain": "rhythm",
+      "layer": "paragraph",
+      "strength": "creative_option",
+      "human_logic": "IF a dense explanation reaches its key consequence, THEN a short sentence may isolate the payoff ELSE continue normal cadence.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.dense_explanation",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "paragraph.key_consequence.position",
+            "operator": "eq",
+            "value": "next"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "isolate",
+          "target": "paragraph.key_consequence",
+          "as": "short_sentence"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Contrast in length can direct attention to the consequence.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-006",
+      "name": "Read prose aloud",
+      "domain": "rhythm",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF prose is intended for humans, THEN read representative passages aloud or with text-to-speech and flag breath, ambiguity, repetition, and unnatural stress ELSE retain.",
+      "when": {
+        "path": "document.audience",
+        "operator": "neq",
+        "value": "machine_only"
+      },
+      "then": [
+        {
+          "action": "test",
+          "target": "document",
+          "method": "aloud_or_text_to_speech",
+          "flags": [
+            "breath_overload",
+            "ambiguity",
+            "accidental_repetition",
+            "stress_mismatch"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Sound reveals problems silent visual review can miss.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-005",
+        "BK-019",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-007",
+      "name": "Place emphasis at structural edges",
+      "domain": "rhythm",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF one idea deserves emphasis, THEN place it at the sentence opening or ending rather than burying it mid-clause ELSE retain.",
+      "when": {
+        "path": "sentence.emphasis_target",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "sentence.emphasis_target",
+          "destination": "opening_or_ending",
+          "choose_by": "coherence"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Beginnings frame attention; endings receive terminal stress.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-008",
+      "name": "Limit accidental alliteration and rhyme",
+      "domain": "rhythm",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF repeated sound distracts from serious meaning AND is unintended, THEN vary one word ELSE retain purposeful sound pattern.",
+      "when": {
+        "all": [
+          {
+            "any": [
+              {
+                "path": "sentence.alliteration_density",
+                "operator": "eq",
+                "value": "high"
+              },
+              {
+                "path": "sentence.accidental_rhyme",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          },
+          {
+            "path": "sentence.sound_pattern_intended",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "sentence.one_sound_repeating_word",
+          "preserve": "meaning_and_voice"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Sound should support rather than trivialize the message.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-009",
+      "name": "Use repetition with a job",
+      "domain": "rhythm",
+      "layer": "paragraph",
+      "strength": "creative_option",
+      "human_logic": "IF a word or structure repeats, THEN retain it only for cohesion, emphasis, rhythm, motif, instruction consistency, or technical precision ELSE vary or delete it.",
+      "when": {
+        "path": "paragraph.repetition.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "paragraph.repetition.function",
+          "allowed": [
+            "cohesion",
+            "emphasis",
+            "rhythm",
+            "motif",
+            "instruction_consistency",
+            "technical_precision"
+          ]
+        },
+        {
+          "action": "delete_or_vary",
+          "target": "paragraph.repetition",
+          "when": "function_missing"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Repetition is powerful when patterned and tiring when accidental.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-019",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-010",
+      "name": "Metaphor must preserve the model",
+      "domain": "voice",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF a metaphor explains a mechanism, THEN map its relevant correspondences and state its boundary when overextension would mislead ELSE use it only decoratively.",
+      "when": {
+        "path": "metaphor.function",
+        "operator": "eq",
+        "value": "explanation"
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "metaphor.mapping",
+          "require": [
+            "source",
+            "target",
+            "shared_relation"
+          ]
+        },
+        {
+          "action": "qualify",
+          "target": "metaphor",
+          "include": "where_the_analogy_breaks",
+          "when": "overextension_risk"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A vivid analogy can create a false mental model if its limits stay hidden.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-037"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-011",
+      "name": "Calibrate confidence to evidence",
+      "domain": "voice",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF wording expresses certainty, THEN match modal strength to evidence and uncertainty ELSE retain.",
+      "when": {
+        "path": "sentence.epistemic_claim",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "sentence.confidence",
+          "value_from": "evidence.strength_and_uncertainty"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Tone must not make a claim sound more certain than the evidence allows.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "VOI-012",
+      "name": "Avoid institutional self-centering",
+      "domain": "voice",
+      "layer": "document",
+      "strength": "heuristic",
+      "human_logic": "IF WE/OUR language displaces the reader’s need or action, THEN rewrite around the reader or subject ELSE retain clear author responsibility.",
+      "when": {
+        "all": [
+          {
+            "path": "document.first_person_plural_rate",
+            "operator": "eq",
+            "value": "high"
+          },
+          {
+            "path": "document.reader_need_displaced",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "reframe",
+          "target": "document",
+          "center": "reader_need_or_subject"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Reader-centered prose is not the same as hiding who is responsible.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "WEB-002"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

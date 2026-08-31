@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bowtiekreative.com/schemas/laka-writing-rule.schema.json",
+  "title": "LAKA Writing Rule",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "domain",
+    "layer",
+    "strength",
+    "human_logic",
+    "when",
+    "then",
+    "else",
+    "because",
+    "source_ids",
+    "laka"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2,5}-[0-9]{3}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3
+    },
+    "domain": {
+      "type": "string"
+    },
+    "layer": {
+      "enum": [
+        "signal",
+        "grapheme",
+        "morpheme",
+        "word",
+        "phrase",
+        "clause",
+        "sentence",
+        "paragraph",
+        "section",
+        "document",
+        "content_system"
+      ]
+    },
+    "strength": {
+      "enum": [
+        "hard_constraint",
+        "context_default",
+        "heuristic",
+        "creative_option"
+      ]
+    },
+    "human_logic": {
+      "type": "string"
+    },
+    "when": {
+      "$ref": "#/$defs/condition"
+    },
+    "then": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/action"
+      },
+      "minItems": 1
+    },
+    "else": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/action"
+      },
+      "minItems": 1
+    },
+    "unless": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/condition"
+      }
+    },
+    "because": {
+      "type": "string"
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "examples": {
+      "type": "object"
+    },
+    "source_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "laka": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "all"
+          ],
+          "properties": {
+            "all": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "any"
+          ],
+          "properties": {
+            "any": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "not"
+          ],
+          "properties": {
+            "not": {
+              "$ref": "#/$defs/condition"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "path",
+            "operator"
+          ],
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "operator": {
+              "type": "string"
+            },
+            "value": {}
+          }
+        }
+      ]
+    },
+    "action": {
+      "type": "object",
+      "required": [
+        "action",
+        "target"
+      ],
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

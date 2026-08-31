@@ -1,0 +1,1203 @@
+{
+  "title": "Core Grammar Rules",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "GRM-001",
+      "name": "Subject–verb number agreement",
+      "domain": "grammar",
+      "layer": "clause",
+      "strength": "hard_constraint",
+      "human_logic": "IF a finite clause has an expressed subject AND neither quoted dialect nor an agreement exception applies, THEN align the finite verb with the subject in number ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "clause.subject",
+            "operator": "exists"
+          },
+          {
+            "path": "clause.verb.finite",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "not": {
+              "path": "context.mode",
+              "operator": "eq",
+              "value": "quoted_dialect"
+            }
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "clause.verb.number",
+          "value_from": "clause.subject.grammatical_number"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Agreement helps readers identify the intended grammatical relation.",
+      "diagnostics": [
+        "Ignore nouns inside intervening prepositional phrases when identifying the head subject.",
+        "Evaluate collective nouns and notional agreement according to dialect and house style."
+      ],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-004",
+        "BK-010",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-002",
+      "name": "Compound subject agreement",
+      "domain": "grammar",
+      "layer": "clause",
+      "strength": "hard_constraint",
+      "human_logic": "IF two or more singular subject heads are coordinated by AND, THEN use plural agreement ELSE evaluate the coordinator.",
+      "when": {
+        "all": [
+          {
+            "path": "clause.subject.coordinator",
+            "operator": "eq",
+            "value": "and"
+          },
+          {
+            "path": "clause.subject.head_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "clause.subject.denotes_single_unit",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "clause.verb.number",
+          "value": "plural"
+        }
+      ],
+      "else": [
+        {
+          "action": "evaluate",
+          "target": "clause.subject.coordinator",
+          "rules": [
+            "or_nor_proximity",
+            "single_unit_exception"
+          ]
+        }
+      ],
+      "unless": [],
+      "because": "AND normally combines subject referents into a plural set.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-010",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-003",
+      "name": "Or/nor proximity agreement",
+      "domain": "grammar",
+      "layer": "clause",
+      "strength": "context_default",
+      "human_logic": "IF subject alternatives are joined by OR or NOR, THEN agree with the closest subject OR rewrite when the result sounds unstable ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "clause.subject.coordinator",
+            "operator": "in",
+            "value": [
+              "or",
+              "nor"
+            ]
+          },
+          {
+            "path": "clause.subject.head_count",
+            "operator": "gte",
+            "value": 2
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "clause.verb.number",
+          "value_from": "clause.subject.nearest_head.number"
+        },
+        {
+          "action": "flag",
+          "target": "clause",
+          "when": "mixed_number_heads",
+          "message": "Consider rewriting to avoid distracting proximity agreement."
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Proximity agreement is conventional, but a rewrite can reduce processing friction.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-010",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-004",
+      "name": "Pronoun–antecedent agreement",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a pronoun refers to an antecedent AND the antecedent is known, THEN align person and number while respecting singular THEY ELSE request the missing referent.",
+      "when": {
+        "all": [
+          {
+            "path": "pronoun",
+            "operator": "exists"
+          },
+          {
+            "path": "pronoun.antecedent",
+            "operator": "exists"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "pronoun.person",
+          "value_from": "pronoun.antecedent.person"
+        },
+        {
+          "action": "align",
+          "target": "pronoun.number",
+          "value_from": "pronoun.antecedent.number",
+          "allow": [
+            "singular_they"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "request_context",
+          "target": "pronoun.antecedent"
+        }
+      ],
+      "unless": [],
+      "because": "Agreement and a stable referent prevent identity confusion.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-007",
+        "BK-010",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-005",
+      "name": "Unambiguous pronoun reference",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a pronoun has two or more plausible antecedents OR none, THEN replace it with the intended noun phrase ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "pronoun.plausible_antecedent_count",
+            "operator": "gt",
+            "value": 1
+          },
+          {
+            "path": "pronoun.plausible_antecedent_count",
+            "operator": "eq",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "pronoun",
+          "value_from": "intended_referent.short_noun_phrase"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers should not need to guess who or what a pronoun denotes.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-008",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-006",
+      "name": "Stable grammatical person",
+      "domain": "grammar",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF a passage shifts person without changing speaker, audience, or viewpoint, THEN restore the established person ELSE preserve the motivated shift.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.person_shift",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "paragraph.speaker_change",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "paragraph.audience_change",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "paragraph.viewpoint_change",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "paragraph.person",
+          "value_from": "document.established_person"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Unmotivated person shifts make the reader reconstruct the communication roles.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-004",
+        "BK-007",
+        "WEB-003",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-007",
+      "name": "Tense consistency within a time frame",
+      "domain": "grammar",
+      "layer": "paragraph",
+      "strength": "context_default",
+      "human_logic": "IF tense changes but event time and narrative viewpoint do not, THEN restore the established tense ELSE keep the meaningful time shift.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.tense_shift",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "paragraph.event_time_shift",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "paragraph.viewpoint_time_shift",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "paragraph.tense",
+          "value_from": "paragraph.established_tense"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Tense shifts should encode time or viewpoint, not accident.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-004",
+        "BK-007",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-008",
+      "name": "Sequence of tenses",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a dependent clause is temporally related to a governing clause, THEN select tense and aspect that express the intended ordering ELSE do not normalize automatically.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.main_clause.time",
+            "operator": "exists"
+          },
+          {
+            "path": "sentence.dependent_clause.time_relation",
+            "operator": "exists"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "sentence.dependent_clause.tense_aspect",
+          "value_from": "sentence.dependent_clause.time_relation"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Tense and aspect encode whether events precede, overlap, or follow one another.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-004",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-009",
+      "name": "Complete comparative relation",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a comparison can attach to more than one comparison set, THEN state the full set or rewrite ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.contains_comparison",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.comparison_set_ambiguity",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "expand",
+          "target": "sentence.comparison",
+          "include": "explicit_comparison_set"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "An incomplete comparison can imply an unintended or logically impossible claim.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-007",
+        "BK-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-010",
+      "name": "Like for nouns; as for clauses",
+      "domain": "grammar",
+      "layer": "phrase",
+      "strength": "context_default",
+      "human_logic": "IF the comparison complement contains a finite clause, THEN prefer AS or AS IF; IF it is a noun phrase, LIKE is available ELSE retain idiom.",
+      "when": {
+        "any": [
+          {
+            "path": "comparison.complement_type",
+            "operator": "eq",
+            "value": "finite_clause"
+          },
+          {
+            "path": "comparison.complement_type",
+            "operator": "eq",
+            "value": "noun_phrase"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "comparison.marker",
+          "map": {
+            "finite_clause": [
+              "as",
+              "as_if"
+            ],
+            "noun_phrase": [
+              "like",
+              "as"
+            ]
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The marker can reveal whether the complement is a phrase or clause, though idiom and dialect matter.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-011",
+      "name": "Article required for singular count noun",
+      "domain": "grammar",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a singular count noun is used referentially AND lacks a determiner, THEN add the contextually correct determiner ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "noun.countability",
+            "operator": "eq",
+            "value": "count"
+          },
+          {
+            "path": "noun.number",
+            "operator": "eq",
+            "value": "singular"
+          },
+          {
+            "path": "noun.referential",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "noun.determiner",
+            "operator": "missing",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "noun.determiner",
+          "choose_by": [
+            "definiteness",
+            "possession",
+            "quantity",
+            "genericity"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "English singular count noun phrases generally require a determiner.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-004",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-012",
+      "name": "A/an follows sound",
+      "domain": "grammar",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF an indefinite article precedes a singular noun phrase, THEN choose A before a consonant sound OR AN before a vowel sound ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "determiner.type",
+            "operator": "eq",
+            "value": "indefinite_article"
+          },
+          {
+            "path": "noun_phrase.initial_sound",
+            "operator": "exists"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "determiner.form",
+          "by": "noun_phrase.initial_sound",
+          "map": {
+            "consonant": "a",
+            "vowel": "an"
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The choice follows pronunciation rather than spelling.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-004",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-013",
+      "name": "Countability-compatible quantifier",
+      "domain": "grammar",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a quantifier conflicts with the noun’s countability, THEN replace the quantifier or recast the noun ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "noun.countability",
+            "operator": "exists"
+          },
+          {
+            "path": "quantifier.compatible_with_noun",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "quantifier",
+          "choose_by": "noun.countability"
+        },
+        {
+          "action": "flag",
+          "target": "noun",
+          "message": "Check whether a domain-specific count sense is intended."
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Quantifiers encode whether items are counted individually or measured as mass.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-004",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-014",
+      "name": "Case for coordinated pronouns",
+      "domain": "grammar",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a pronoun appears in coordination, THEN assign the case required by its syntactic role, tested without the other conjunct ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "pronoun.in_coordination",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "coordination.syntactic_role",
+            "operator": "exists"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "pronoun.case",
+          "value_from": "coordination.syntactic_role.case"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Coordination does not change the case licensed by the pronoun’s grammatical role.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-003",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-015",
+      "name": "Reflexive pronoun requires local antecedent",
+      "domain": "grammar",
+      "layer": "clause",
+      "strength": "hard_constraint",
+      "human_logic": "IF a reflexive pronoun lacks a compatible local antecedent, THEN replace it with the correct personal pronoun or supply the antecedent ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "pronoun.type",
+            "operator": "eq",
+            "value": "reflexive"
+          },
+          {
+            "path": "pronoun.compatible_local_antecedent",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "pronoun",
+          "choose_by": "syntactic_role_and_referent"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Reflexives normally refer back to a local participant in the same clause.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-004",
+        "BK-010"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-016",
+      "name": "Parallel grammatical form",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF coordinated items perform the same function AND use mismatched forms without rhetorical purpose, THEN make their structures parallel ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "coordination.item_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "coordination.same_function",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "coordination.forms_parallel",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "coordination.rhetorical_asymmetry",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "coordination.item_forms",
+          "value_from": "clearest_existing_pattern"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Parallel form exposes the equality and relationship of coordinated ideas.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-007",
+        "BK-013",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-017",
+      "name": "Modifier beside its target",
+      "domain": "grammar",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a modifier can attach to the wrong head, THEN move it beside the intended target or expand the phrase ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "modifier",
+            "operator": "exists"
+          },
+          {
+            "path": "modifier.attachment_ambiguous",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "move",
+          "target": "modifier",
+          "destination": "adjacent_to_intended_head"
+        },
+        {
+          "action": "expand",
+          "target": "modifier",
+          "when": "movement_insufficient",
+          "include": "explicit_relation"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Attachment ambiguity changes who did what, when, where, or to what degree.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-001",
+        "BK-007",
+        "BK-008"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-018",
+      "name": "Repair dangling introductory modifier",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF an introductory modifier’s implied actor is not the following subject, THEN make the actor the subject OR expand the modifier into a clause ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.intro_modifier.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "sentence.intro_modifier.actor_matches_subject",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "sentence",
+          "options": [
+            "make_actor_subject",
+            "expand_modifier_to_clause"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The understood subject of a reduced modifier should be recoverable without absurdity.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-019",
+      "name": "Logical negation",
+      "domain": "grammar",
+      "layer": "clause",
+      "strength": "hard_constraint",
+      "human_logic": "IF two negatives unintentionally cancel into a positive, THEN replace them with the intended positive or single negative ELSE retain deliberate litotes or dialect.",
+      "when": {
+        "all": [
+          {
+            "path": "clause.negative_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "clause.intended_litotes",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "context.mode",
+            "operator": "neq",
+            "value": "quoted_dialect"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "clause.negation",
+          "value_from": "intended_polarity",
+          "prefer": "single_operator"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Nested polarity increases error risk and can reverse the intended meaning.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-004",
+        "BK-010",
+        "WEB-006"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "GRM-020",
+      "name": "Avoid fused participle logic",
+      "domain": "grammar",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF an -ing construction implies a cause, sequence, or actor that the sentence does not support, THEN state the relation in a finite clause ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.ing_clause.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "path": "sentence.ing_clause.actor_ambiguous",
+                "operator": "eq",
+                "value": true
+              },
+              {
+                "path": "sentence.ing_clause.time_relation_impossible",
+                "operator": "eq",
+                "value": true
+              },
+              {
+                "path": "sentence.ing_clause.causal_relation_unsupported",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "expand",
+          "target": "sentence.ing_clause",
+          "to": "finite_clause",
+          "include": [
+            "actor",
+            "time_or_logic_connector"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Compressed participial clauses can hide impossible timing or unsupported causation.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-008",
+        "WEB-004"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "title": "Volumetric Writing Grammar Glossary",
+  "version": "1.0.0",
+  "term_count": 47,
+  "terms": [
+    {
+      "term": "accuracy",
+      "definition": "Correspondence between the text, intended meaning, and supportable world or source state."
+    },
+    {
+      "term": "action_path",
+      "definition": "The sequence that takes a reader from understanding to the intended next action."
+    },
+    {
+      "term": "active_voice",
+      "definition": "A clause pattern in which the grammatical subject normally represents the actor or experiencer."
+    },
+    {
+      "term": "addressable_space",
+      "definition": "All rule-and-context combinations the system can evaluate, not necessarily generate."
+    },
+    {
+      "term": "antecedent",
+      "definition": "The expression to which a later pronoun or reference expression points."
+    },
+    {
+      "term": "claim",
+      "definition": "A proposition offered as true, probable, valuable, causal, definitional, predictive, or advisable."
+    },
+    {
+      "term": "clause",
+      "definition": "A unit organized around a predicate and its participants or circumstances."
+    },
+    {
+      "term": "cohesion",
+      "definition": "Surface links such as reference, repetition, substitution, conjunction, and lexical relation."
+    },
+    {
+      "term": "coherence",
+      "definition": "The reader-recoverable conceptual and rhetorical unity of a text."
+    },
+    {
+      "term": "condition",
+      "definition": "A circumstance that must hold for a rule, claim, or action to apply."
+    },
+    {
+      "term": "context_default",
+      "definition": "A rule that normally improves the target genre or audience but may yield to a documented reason."
+    },
+    {
+      "term": "copy",
+      "definition": "Persuasive writing designed to influence a defined decision or action."
+    },
+    {
+      "term": "creative_option",
+      "definition": "A controlled alternative offered for rhetorical effect rather than enforced."
+    },
+    {
+      "term": "dependency",
+      "definition": "A grammatical or content-system relation in which one element relies on another."
+    },
+    {
+      "term": "discourse_relation",
+      "definition": "The logical or rhetorical connection between propositions or passages."
+    },
+    {
+      "term": "evidence",
+      "definition": "Information used to support, test, bound, or challenge a claim."
+    },
+    {
+      "term": "evidence_debt",
+      "definition": "The support obligation created by a specific or consequential claim."
+    },
+    {
+      "term": "genre",
+      "definition": "A recurring communication form with characteristic reader expectations and moves."
+    },
+    {
+      "term": "given_information",
+      "definition": "Information the reader can already identify from context or shared knowledge."
+    },
+    {
+      "term": "hard_constraint",
+      "definition": "A requirement that must pass or block publication or action."
+    },
+    {
+      "term": "heuristic",
+      "definition": "A useful diagnostic or ranking rule that does not guarantee an outcome."
+    },
+    {
+      "term": "information_type",
+      "definition": "A structured topic such as concept, task, reference, or troubleshooting."
+    },
+    {
+      "term": "LAKA",
+      "definition": "A multidimensional diagnostic and transformation grid for decomposing, varying, selecting, routing, and reviewing interventions."
+    },
+    {
+      "term": "layer",
+      "definition": "The scale at which a writing object exists, from signal to content system."
+    },
+    {
+      "term": "meaning",
+      "definition": "The conceptual, relational, pragmatic, and emotional content a reader recovers."
+    },
+    {
+      "term": "message_scent",
+      "definition": "Continuity between a source message and the destination it leads to."
+    },
+    {
+      "term": "minimal_pair",
+      "definition": "Two examples differing in one controlled feature so its effect can be evaluated."
+    },
+    {
+      "term": "nominalization",
+      "definition": "A noun form that represents an action, process, or quality."
+    },
+    {
+      "term": "outcome",
+      "definition": "The intended change in what a reader knows, feels, decides, or does."
+    },
+    {
+      "term": "paragraph_move",
+      "definition": "The main rhetorical job performed by a paragraph."
+    },
+    {
+      "term": "passive_voice",
+      "definition": "A clause pattern that promotes the receiver or result while demoting or omitting the actor."
+    },
+    {
+      "term": "plain_language",
+      "definition": "Communication designed so intended readers can find, understand, and use what they need."
+    },
+    {
+      "term": "predicate",
+      "definition": "The central expression of an event, action, process, relation, or state."
+    },
+    {
+      "term": "propagation",
+      "definition": "The degree to which a local issue or change affects dependent units."
+    },
+    {
+      "term": "rhetorical_situation",
+      "definition": "The author, audience, purpose, text, and setting that constrain communication."
+    },
+    {
+      "term": "rule_strength",
+      "definition": "The enforcement class: hard constraint, context default, heuristic, or creative option."
+    },
+    {
+      "term": "scope",
+      "definition": "The amount of text or system affected by an issue or intervention."
+    },
+    {
+      "term": "smallest_sufficient_intervention",
+      "definition": "The least invasive change that fully resolves the diagnosed failure without creating a larger one."
+    },
+    {
+      "term": "subtext",
+      "definition": "Meaning carried indirectly beneath a character’s or speaker’s literal words."
+    },
+    {
+      "term": "syntax",
+      "definition": "The structural relations and order by which words and phrases form clauses and sentences."
+    },
+    {
+      "term": "task_success",
+      "definition": "The degree to which a reader completes the intended action correctly and safely."
+    },
+    {
+      "term": "tone",
+      "definition": "A local adaptation of voice to subject, reader state, and moment."
+    },
+    {
+      "term": "truth_condition",
+      "definition": "The conditions under which a proposition would be true or false."
+    },
+    {
+      "term": "usability",
+      "definition": "The degree to which readers can find, understand, and use the content."
+    },
+    {
+      "term": "voice",
+      "definition": "The stable relationship and character projected by a text."
+    },
+    {
+      "term": "volumetric_grammar",
+      "definition": "A grammar system that evaluates language across interacting linguistic, rhetorical, contextual, dynamic, and outcome dimensions."
+    },
+    {
+      "term": "warrant",
+      "definition": "The reasoning that connects evidence to a claim."
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "title": "Reference Rule Engine",
+  "version": "1.0.0",
+  "inputs": {
+    "required": [
+      "text",
+      "rhetorical_situation",
+      "intended_outcome"
+    ],
+    "recommended": [
+      "genre",
+      "channel",
+      "stakes",
+      "audience_state",
+      "style_profile",
+      "source_evidence",
+      "product_or_world_state"
+    ],
+    "analyzed_model": [
+      "tokens",
+      "morphology",
+      "dependencies",
+      "clauses",
+      "sentences",
+      "paragraphs",
+      "sections",
+      "claims",
+      "evidence",
+      "entities",
+      "discourse_relations",
+      "document_structure"
+    ]
+  },
+  "execution": [
+    {
+      "step": 1,
+      "action": "analyze",
+      "output": "text_model"
+    },
+    {
+      "step": 2,
+      "action": "filter_rules",
+      "logic": {
+        "all": [
+          {
+            "path": "rule.domain",
+            "operator": "compatible_with",
+            "value": "context"
+          },
+          {
+            "path": "rule.layer",
+            "operator": "present_in",
+            "value": "text_model"
+          }
+        ]
+      }
+    },
+    {
+      "step": 3,
+      "action": "evaluate_hard_constraints",
+      "on_fail": "block_or_required_fix"
+    },
+    {
+      "step": 4,
+      "action": "evaluate_context_defaults",
+      "on_exception": "require_named_purpose"
+    },
+    {
+      "step": 5,
+      "action": "evaluate_heuristics_and_creative_options",
+      "on_match": "rank_not_force"
+    },
+    {
+      "step": 6,
+      "action": "generate_candidate_edits"
+    },
+    {
+      "step": 7,
+      "action": "rank_LAKA",
+      "order": [
+        "outcome_gain_desc",
+        "magnitude_asc",
+        "scope_asc",
+        "depth_asc",
+        "reversibility_asc"
+      ]
+    },
+    {
+      "step": 8,
+      "action": "apply_minimal_set"
+    },
+    {
+      "step": 9,
+      "action": "regression_test",
+      "dimensions": [
+        "meaning",
+        "accuracy",
+        "grammar",
+        "cohesion",
+        "voice",
+        "accessibility",
+        "evidence",
+        "task_success"
+      ]
+    },
+    {
+      "step": 10,
+      "action": "emit",
+      "outputs": [
+        "revised_text",
+        "diagnostics",
+        "applied_rule_ids",
+        "exceptions",
+        "unresolved_risks",
+        "test_plan"
+      ]
+    }
+  ],
+  "strength_behavior": {
+    "hard_constraint": "must pass or block",
+    "context_default": "apply unless a documented exception improves the intended outcome",
+    "heuristic": "score and rank",
+    "creative_option": "offer as a controlled alternative"
+  },
+  "safe_failure": {
+    "if": {
+      "any": [
+        {
+          "path": "intent",
+          "operator": "unknown",
+          "value": true
+        },
+        {
+          "path": "evidence",
+          "operator": "insufficient",
+          "value": true
+        },
+        {
+          "path": "rule_conflict",
+          "operator": "unresolved",
+          "value": true
+        }
+      ]
+    },
+    "then": [
+      "preserve_text",
+      "ask_focused_question_or_flag",
+      "do_not_invent"
+    ],
+    "else": [
+      "continue"
+    ]
+  }
+}

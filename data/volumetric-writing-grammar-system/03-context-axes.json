@@ -1,0 +1,144 @@
+{
+  "title": "Rhetorical and Production Context Axes",
+  "axes": {
+    "purpose": [
+      "inform",
+      "explain",
+      "instruct",
+      "record",
+      "analyze",
+      "argue",
+      "persuade",
+      "sell",
+      "entertain",
+      "inspire",
+      "warn",
+      "coordinate"
+    ],
+    "audience_role": [
+      "novice",
+      "learner",
+      "practitioner",
+      "expert",
+      "decision_maker",
+      "buyer",
+      "user",
+      "operator",
+      "reviewer",
+      "public"
+    ],
+    "audience_state": [
+      "unaware",
+      "problem_aware",
+      "solution_aware",
+      "offer_aware",
+      "ready_to_act",
+      "skeptical",
+      "confused",
+      "time_constrained",
+      "distressed"
+    ],
+    "channel": [
+      "book",
+      "article",
+      "report",
+      "email",
+      "web_page",
+      "landing_page",
+      "advertisement",
+      "social_post",
+      "proposal",
+      "documentation",
+      "user_interface",
+      "script",
+      "presentation"
+    ],
+    "genre": [
+      "narrative",
+      "exposition",
+      "argument",
+      "procedure",
+      "reference",
+      "description",
+      "correspondence",
+      "marketing",
+      "microcopy"
+    ],
+    "stakes": [
+      "low",
+      "ordinary",
+      "high",
+      "safety_critical"
+    ],
+    "formality": [
+      "intimate",
+      "conversational",
+      "professional",
+      "formal",
+      "ceremonial"
+    ],
+    "evidence_need": [
+      "none",
+      "illustrative",
+      "credible",
+      "documented",
+      "expert_or_scientific"
+    ],
+    "reading_condition": [
+      "focused",
+      "scanning",
+      "interrupted",
+      "mobile",
+      "screen_reader",
+      "translated",
+      "under_stress"
+    ],
+    "knowledge_gap": [
+      "none",
+      "small",
+      "moderate",
+      "large",
+      "unknown"
+    ],
+    "emotional_temperature": [
+      "calm",
+      "curious",
+      "hopeful",
+      "skeptical",
+      "anxious",
+      "angry",
+      "grieving",
+      "urgent"
+    ],
+    "lifecycle": [
+      "draft",
+      "developmental_edit",
+      "line_edit",
+      "copyedit",
+      "proofread",
+      "published",
+      "maintained"
+    ]
+  },
+  "precedence": [
+    "truth_and_safety",
+    "intended_meaning",
+    "reader_task_success",
+    "accessibility",
+    "genre_and_channel_fit",
+    "house_style",
+    "individual_preference"
+  ],
+  "rhetorical_situation": {
+    "required": [
+      "author",
+      "audience",
+      "purpose",
+      "text",
+      "setting"
+    ],
+    "source_ids": [
+      "WEB-010"
+    ]
+  }
+}

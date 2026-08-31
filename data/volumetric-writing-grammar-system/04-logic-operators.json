@@ -1,0 +1,159 @@
+{
+  "title": "Boolean and Decision Logic",
+  "version": "1.0.0",
+  "condition_ast": {
+    "combinators": {
+      "all": "AND: every child condition must be true.",
+      "any": "OR: at least one child condition must be true.",
+      "not": "NOT: invert one child condition."
+    },
+    "predicates": [
+      "exists",
+      "missing",
+      "eq",
+      "neq",
+      "gt",
+      "gte",
+      "lt",
+      "lte",
+      "in",
+      "not_in",
+      "contains",
+      "not_contains",
+      "matches",
+      "count_gt",
+      "count_gte",
+      "count_lt",
+      "count_lte",
+      "ratio_gt",
+      "ratio_lt",
+      "changed",
+      "unchanged"
+    ],
+    "path_convention": "Dot notation addresses an analyzed text model, such as sentence.voice or document.audience.knowledge_level."
+  },
+  "decision_shape": {
+    "if": "when",
+    "then": "ordered actions applied when the condition is true",
+    "else": "ordered actions applied when the condition is false",
+    "and": "all",
+    "or": "any",
+    "not": "not",
+    "exception": "unless"
+  },
+  "action_vocabulary": [
+    "retain",
+    "flag",
+    "annotate",
+    "replace",
+    "delete",
+    "insert",
+    "move",
+    "split",
+    "merge",
+    "reorder",
+    "align",
+    "convert",
+    "define",
+    "expand",
+    "compress",
+    "qualify",
+    "cite",
+    "verify",
+    "request_evidence",
+    "request_context",
+    "select_template",
+    "measure",
+    "test_with_reader",
+    "escalate_review",
+    "block_publication"
+  ],
+  "evaluation_order": [
+    "validate_input",
+    "apply_hard_constraints",
+    "apply_context_defaults",
+    "evaluate_exceptions",
+    "rank_heuristics",
+    "choose_smallest_sufficient_intervention",
+    "run_regression_checks"
+  ],
+  "conflict_resolution": [
+    {
+      "if": {
+        "all": [
+          {
+            "path": "rule_a.strength",
+            "operator": "eq",
+            "value": "hard_constraint"
+          },
+          {
+            "path": "rule_b.strength",
+            "operator": "neq",
+            "value": "hard_constraint"
+          }
+        ]
+      },
+      "then": "rule_a"
+    },
+    {
+      "if": {
+        "all": [
+          {
+            "path": "rule_a.strength",
+            "operator": "eq",
+            "value": "hard_constraint"
+          },
+          {
+            "path": "rule_b.strength",
+            "operator": "eq",
+            "value": "hard_constraint"
+          }
+        ]
+      },
+      "then": "request_context_or_escalate"
+    },
+    {
+      "if": {
+        "all": [
+          {
+            "path": "rules.strength",
+            "operator": "eq",
+            "value": "default"
+          },
+          {
+            "path": "context.genre",
+            "operator": "in",
+            "value": [
+              "dialogue",
+              "poetry",
+              "experimental_prose"
+            ]
+          }
+        ]
+      },
+      "then": "allow_documented_exception"
+    },
+    {
+      "if": {
+        "any": [
+          {
+            "path": "change.damages_accuracy",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "change.damages_accessibility",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "change.damages_safety",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": "reject_change"
+    }
+  ]
+}

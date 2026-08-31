@@ -1,0 +1,2739 @@
+{
+  "title": "Conditional Composition Templates",
+  "version": "1.0.0",
+  "template_count": 19,
+  "templates": [
+    {
+      "id": "TPL-CONCEPT",
+      "name": "Concept topic",
+      "use_when": {
+        "any": [
+          {
+            "path": "reader.question",
+            "operator": "in",
+            "value": [
+              "what_is",
+              "why",
+              "how_it_works"
+            ]
+          },
+          {
+            "path": "purpose",
+            "operator": "eq",
+            "value": "explain"
+          }
+        ]
+      },
+      "slots": [
+        {
+          "id": "title",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.title",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "definition",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.definition",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "purpose_or_significance",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.purpose_or_significance",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "model_or_mechanism",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.model_or_mechanism",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "relationships",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.relationships.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "example",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.example",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "boundaries_or_nonexamples",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.boundaries_or_nonexamples.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "next_topic",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.next_topic.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-TASK",
+      "name": "Task procedure",
+      "use_when": {
+        "path": "reader.question",
+        "operator": "eq",
+        "value": "how_do_i"
+      },
+      "slots": [
+        {
+          "id": "goal",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.goal",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "prerequisites",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.prerequisites.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "safety",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.safety.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "ordered_steps",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.ordered_steps",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "expected_results",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.expected_results",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "recovery",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.recovery.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "verification",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.verification",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "next_step",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.next_step.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-REFERENCE",
+      "name": "Reference entry",
+      "use_when": {
+        "path": "reader.mode",
+        "operator": "eq",
+        "value": "lookup"
+      },
+      "slots": [
+        {
+          "id": "entity_name",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.entity_name",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "definition",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.definition",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "syntax_or_signature",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.syntax_or_signature.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "fields_or_properties",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.fields_or_properties",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "valid_values",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.valid_values.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "defaults",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.defaults.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "constraints",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.constraints",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "examples",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.examples",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "errors",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.errors.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "version",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.version.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "related_entries",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.related_entries.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-TROUBLE",
+      "name": "Troubleshooting topic",
+      "use_when": {
+        "path": "reader.goal",
+        "operator": "eq",
+        "value": "recover_from_failure"
+      },
+      "slots": [
+        {
+          "id": "observable_symptom",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.observable_symptom",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "scope_check",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.scope_check.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "discriminating_tests",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.discriminating_tests",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "likely_causes",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.likely_causes",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "corrective_actions",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.corrective_actions",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "verification",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.verification",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "escalation",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.escalation.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-EXPLAINER",
+      "name": "General explainer",
+      "use_when": {
+        "path": "purpose",
+        "operator": "eq",
+        "value": "explain"
+      },
+      "slots": [
+        {
+          "id": "reader_question",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.reader_question",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "short_answer",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.short_answer",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "known_base",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.known_base.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "model",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.model",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "worked_example",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.worked_example",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "limits",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.limits",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "knowledge_check",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.knowledge_check.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "next_action",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.next_action.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-ARTICLE",
+      "name": "Nonfiction article",
+      "use_when": {
+        "path": "channel",
+        "operator": "in",
+        "value": [
+          "article",
+          "blog",
+          "publication"
+        ]
+      },
+      "slots": [
+        {
+          "id": "headline",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.headline",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "deck_or_promise",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.deck_or_promise.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "lead",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.lead",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "controlling_idea",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.controlling_idea",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "sections",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.sections",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "evidence",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.evidence",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "counterpoint",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.counterpoint.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "conclusion",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.conclusion",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "sources",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.sources",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-ARGUMENT",
+      "name": "Evidence-based argument",
+      "use_when": {
+        "path": "purpose",
+        "operator": "in",
+        "value": [
+          "argue",
+          "recommend",
+          "persuade"
+        ]
+      },
+      "slots": [
+        {
+          "id": "rhetorical_situation",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.rhetorical_situation",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "thesis",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.thesis",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "claim_map",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.claim_map",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "evidence",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.evidence",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "warrants",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.warrants",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "counterarguments",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.counterarguments",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "limitations",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.limitations",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "conclusion",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.conclusion",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "decision_rule",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.decision_rule.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-REPORT",
+      "name": "Analytical report",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "report"
+      },
+      "slots": [
+        {
+          "id": "title",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.title",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "executive_summary",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.executive_summary",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "question_or_mandate",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.question_or_mandate",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "method",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.method",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "findings",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.findings",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "analysis",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.analysis",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "limitations",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.limitations",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "recommendations",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.recommendations.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "appendices",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.appendices.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "sources",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.sources",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-PROPOSAL",
+      "name": "Business proposal",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "proposal"
+      },
+      "slots": [
+        {
+          "id": "client_context",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.client_context",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "desired_outcome",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.desired_outcome",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "diagnosis",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.diagnosis",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "scope",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.scope",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "approach",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.approach",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "deliverables",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.deliverables",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "timeline",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.timeline",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "responsibilities",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.responsibilities",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "investment",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.investment",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "proof",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.proof.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "risks_and_assumptions",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.risks_and_assumptions",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "acceptance",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.acceptance",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-CASE",
+      "name": "Case study",
+      "use_when": {
+        "path": "purpose",
+        "operator": "eq",
+        "value": "prove_with_case"
+      },
+      "slots": [
+        {
+          "id": "subject_and_context",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.subject_and_context",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "starting_state",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.starting_state",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "constraint",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.constraint",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "intervention",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.intervention",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "mechanism",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.mechanism",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "measured_result",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.measured_result",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "timeframe",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.timeframe",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "limitations",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.limitations",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "transferable_lesson",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.transferable_lesson",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "cta",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.cta.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-LANDING",
+      "name": "Landing page",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "landing_page"
+      },
+      "slots": [
+        {
+          "id": "message_match",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.message_match",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "headline",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.headline",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "subhead",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.subhead.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "primary_cta",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.primary_cta",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "problem_or_opportunity",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.problem_or_opportunity",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "benefits",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.benefits",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "mechanism",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.mechanism.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "proof",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.proof",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "offer",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.offer",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "objections",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.objections.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "risk_terms",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.risk_terms.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "final_cta",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.final_cta",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-SALES",
+      "name": "Long-form sales letter",
+      "use_when": {
+        "all": [
+          {
+            "path": "purpose",
+            "operator": "eq",
+            "value": "sell"
+          },
+          {
+            "path": "channel",
+            "operator": "in",
+            "value": [
+              "web_page",
+              "letter",
+              "email_longform"
+            ]
+          }
+        ]
+      },
+      "slots": [
+        {
+          "id": "lead",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.lead",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "problem_or_desire",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.problem_or_desire",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "promise",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.promise",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "mechanism",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.mechanism",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "proof",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.proof",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "story",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.story.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "offer",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.offer",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "bonuses",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.bonuses.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "objections",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.objections",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "guarantee",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.guarantee.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "urgency",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.urgency.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "cta",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.cta",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "postscript",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.postscript.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-EMAIL",
+      "name": "Action email",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "email"
+      },
+      "slots": [
+        {
+          "id": "subject",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.subject",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "preview_text",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.preview_text.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "greeting",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.greeting.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "reason_now",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.reason_now",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "reader_value",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.reader_value",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "necessary_detail",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.necessary_detail",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "primary_action",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.primary_action",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "deadline_or_timing",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.deadline_or_timing.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "signature",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.signature",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-AD",
+      "name": "Short advertisement",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "advertisement"
+      },
+      "slots": [
+        {
+          "id": "audience_signal",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.audience_signal",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "hook_or_promise",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.hook_or_promise",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "proof_or_specific",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.proof_or_specific.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "offer",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.offer",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "cta",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.cta",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "conditions_or_disclosure",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.conditions_or_disclosure.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-SOCIAL",
+      "name": "Social post",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "social_post"
+      },
+      "slots": [
+        {
+          "id": "opening_signal",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.opening_signal",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "one_core_idea",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.one_core_idea",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "support_or_example",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.support_or_example.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "reader_relevance",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.reader_relevance",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "action_or_closure",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.action_or_closure.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "source_or_disclosure",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.source_or_disclosure.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-ERROR",
+      "name": "UX error message",
+      "use_when": {
+        "path": "genre",
+        "operator": "eq",
+        "value": "microcopy"
+      },
+      "slots": [
+        {
+          "id": "what_happened",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.what_happened",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "current_state_or_consequence",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.current_state_or_consequence",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "recovery_action",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.recovery_action",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "support_or_code",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.support_or_code.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-SCENE",
+      "name": "Narrative scene",
+      "use_when": {
+        "path": "genre",
+        "operator": "eq",
+        "value": "narrative_scene"
+      },
+      "slots": [
+        {
+          "id": "viewpoint",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.viewpoint",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "scene_goal",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.scene_goal",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "setting_pressure",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.setting_pressure.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "opposition",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.opposition",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "beats",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.beats",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "turn",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.turn",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "new_state",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.new_state",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "forward_question",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.forward_question.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-CHAPTER",
+      "name": "Book chapter",
+      "use_when": {
+        "path": "channel",
+        "operator": "eq",
+        "value": "book"
+      },
+      "slots": [
+        {
+          "id": "chapter_promise",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.chapter_promise",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "entry",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.entry",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "controlling_move",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.controlling_move",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "sections_or_scenes",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.sections_or_scenes",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "examples_or_evidence",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.examples_or_evidence",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "integration",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.integration",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "payoff",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.payoff",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "bridge",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.bridge.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    },
+    {
+      "id": "TPL-LESSON",
+      "name": "Course lesson",
+      "use_when": {
+        "path": "purpose",
+        "operator": "eq",
+        "value": "teach"
+      },
+      "slots": [
+        {
+          "id": "observable_outcome",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.observable_outcome",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "prior_knowledge",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.prior_knowledge.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        },
+        {
+          "id": "model",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.model",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "worked_example",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.worked_example",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "guided_practice",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.guided_practice",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "independent_practice",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.independent_practice",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "feedback",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.feedback",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "assessment",
+          "required": true,
+          "logic": {
+            "if": {
+              "path": "slots.assessment",
+              "operator": "missing"
+            },
+            "then": "block_or_request",
+            "else": "continue"
+          }
+        },
+        {
+          "id": "transfer_task",
+          "required": false,
+          "logic": {
+            "if": {
+              "path": "slots.transfer_task.relevance",
+              "operator": "eq",
+              "value": true
+            },
+            "then": "include",
+            "else": "omit"
+          }
+        }
+      ],
+      "global_rules": {
+        "if": {
+          "any": [
+            {
+              "path": "truth_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility_check",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "purpose_match",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "block_and_revise",
+        "else": "publish_or_test"
+      }
+    }
+  ]
+}

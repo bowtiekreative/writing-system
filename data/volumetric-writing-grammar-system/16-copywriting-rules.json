@@ -1,0 +1,1108 @@
+{
+  "title": "Persuasive and Direct-Response Copy Rules",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "CPY-001",
+      "name": "Start from market awareness",
+      "domain": "copywriting",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF writing persuasive copy, THEN classify the audience as unaware, problem-aware, solution-aware, product-aware, or most-aware before choosing the message ELSE request research.",
+      "when": {
+        "path": "context.purpose",
+        "operator": "in",
+        "value": [
+          "persuade",
+          "sell"
+        ]
+      },
+      "then": [
+        {
+          "action": "classify",
+          "target": "audience.awareness",
+          "states": [
+            "unaware",
+            "problem_aware",
+            "solution_aware",
+            "product_aware",
+            "most_aware"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The same claim lands differently depending on what the reader already knows and believes.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-030",
+        "BK-032"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-002",
+      "name": "Match lead to awareness and evidence",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF awareness is known, THEN select a lead type that bridges the reader’s current state to the offer ELSE do not default to a hype lead.",
+      "when": {
+        "path": "audience.awareness",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "copy.lead_type",
+          "by": [
+            "audience.awareness",
+            "market.sophistication",
+            "available_proof"
+          ],
+          "options": [
+            "direct_promise",
+            "problem_solution",
+            "secret_or_mechanism",
+            "story",
+            "prediction",
+            "invitation",
+            "offer"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Lead strategy is a routing decision, not decorative wordplay.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-030",
+        "BK-031",
+        "BK-029"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-003",
+      "name": "Headline makes one credible promise",
+      "domain": "copywriting",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a headline is used, THEN make its audience relevance, benefit or curiosity, and credible scope legible ELSE revise.",
+      "when": {
+        "path": "copy.headline.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "copy.headline",
+          "require": [
+            "audience_relevance",
+            "benefit_or_curiosity",
+            "credible_scope"
+          ]
+        },
+        {
+          "action": "revise",
+          "target": "copy.headline",
+          "when": "requirement_missing"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The headline earns attention by promising a relevant payoff without outrunning proof.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-030",
+        "BK-032",
+        "BK-036"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-004",
+      "name": "Mechanism explains the promise",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF the promise is unfamiliar, counterintuitive, or in a sophisticated market, THEN explain why and how the offer produces the result ELSE keep the mechanism concise.",
+      "when": {
+        "any": [
+          {
+            "path": "copy.promise.familiarity",
+            "operator": "eq",
+            "value": "low"
+          },
+          {
+            "path": "copy.promise.counterintuitive",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "market.sophistication",
+            "operator": "in",
+            "value": [
+              "high",
+              "very_high"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "copy.mechanism",
+          "include": [
+            "cause",
+            "process",
+            "difference",
+            "boundary"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A mechanism converts a bare claim into an understandable causal story.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-030",
+        "BK-033"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-005",
+      "name": "Translate feature into buyer outcome",
+      "domain": "copywriting",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF copy names a feature, THEN connect it to functional benefit, practical outcome, and relevant emotional meaning when supported ELSE remove the feature.",
+      "when": {
+        "path": "copy.feature.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "expand",
+          "target": "copy.feature",
+          "chain": [
+            "feature",
+            "functional_benefit",
+            "practical_outcome",
+            "emotional_meaning"
+          ],
+          "only": "supported_links"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Buyers care about what a feature changes for them.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-032",
+        "BK-034"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-006",
+      "name": "Specificity earns credibility",
+      "domain": "copywriting",
+      "layer": "sentence",
+      "strength": "heuristic",
+      "human_logic": "IF a claim uses generic superiority language AND verifiable specifics exist, THEN replace the generic phrase with the relevant specific ELSE qualify or remove it.",
+      "when": {
+        "all": [
+          {
+            "path": "copy.claim.language",
+            "operator": "eq",
+            "value": "generic_superiority"
+          },
+          {
+            "path": "copy.claim.verifiable_specifics_exist",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "copy.claim",
+          "with": "relevant_verifiable_specific"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Specific details are more testable and believable than empty superlatives.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-032",
+        "BK-036"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-007",
+      "name": "Proof appears after or near the claim",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a material sales claim is made, THEN attach the strongest appropriate proof close to it ELSE weaken or remove the claim.",
+      "when": {
+        "all": [
+          {
+            "path": "copy.claim.material",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "copy.claim.proof_status",
+            "operator": "neq",
+            "value": "adequate"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "copy.proof",
+          "types": [
+            "demonstration",
+            "data",
+            "case",
+            "testimonial",
+            "credential",
+            "guarantee_terms"
+          ],
+          "choose_by": "claim_type"
+        },
+        {
+          "action": "qualify_or_delete",
+          "target": "copy.claim",
+          "when": "proof_unavailable"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Persuasion becomes trustworthy when claims create visible evidence trails.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-033",
+        "BK-035",
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-008",
+      "name": "Testimonial is real, typicality-aware, and specific",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a testimonial is used, THEN verify identity permission, authenticity, result context, and any required typicality disclosure ELSE remove it.",
+      "when": {
+        "path": "copy.testimonial.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "copy.testimonial",
+          "fields": [
+            "permission",
+            "authenticity",
+            "result_context",
+            "disclosure"
+          ]
+        },
+        {
+          "action": "delete",
+          "target": "copy.testimonial",
+          "when": "verification_fails"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Social proof must not imply results or endorsement that the evidence does not support.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-035",
+        "WEB-012"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-009",
+      "name": "Objection response names the real risk",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF research shows a recurring material objection, THEN acknowledge it, answer with proof or terms, and preserve any legitimate limitation ELSE do not invent objections.",
+      "when": {
+        "path": "audience.objection.frequency",
+        "operator": "in",
+        "value": [
+          "common",
+          "dominant"
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "copy.objection_response",
+          "pattern": [
+            "acknowledge",
+            "answer",
+            "proof_or_terms",
+            "legitimate_limit"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A strong response reduces uncertainty without pretending the tradeoff does not exist.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-034",
+        "BK-035"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-010",
+      "name": "Offer is operationally complete",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF an offer is presented, THEN state deliverable, audience, price or exchange, timing, requirements, exclusions, risk terms, and next action as applicable ELSE mark incomplete.",
+      "when": {
+        "path": "copy.offer.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "complete",
+          "target": "copy.offer",
+          "fields": [
+            "deliverable",
+            "audience",
+            "price_or_exchange",
+            "timing",
+            "requirements",
+            "exclusions",
+            "risk_terms",
+            "next_action"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "An incomplete offer creates uncertainty exactly where a decision should become easier.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-034"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-011",
+      "name": "CTA names one next action",
+      "domain": "copywriting",
+      "layer": "phrase",
+      "strength": "context_default",
+      "human_logic": "IF the page has one primary conversion goal, THEN use one prominent CTA that names the action and immediate result ELSE define priority among multiple actions.",
+      "when": {
+        "path": "copy.primary_conversion_goal_count",
+        "operator": "eq",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "copy.primary_cta",
+          "include": [
+            "specific_action",
+            "immediate_result"
+          ],
+          "prominence": "primary"
+        }
+      ],
+      "else": [
+        {
+          "action": "rank",
+          "target": "copy.ctas",
+          "by": "goal_priority"
+        }
+      ],
+      "unless": [],
+      "because": "A CTA routes intent into behavior.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-032",
+        "BK-034"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-012",
+      "name": "Friction matches commitment",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF requested information or effort exceeds what the current commitment needs, THEN remove, defer, or explain it ELSE retain.",
+      "when": {
+        "path": "copy.form.friction_to_commitment_ratio",
+        "operator": "gt",
+        "value": 1
+      },
+      "then": [
+        {
+          "action": "reduce",
+          "target": "copy.form",
+          "options": [
+            "remove_field",
+            "defer_field",
+            "explain_need"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Premature burden suppresses action and trust.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-032"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-013",
+      "name": "Urgency must be factual",
+      "domain": "copywriting",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF urgency or scarcity is claimed, THEN verify the real deadline, quantity, capacity, or consequence and disclose material conditions ELSE remove it.",
+      "when": {
+        "path": "copy.urgency_or_scarcity.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "copy.urgency_or_scarcity",
+          "against": "operational_fact"
+        },
+        {
+          "action": "disclose",
+          "target": "copy.urgency_or_scarcity.conditions"
+        },
+        {
+          "action": "delete",
+          "target": "copy.urgency_or_scarcity",
+          "when": "unverified"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "False urgency is deceptive and destroys long-term trust.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-012",
+        "WEB-013",
+        "BK-035"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-014",
+      "name": "Guarantee states enforceable terms",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a guarantee is offered, THEN state coverage, duration, request process, exclusions, remedy, and jurisdictional limits ELSE do not rely on vague risk reversal.",
+      "when": {
+        "path": "copy.guarantee.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "complete",
+          "target": "copy.guarantee",
+          "fields": [
+            "coverage",
+            "duration",
+            "request_process",
+            "exclusions",
+            "remedy",
+            "jurisdictional_limits"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A guarantee reduces risk only when the buyer can understand and use it.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-034",
+        "WEB-012"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-015",
+      "name": "Story serves the buying decision",
+      "domain": "copywriting",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF a sales story does not change relevance, belief, desire, trust, objection, or action, THEN cut or reframe it ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "copy.story.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "copy.story.decision_function_count",
+            "operator": "eq",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "delete_or_reframe",
+          "target": "copy.story",
+          "allowed_functions": [
+            "relevance",
+            "belief",
+            "desire",
+            "trust",
+            "objection",
+            "action"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Narrative in copy should move the decision, not merely entertain.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-038",
+        "BK-037"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-016",
+      "name": "Email subject matches message and destination",
+      "domain": "copywriting",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a subject line creates curiosity or a promise, THEN the email and linked destination must satisfy it ELSE revise.",
+      "when": {
+        "path": "copy.email_subject.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "copy.email_subject.payoff",
+          "across": [
+            "email_body",
+            "linked_destination"
+          ]
+        },
+        {
+          "action": "revise",
+          "target": "copy.email_subject",
+          "when": "mismatch"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Open-rate tactics that break the content promise trade attention for distrust.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-032",
+        "WEB-012"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-017",
+      "name": "Landing page preserves message scent",
+      "domain": "copywriting",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF traffic arrives from an ad, email, search result, or referral, THEN repeat the source’s core promise, audience, and offer early on the page ELSE diagnose mismatch.",
+      "when": {
+        "path": "copy.traffic_source_message",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "copy.landing_opening",
+          "with": [
+            "traffic_source_message.promise",
+            "traffic_source_message.audience",
+            "traffic_source_message.offer"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Continuity reassures visitors that they reached the expected destination.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-029",
+        "BK-032"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-018",
+      "name": "Market sophistication changes novelty claim",
+      "domain": "copywriting",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF competitors repeat the same promise, THEN differentiate mechanism, proof, segment, tradeoff, experience, or category rather than shouting the same claim ELSE use the direct promise.",
+      "when": {
+        "path": "market.promise_saturation",
+        "operator": "in",
+        "value": [
+          "high",
+          "very_high"
+        ]
+      },
+      "then": [
+        {
+          "action": "differentiate",
+          "target": "copy.positioning",
+          "axes": [
+            "mechanism",
+            "proof",
+            "segment",
+            "tradeoff",
+            "experience",
+            "category"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Sophisticated markets discount familiar unsupported claims.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-030"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-019",
+      "name": "Test one causal variable at a time when possible",
+      "domain": "copywriting",
+      "layer": "content_system",
+      "strength": "heuristic",
+      "human_logic": "IF an experiment must identify what caused a result, THEN change one primary variable or use a designed multivariate test with adequate traffic ELSE treat results as directional.",
+      "when": {
+        "path": "experiment.goal",
+        "operator": "eq",
+        "value": "causal_attribution"
+      },
+      "then": [
+        {
+          "action": "design",
+          "target": "experiment",
+          "options": [
+            "single_primary_variable",
+            "powered_multivariate"
+          ]
+        },
+        {
+          "action": "qualify",
+          "target": "experiment.result",
+          "when": "confounded",
+          "value": "directional_only"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Confounded variants cannot reveal which change caused the outcome.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-033"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "CPY-020",
+      "name": "Optimize downstream value, not click alone",
+      "domain": "copywriting",
+      "layer": "content_system",
+      "strength": "hard_constraint",
+      "human_logic": "IF a variant increases clicks but lowers qualified action, retention, revenue quality, or trust, THEN reject or segment it ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "experiment.click_rate_change",
+            "operator": "gt",
+            "value": 0
+          },
+          {
+            "any": [
+              {
+                "path": "experiment.qualified_action_change",
+                "operator": "lt",
+                "value": 0
+              },
+              {
+                "path": "experiment.retention_change",
+                "operator": "lt",
+                "value": 0
+              },
+              {
+                "path": "experiment.revenue_quality_change",
+                "operator": "lt",
+                "value": 0
+              },
+              {
+                "path": "experiment.trust_signal_change",
+                "operator": "lt",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "reject_or_segment",
+          "target": "experiment.variant"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A local metric can improve while the business and reader outcome degrades.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-033",
+        "BK-035"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

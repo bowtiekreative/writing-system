@@ -1,0 +1,1025 @@
+{
+  "title": "Narrative and Story Grammar",
+  "version": "1.0.0",
+  "rule_count": 18,
+  "rules": [
+    {
+      "id": "NAR-001",
+      "name": "Give the focal agent a desire",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF a narrative section expects forward motion AND the focal agent has no legible desire or need, THEN reveal one ELSE retain deliberate mystery with another source of propulsion.",
+      "when": {
+        "all": [
+          {
+            "path": "section.genre",
+            "operator": "eq",
+            "value": "narrative"
+          },
+          {
+            "path": "section.forward_motion_required",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "section.focal_agent.desire",
+            "operator": "missing",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "section.focal_agent.desire",
+          "mode": "action_choice_or_concrete_thought"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Desire gives events direction and lets readers evaluate progress.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-002",
+      "name": "Obstacle opposes the desire",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF the focal agent has a desire but no meaningful resistance, THEN introduce an external, interpersonal, internal, or systemic obstacle ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "section.focal_agent.desire",
+            "operator": "exists"
+          },
+          {
+            "path": "section.obstacle_count",
+            "operator": "eq",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "section.obstacle",
+          "types": [
+            "external",
+            "interpersonal",
+            "internal",
+            "systemic"
+          ],
+          "require": "meaningfully_blocks_desire"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Conflict emerges when resistance makes pursuit consequential.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-003",
+      "name": "Make stakes change choice",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF failure or success would not alter the agent’s choices, relationships, identity, resources, safety, or future, THEN strengthen or clarify stakes ELSE retain a low-stakes form by design.",
+      "when": {
+        "all": [
+          {
+            "path": "section.stakes.consequence",
+            "operator": "eq",
+            "value": "none"
+          },
+          {
+            "path": "section.genre_variant",
+            "operator": "not_in",
+            "value": [
+              "slice_of_life",
+              "lyric_meditation"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "specify",
+          "target": "section.stakes",
+          "dimensions": [
+            "choice",
+            "relationship",
+            "identity",
+            "resource",
+            "safety",
+            "future"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Stakes give conflict weight beyond motion alone.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-038"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-004",
+      "name": "Events cause later events",
+      "domain": "narrative",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF a major event has no causal, motivational, or thematic relation to what precedes it, THEN connect, foreshadow, move, or remove it ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "event.major",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "event.relation_to_prior",
+            "operator": "eq",
+            "value": "none"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "repair",
+          "target": "event",
+          "options": [
+            "add_cause",
+            "add_motivation",
+            "add_foreshadowing",
+            "move",
+            "remove"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Narrative coherence depends on more than chronology.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-005",
+      "name": "Scene contains a turn",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF a scene begins and ends with the same relevant value, knowledge, power, relationship, or plan, THEN add a turn or compress the scene ELSE retain an intentional atmosphere scene.",
+      "when": {
+        "all": [
+          {
+            "path": "section.type",
+            "operator": "eq",
+            "value": "scene"
+          },
+          {
+            "path": "section.state_change",
+            "operator": "eq",
+            "value": "none"
+          },
+          {
+            "path": "section.function",
+            "operator": "neq",
+            "value": "atmosphere_only"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "section.turn",
+          "dimensions": [
+            "value",
+            "knowledge",
+            "power",
+            "relationship",
+            "plan"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A scene earns space by changing the story state.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-006",
+      "name": "Choice reveals character",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF the story asserts a trait without a consequential choice that demonstrates it, THEN create or cite such a choice ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "character.asserted_trait",
+            "operator": "exists"
+          },
+          {
+            "path": "character.demonstrating_choice_count",
+            "operator": "eq",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "character.choice",
+          "pressure": "meaningful",
+          "reveals": "asserted_trait_or_contradiction"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Choice under pressure converts description into evidence.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-007",
+      "name": "Control point of view",
+      "domain": "narrative",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF perception, knowledge, or interior access exceeds the established viewpoint without a marked shift, THEN remove, recast, or mark the shift ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.viewpoint_boundary_crossed",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "paragraph.viewpoint_shift_marked",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "recast",
+          "target": "paragraph",
+          "within": "established_viewpoint"
+        },
+        {
+          "action": "mark",
+          "target": "viewpoint_shift",
+          "when": "shift_intended"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Viewpoint defines which information the narrative camera can access.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-017",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-008",
+      "name": "Keep narrative tense stable",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "context_default",
+      "human_logic": "IF narrative tense changes without a time-frame or mode shift, THEN restore the established tense ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "section.narrative_tense_shift",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "section.time_frame_shift",
+            "operator": "eq",
+            "value": false
+          },
+          {
+            "path": "section.mode_shift",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "section.narrative_tense",
+          "value_from": "document.narrative_tense"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Stable tense keeps the temporal viewpoint coherent.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-009",
+      "name": "Use scene when the moment changes the state",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF an event contains consequential choice, conflict, discovery, or relationship change, THEN dramatize enough of it as scene ELSE summary may carry it.",
+      "when": {
+        "path": "event.contains",
+        "operator": "in",
+        "value": [
+          "consequential_choice",
+          "conflict",
+          "discovery",
+          "relationship_change"
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "event.presentation",
+          "value": "scene_or_hybrid"
+        }
+      ],
+      "else": [
+        {
+          "action": "select",
+          "target": "event.presentation",
+          "value": "summary_available"
+        }
+      ],
+      "unless": [],
+      "because": "Scene allocates attention to moments readers need to experience and judge.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-010",
+      "name": "Use summary for compression and linkage",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF time passes without a necessary beat-by-beat change, THEN summarize it and move to the next consequential moment ELSE remain in scene.",
+      "when": {
+        "all": [
+          {
+            "path": "event_span.consequential_beat_count",
+            "operator": "eq",
+            "value": 0
+          },
+          {
+            "path": "event_span.duration",
+            "operator": "gt",
+            "value": "moment"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "compress",
+          "target": "event_span",
+          "to": "summary"
+        },
+        {
+          "action": "transition",
+          "target": "next_consequential_moment"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Summary controls pace by compressing low-change intervals.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-011",
+      "name": "Dialogue changes the interaction",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF a line of dialogue neither pursues a goal, resists, reveals, conceals, changes status, or creates rhythm, THEN cut or rewrite it ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "dialogue.line.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "dialogue.line.function_count",
+            "operator": "eq",
+            "value": 0
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "delete_or_rewrite",
+          "target": "dialogue.line",
+          "allowed_functions": [
+            "pursue",
+            "resist",
+            "reveal",
+            "conceal",
+            "status_change",
+            "rhythm"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Dialogue should do more than reproduce ordinary speech.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-012",
+      "name": "Subtext differs from literal text",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "creative_option",
+      "human_logic": "IF characters have conflicting public and private goals, THEN let word choice, omission, action, or rhythm carry subtext ELSE direct speech is acceptable.",
+      "when": {
+        "path": "dialogue.public_private_goal_conflict",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "layer",
+          "target": "dialogue.line",
+          "surface": "public_goal",
+          "subtext": "private_goal",
+          "signals": [
+            "word_choice",
+            "omission",
+            "action",
+            "rhythm"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Subtext lets dialogue carry simultaneous social and private actions.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-013",
+      "name": "Exposition arrives through present need",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF background information interrupts current desire or conflict, THEN delay, distribute, or attach it to a present decision ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "section.exposition.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "section.exposition.interrupts_current_motion",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "section.exposition",
+          "options": [
+            "delay",
+            "distribute",
+            "attach_to_present_decision"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers absorb background best when they understand why it matters now.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-016"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-014",
+      "name": "Foreshadow without announcing",
+      "domain": "narrative",
+      "layer": "document",
+      "strength": "creative_option",
+      "human_logic": "IF a later turn requires preparation, THEN plant a fair detail that has an immediate function and gains a second meaning later ELSE do not add arbitrary clues.",
+      "when": {
+        "path": "document.later_turn.requires_setup",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "document.foreshadowing",
+          "requirements": [
+            "immediate_function",
+            "later_reinterpretation",
+            "proportionate_visibility"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Fair preparation supports surprise without making the turn feel unearned.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-015",
+      "name": "Pay off planted elements",
+      "domain": "narrative",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF a detail is emphasized as a promise, mystery, threat, goal, or motif, THEN resolve, transform, or deliberately leave it open ELSE reduce its emphasis.",
+      "when": {
+        "path": "narrative.plant.emphasis",
+        "operator": "in",
+        "value": [
+          "medium",
+          "high"
+        ]
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "narrative.plant.payoff",
+          "options": [
+            "resolve",
+            "transform",
+            "deliberately_open"
+          ]
+        },
+        {
+          "action": "reduce",
+          "target": "narrative.plant.emphasis",
+          "when": "no_payoff"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Emphasis creates reader expectation.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-037"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-016",
+      "name": "Ending resolves the controlling change",
+      "domain": "narrative",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF the narrative establishes a controlling desire, question, or value conflict, THEN the ending must answer, transform, or meaningfully refuse it ELSE retain an episodic close.",
+      "when": {
+        "path": "document.controlling_narrative_question",
+        "operator": "exists"
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "document.ending",
+          "with": "controlling_narrative_question",
+          "modes": [
+            "answer",
+            "transform",
+            "meaningful_refusal"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Closure comes from resolving the story’s governing movement, not merely stopping events.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-016",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-017",
+      "name": "Description follows viewpoint and pressure",
+      "domain": "narrative",
+      "layer": "paragraph",
+      "strength": "heuristic",
+      "human_logic": "IF description lists details the viewpoint character would not notice in the current goal or emotion, THEN select details shaped by attention ELSE retain omniscient design.",
+      "when": {
+        "all": [
+          {
+            "path": "paragraph.function",
+            "operator": "eq",
+            "value": "description"
+          },
+          {
+            "path": "document.viewpoint_mode",
+            "operator": "neq",
+            "value": "omniscient"
+          },
+          {
+            "path": "paragraph.detail_selection_matches_attention",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "filter",
+          "target": "paragraph.details",
+          "by": [
+            "viewpoint_goal",
+            "emotion",
+            "knowledge",
+            "sensory_access"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Description becomes story when attention reveals both world and perceiver.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-017",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "NAR-018",
+      "name": "Show or tell by reader task",
+      "domain": "narrative",
+      "layer": "section",
+      "strength": "heuristic",
+      "human_logic": "IF the reader must experience, infer, or judge a consequential moment, THEN show selected evidence; IF the reader only needs transition or orientation, tell efficiently ELSE blend both.",
+      "when": {
+        "path": "event.reader_task",
+        "operator": "in",
+        "value": [
+          "experience",
+          "infer",
+          "judge",
+          "orient",
+          "transition"
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "event.presentation",
+          "map": {
+            "experience": "show",
+            "infer": "show",
+            "judge": "show",
+            "orient": "tell",
+            "transition": "tell"
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Showing and telling are allocation choices, not moral categories.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-011",
+        "BK-017"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

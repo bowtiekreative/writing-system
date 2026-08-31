@@ -1,0 +1,339 @@
+{
+  "title": "End-to-End Writing Pipelines",
+  "version": "1.0.0",
+  "pipeline_count": 7,
+  "pipelines": [
+    {
+      "id": "PIPE-GENERATE",
+      "name": "Generate from zero",
+      "steps": [
+        "define_rhetorical_situation",
+        "select_genre_and_template",
+        "build_claim_or_story_map",
+        "draft_structure",
+        "draft_units",
+        "run_hard_constraints",
+        "run_context_defaults",
+        "apply_LAKA_variations",
+        "select_smallest_sufficient_set",
+        "test_reader_outcome",
+        "finalize"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    },
+    {
+      "id": "PIPE-REVISE",
+      "name": "Revise an existing draft",
+      "steps": [
+        "preserve_original",
+        "state_intended_outcome",
+        "diagnose_by_scale",
+        "map_failures_to_rules",
+        "generate_interventions",
+        "rank_by_LAKA",
+        "apply_smallest_sufficient_changes",
+        "regression_check",
+        "reader_test",
+        "record_decisions"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    },
+    {
+      "id": "PIPE-EDIT",
+      "name": "Professional editing",
+      "steps": [
+        "confirm_assignment_scope",
+        "strategy_pass",
+        "structure_pass",
+        "evidence_pass",
+        "paragraph_pass",
+        "sentence_pass",
+        "word_pass",
+        "mechanics_pass",
+        "proof_pass",
+        "risk_register",
+        "handoff"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    },
+    {
+      "id": "PIPE-TECH",
+      "name": "Technical documentation",
+      "steps": [
+        "identify_user_task_or_question",
+        "select_information_type",
+        "capture_product_truth",
+        "draft_contract_or_flow",
+        "add prerequisites_and_failures",
+        "validate_in_environment",
+        "accessibility_test",
+        "version_and_owner_metadata",
+        "publish",
+        "monitor_drift"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    },
+    {
+      "id": "PIPE-COPY",
+      "name": "Persuasive copy",
+      "steps": [
+        "research_audience",
+        "classify_awareness",
+        "map_desire_and_objections",
+        "define_offer",
+        "inventory_proof",
+        "select_lead",
+        "draft_claim_proof_pairs",
+        "complete_terms_and_disclosures",
+        "build_action_path",
+        "test_message_match",
+        "measure_downstream_value"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    },
+    {
+      "id": "PIPE-NARRATIVE",
+      "name": "Narrative writing",
+      "steps": [
+        "define_controlling_change",
+        "choose_viewpoint_and_tense",
+        "map_desire_obstacle_stakes",
+        "design_causal_turns",
+        "allocate_scene_and_summary",
+        "draft_beats",
+        "layer_exposition_and_subtext",
+        "test_promises_and_payoffs",
+        "rhythm_pass",
+        "ending_alignment"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    },
+    {
+      "id": "PIPE-ACCESS",
+      "name": "Accessibility review",
+      "steps": [
+        "classify_content_and_tasks",
+        "check_semantic_structure",
+        "check_plain_language",
+        "check_non_text_equivalents",
+        "check_links_and_labels",
+        "check_time_and_reflow",
+        "linearize_with_screen_reader",
+        "test_cognitive_load",
+        "test_with_representative_users",
+        "track_barriers"
+      ],
+      "decision": {
+        "if": {
+          "any": [
+            {
+              "path": "accuracy",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "safety",
+              "operator": "eq",
+              "value": "fail"
+            },
+            {
+              "path": "accessibility",
+              "operator": "eq",
+              "value": "fail"
+            }
+          ]
+        },
+        "then": "return_to_earliest_causal_step",
+        "else": {
+          "if": {
+            "path": "outcome_test",
+            "operator": "eq",
+            "value": "pass"
+          },
+          "then": "complete",
+          "else": "diagnose_and_iterate"
+        }
+      }
+    }
+  ]
+}

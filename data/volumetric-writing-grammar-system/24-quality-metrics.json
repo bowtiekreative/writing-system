@@ -1,0 +1,161 @@
+{
+  "title": "Writing Quality Measurement Model",
+  "version": "1.0.0",
+  "metrics": [
+    {
+      "id": "accuracy",
+      "weight": 2,
+      "question": "Does every proposition preserve intended and supportable meaning?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "grammar",
+      "weight": 1,
+      "question": "Are required morphological and syntactic relations well formed for the target variety?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "clarity",
+      "weight": 1.5,
+      "question": "Can the audience recover referents, relations, scope, and action without preventable rereading?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "usability",
+      "weight": 2,
+      "question": "Can the reader find, understand, and use the content for the intended task?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "structure",
+      "weight": 1,
+      "question": "Does order reveal the document’s questions, hierarchy, and progression?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "evidence",
+      "weight": 2,
+      "question": "Do claims have appropriate, proximate, bounded support?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "accessibility",
+      "weight": 2,
+      "question": "Can readers with varied sensory, cognitive, language, and input conditions access the meaning and action?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "voice_fit",
+      "weight": 0.75,
+      "question": "Does the prose maintain the declared relationship and adapt tone to the situation?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "rhythm",
+      "weight": 0.5,
+      "question": "Do syntax, length, sound, stress, and repetition support attention and effect?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "ethics",
+      "weight": 2,
+      "question": "Does the text preserve truth, dignity, consent, privacy, and meaningful choice?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "maintainability",
+      "weight": 0.75,
+      "question": "Can volatile facts, terms, rules, and versions be updated without drift?",
+      "score_range": [
+        0,
+        4
+      ]
+    },
+    {
+      "id": "outcome",
+      "weight": 2,
+      "question": "Did the intended reader state or behavior change as intended without unacceptable harm?",
+      "score_range": [
+        0,
+        4
+      ]
+    }
+  ],
+  "formula": "weighted_score = sum(metric_score × weight) / sum(4 × weight) × 100",
+  "score_meanings": {
+    "0": "absent_or_harmful",
+    "1": "major_failure",
+    "2": "usable_with_material_limits",
+    "3": "strong",
+    "4": "excellent_for_context"
+  },
+  "hard_gates": {
+    "if": {
+      "any": [
+        {
+          "path": "accuracy",
+          "operator": "lt",
+          "value": 2
+        },
+        {
+          "path": "evidence",
+          "operator": "lt",
+          "value": 2
+        },
+        {
+          "path": "accessibility",
+          "operator": "lt",
+          "value": 2
+        },
+        {
+          "path": "ethics",
+          "operator": "lt",
+          "value": 2
+        }
+      ]
+    },
+    "then": "fail_regardless_of_average",
+    "else": "calculate_weighted_score"
+  },
+  "outcome_tests": [
+    "comprehension_recall",
+    "findability_time",
+    "task_completion",
+    "error_rate",
+    "decision_quality",
+    "qualified_conversion",
+    "retention_or_follow_through",
+    "reader_trust",
+    "maintenance_drift"
+  ]
+}

@@ -1,0 +1,624 @@
+{
+  "title": "Ethics, Truth, and Claim-Safety Rules",
+  "version": "1.0.0",
+  "rule_count": 12,
+  "rules": [
+    {
+      "id": "ETH-001",
+      "name": "No known false statement",
+      "domain": "ethics",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a statement is known to be false, THEN correct or remove it ELSE continue to evidence review.",
+      "when": {
+        "path": "claim.known_false",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "block_publication",
+          "target": "claim"
+        },
+        {
+          "action": "correct_or_remove",
+          "target": "claim"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Truth is a non-negotiable constraint, not a style preference.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-012",
+        "WEB-013",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-002",
+      "name": "Evaluate express and implied claims",
+      "domain": "ethics",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF wording, visuals, omissions, sequence, or context could imply a material claim, THEN evaluate that implication as well as the literal sentence ELSE retain.",
+      "when": {
+        "path": "document.persuasive_or_advertising",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "extract",
+          "target": "document.claims",
+          "types": [
+            "express",
+            "implied"
+          ]
+        },
+        {
+          "action": "verify",
+          "target": "document.claims"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A literally true sentence can still create a deceptive overall impression.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-003",
+      "name": "Evidence exists before objective claim",
+      "domain": "ethics",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF an objective material claim will be published, THEN verify a reasonable evidentiary basis existed before dissemination ELSE block the claim.",
+      "when": {
+        "all": [
+          {
+            "path": "claim.type",
+            "operator": "eq",
+            "value": "objective"
+          },
+          {
+            "path": "claim.material",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "claim.prior_substantiation"
+        },
+        {
+          "action": "block_publication",
+          "target": "claim",
+          "when": "prior_substantiation_missing"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Post-hoc support does not replace the duty to substantiate an objective claim before publication.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-004",
+      "name": "Disclose material conditions",
+      "domain": "ethics",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF price, outcome, eligibility, risk, timing, endorsement, or availability depends on a material condition, THEN disclose it clearly and near the claim ELSE retain.",
+      "when": {
+        "path": "claim.material_condition.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "claim.material_condition",
+          "position": "clear_and_proximate",
+          "presentation": "noticeable_and_understandable"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A hidden condition can reverse the practical meaning of an offer.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-012",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-005",
+      "name": "Do not fabricate authority or social proof",
+      "domain": "ethics",
+      "layer": "section",
+      "strength": "hard_constraint",
+      "human_logic": "IF a credential, citation, endorsement, review, testimonial, user count, or case is unverifiable or synthetic without disclosure, THEN remove or accurately label it ELSE retain.",
+      "when": {
+        "path": "proof.type",
+        "operator": "in",
+        "value": [
+          "credential",
+          "citation",
+          "endorsement",
+          "review",
+          "testimonial",
+          "user_count",
+          "case"
+        ]
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "proof.provenance"
+        },
+        {
+          "action": "remove_or_disclose",
+          "target": "proof",
+          "when": "unverifiable_or_synthetic"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Invented proof exploits trust rather than earning it.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-012",
+        "BK-035"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-006",
+      "name": "Do not exploit vulnerability",
+      "domain": "ethics",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF the audience is distressed, grieving, cognitively impaired, financially desperate, a child, or otherwise vulnerable, THEN remove coercive pressure and raise clarity, evidence, consent, and review requirements ELSE retain.",
+      "when": {
+        "path": "audience.vulnerability",
+        "operator": "in",
+        "value": [
+          "distressed",
+          "grieving",
+          "cognitively_impaired",
+          "financially_desperate",
+          "child",
+          "dependent"
+        ]
+      },
+      "then": [
+        {
+          "action": "remove",
+          "target": "copy.coercive_pressure"
+        },
+        {
+          "action": "raise",
+          "target": "document.safeguards",
+          "dimensions": [
+            "clarity",
+            "evidence",
+            "consent",
+            "human_review"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Persuasion should preserve meaningful choice.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-035",
+        "WEB-012"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-007",
+      "name": "Permission is not pressure",
+      "domain": "ethics",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a reader can legally or practically decline, THEN do not describe refusal as impossible, shameful, disloyal, or dangerous without evidence ELSE state real consequences neutrally.",
+      "when": {
+        "path": "reader.choice.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "copy.choice_framing",
+          "forbid": [
+            "false_impossibility",
+            "shame",
+            "false_disloyalty",
+            "unsupported_danger"
+          ]
+        },
+        {
+          "action": "state",
+          "target": "copy.real_consequences",
+          "tone": "neutral"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Choice architecture should not disguise coercion as grammar.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-035"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-008",
+      "name": "Preserve uncertainty in summaries",
+      "domain": "ethics",
+      "layer": "paragraph",
+      "strength": "hard_constraint",
+      "human_logic": "IF source material expresses uncertainty, disagreement, limitation, or conditionality, THEN preserve it in summary ELSE retain.",
+      "when": {
+        "path": "source.epistemic_limits.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "align",
+          "target": "summary.epistemic_limits",
+          "with": "source.epistemic_limits"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Compression must not turn tentative evidence into certainty.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-013"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-009",
+      "name": "Separate persuasion from information when needed",
+      "domain": "ethics",
+      "layer": "document",
+      "strength": "context_default",
+      "human_logic": "IF sponsorship, sales intent, advocacy, or conflict of interest could change reader interpretation, THEN disclose it early and plainly ELSE retain.",
+      "when": {
+        "path": "document.material_interest.exists",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "disclose",
+          "target": "document.material_interest",
+          "position": "early",
+          "style": "plain"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers need the communicator’s material role to evaluate the message.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-012",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-010",
+      "name": "Protect private information",
+      "domain": "ethics",
+      "layer": "document",
+      "strength": "hard_constraint",
+      "human_logic": "IF a draft contains personal, confidential, credential, or security-sensitive information not necessary for the reader’s task, THEN redact or minimize it ELSE retain authorized necessary data.",
+      "when": {
+        "all": [
+          {
+            "path": "document.sensitive_information.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "document.sensitive_information.necessary",
+            "operator": "eq",
+            "value": false
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "redact_or_minimize",
+          "target": "document.sensitive_information"
+        },
+        {
+          "action": "verify",
+          "target": "document.access_scope"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Useful writing does not require avoidable exposure.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-011",
+      "name": "No discriminatory default",
+      "domain": "ethics",
+      "layer": "content_system",
+      "strength": "hard_constraint",
+      "human_logic": "IF examples, labels, or rules assign capability, risk, role, or worth by protected or irrelevant identity, THEN remove the inference and audit downstream rules ELSE retain identity only when relevant and responsibly handled.",
+      "when": {
+        "path": "content.identity_based_unsupported_inference",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "remove",
+          "target": "content.unsupported_inference"
+        },
+        {
+          "action": "audit",
+          "target": "content_system.downstream_rules"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Bias can propagate through examples and automated rules.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "WEB-003",
+        "WEB-004",
+        "BK-026"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "ETH-012",
+      "name": "Human review for consequential automation",
+      "domain": "ethics",
+      "layer": "content_system",
+      "strength": "hard_constraint",
+      "human_logic": "IF generated writing can materially affect rights, safety, health, finances, employment, housing, or legal status, THEN require qualified human review, evidence trace, and appeal or correction path ELSE apply proportionate review.",
+      "when": {
+        "path": "generated_content.consequence_domain",
+        "operator": "in",
+        "value": [
+          "rights",
+          "safety",
+          "health",
+          "finance",
+          "employment",
+          "housing",
+          "legal_status"
+        ]
+      },
+      "then": [
+        {
+          "action": "require",
+          "target": "generated_content.review",
+          "include": [
+            "qualified_human",
+            "evidence_trace",
+            "appeal_or_correction_path"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Consequential language systems need accountable judgment and recourse.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-026",
+        "WEB-007"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

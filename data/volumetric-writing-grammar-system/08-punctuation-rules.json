@@ -1,0 +1,1109 @@
+{
+  "title": "Punctuation as Meaning and Boundary",
+  "version": "1.0.0",
+  "rule_count": 20,
+  "rules": [
+    {
+      "id": "PUN-001",
+      "name": "Terminate complete sentences",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a prose sentence is complete, THEN end it with a mark matching statement, direct question, or strong exclamation ELSE keep it joined to its governing structure.",
+      "when": {
+        "path": "sentence.complete",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.terminal_mark",
+          "map": {
+            "statement": ".",
+            "direct_question": "?",
+            "exclamation": "!"
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Terminal punctuation marks closure and sentence force.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-009",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-002",
+      "name": "No comma splice",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF two independent clauses are joined only by a comma, THEN add a coordinator, use a semicolon, or make two sentences ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.independent_clause_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "sentence.joiner",
+            "operator": "eq",
+            "value": "comma_only"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "sentence.joiner",
+          "options": [
+            "comma_plus_coordinator",
+            "semicolon",
+            "period"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A comma alone normally does not mark the full boundary between independent clauses.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-003",
+      "name": "Comma before coordinating conjunction",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF a coordinating conjunction joins two independent clauses, THEN place a comma before it unless the clauses are very short and unambiguous ELSE retain.",
+      "when": {
+        "all": [
+          {
+            "path": "coordination.joins",
+            "operator": "eq",
+            "value": "independent_clauses"
+          },
+          {
+            "path": "coordination.marker",
+            "operator": "in",
+            "value": [
+              "and",
+              "but",
+              "or",
+              "nor",
+              "for",
+              "so",
+              "yet"
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "coordination.pre_marker_punctuation",
+          "value": ","
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [
+        {
+          "all": [
+            {
+              "path": "coordination.clauses_short",
+              "operator": "eq",
+              "value": true
+            },
+            {
+              "path": "coordination.ambiguity",
+              "operator": "eq",
+              "value": false
+            }
+          ]
+        }
+      ],
+      "because": "The comma displays the boundary while the conjunction displays the relationship.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-004",
+      "name": "Comma after introductory material",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF introductory material is long, clausal, or potentially misread, THEN add a comma before the main clause ELSE use the lightest mark that preserves clarity.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.introduction.exists",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "any": [
+              {
+                "path": "sentence.introduction.type",
+                "operator": "eq",
+                "value": "clause"
+              },
+              {
+                "path": "sentence.introduction.word_count",
+                "operator": "gte",
+                "value": 5
+              },
+              {
+                "path": "sentence.introduction.misread_risk",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "sentence.introduction.boundary",
+          "value": ","
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A visible boundary prevents the introduction from being parsed as part of the main clause.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-005",
+      "name": "Set off nonrestrictive material",
+      "domain": "punctuation",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a modifier adds nonessential information rather than identifying the referent, THEN set it off with paired punctuation ELSE do not set it off.",
+      "when": {
+        "path": "modifier.restrictiveness",
+        "operator": "eq",
+        "value": "nonrestrictive"
+      },
+      "then": [
+        {
+          "action": "wrap",
+          "target": "modifier",
+          "punctuation": "commas_or_contextual_pair"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "modifier",
+          "punctuation": "unpaired"
+        }
+      ],
+      "unless": [],
+      "because": "Punctuation distinguishes supplementary information from information needed to identify the referent.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-006",
+      "name": "Do not isolate restrictive material",
+      "domain": "punctuation",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF a modifier identifies which person or thing is meant, THEN remove punctuation that falsely marks it as optional ELSE evaluate as nonrestrictive.",
+      "when": {
+        "path": "modifier.restrictiveness",
+        "operator": "eq",
+        "value": "restrictive"
+      },
+      "then": [
+        {
+          "action": "delete",
+          "target": "modifier.surrounding_commas"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Removing a restrictive modifier changes reference, so it should not be marked as detachable.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-007",
+      "name": "Serial comma follows declared style",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF a series contains three or more coordinated items, THEN apply the selected serial-comma policy consistently AND add a comma when omission causes ambiguity ELSE retain.",
+      "when": {
+        "path": "series.item_count",
+        "operator": "gte",
+        "value": 3
+      },
+      "then": [
+        {
+          "action": "apply_policy",
+          "target": "series.final_separator",
+          "policy_from": "document.style.serial_comma"
+        },
+        {
+          "action": "insert",
+          "target": "series.final_separator",
+          "when": "ambiguity_without_comma",
+          "value": ","
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Consistency lowers friction, while clarity overrides optional house-style omission.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-005",
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-008",
+      "name": "Semicolon joins related independent clauses",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF two independent clauses are closely related AND no coordinator is used, THEN a semicolon is available ELSE choose another boundary.",
+      "when": {
+        "all": [
+          {
+            "path": "sentence.adjacent_units",
+            "operator": "eq",
+            "value": "independent_clauses"
+          },
+          {
+            "path": "sentence.semantic_relation",
+            "operator": "in",
+            "value": [
+              "contrast",
+              "continuation",
+              "cause",
+              "parallel"
+            ]
+          },
+          {
+            "path": "sentence.coordinator",
+            "operator": "missing",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.boundary",
+          "value": ";"
+        }
+      ],
+      "else": [
+        {
+          "action": "select",
+          "target": "sentence.boundary",
+          "options": [
+            "period",
+            "comma_plus_coordinator",
+            "colon_when_explanatory"
+          ]
+        }
+      ],
+      "unless": [],
+      "because": "A semicolon marks grammatical independence and close conceptual linkage.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-009",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-009",
+      "name": "Semicolons clarify complex series",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF list items contain internal commas, THEN separate top-level items with semicolons ELSE use commas.",
+      "when": {
+        "all": [
+          {
+            "path": "series.item_count",
+            "operator": "gte",
+            "value": 3
+          },
+          {
+            "path": "series.items_contain_commas",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "replace",
+          "target": "series.top_level_separator",
+          "value": ";"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "series.top_level_separator",
+          "preferred": ","
+        }
+      ],
+      "unless": [],
+      "because": "Distinct separator levels make hierarchy visible.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-009",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-010",
+      "name": "Colon follows a complete setup",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF a colon introduces an explanation, list, example, or amplification, THEN ensure the material before it can stand as a complete clause ELSE remove or recast.",
+      "when": {
+        "path": "sentence.colon_function",
+        "operator": "in",
+        "value": [
+          "explanation",
+          "list",
+          "example",
+          "amplification"
+        ]
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "sentence.pre_colon_clause",
+          "require": "independent_clause"
+        },
+        {
+          "action": "restructure",
+          "target": "sentence",
+          "when": "pre_colon_incomplete",
+          "options": [
+            "remove_colon",
+            "complete_setup"
+          ]
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "A colon points forward from a grammatically complete setup.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-009",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-011",
+      "name": "Apostrophe marks possession or omission",
+      "domain": "punctuation",
+      "layer": "word",
+      "strength": "hard_constraint",
+      "human_logic": "IF an apostrophe is present, THEN verify that it marks possession, contracted omission, or a declared special style ELSE remove it.",
+      "when": {
+        "path": "token.contains_apostrophe",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "token.apostrophe_function",
+          "allowed": [
+            "possession",
+            "contraction",
+            "declared_style_exception"
+          ]
+        },
+        {
+          "action": "delete",
+          "target": "token.apostrophe",
+          "when": "no_allowed_function"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Apostrophes do not ordinarily form simple plurals.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-009",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-012",
+      "name": "Possessive form follows number and style",
+      "domain": "punctuation",
+      "layer": "word",
+      "strength": "context_default",
+      "human_logic": "IF a noun is possessive, THEN apply the declared singular/plural/proper-name convention consistently ELSE retain.",
+      "when": {
+        "path": "noun.case",
+        "operator": "eq",
+        "value": "possessive"
+      },
+      "then": [
+        {
+          "action": "apply_policy",
+          "target": "noun.possessive_form",
+          "policy_from": "document.style.possessives"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Possessive conventions vary slightly, so declared consistency matters.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-013",
+      "name": "Hyphenate ambiguity-prone compound modifiers",
+      "domain": "punctuation",
+      "layer": "phrase",
+      "strength": "context_default",
+      "human_logic": "IF multiple words jointly modify a following noun AND grouping is not immediately clear, THEN hyphenate the compound ELSE omit unnecessary hyphens.",
+      "when": {
+        "all": [
+          {
+            "path": "modifier.position",
+            "operator": "eq",
+            "value": "before_noun"
+          },
+          {
+            "path": "modifier.word_count",
+            "operator": "gte",
+            "value": 2
+          },
+          {
+            "path": "modifier.grouping_ambiguous",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "modifier.internal_separator",
+          "value": "-"
+        }
+      ],
+      "else": [
+        {
+          "action": "delete",
+          "target": "modifier.unnecessary_hyphen",
+          "when": "standard_open_or_adverb_ly_pattern"
+        }
+      ],
+      "unless": [],
+      "because": "Hyphens can show which words operate as one modifier.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-014",
+      "name": "Dash marks deliberate interruption or emphasis",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "creative_option",
+      "human_logic": "IF the intended relation is an abrupt break, strong insertion, or emphatic turn, THEN an em dash is available ELSE prefer ordinary syntax and punctuation.",
+      "when": {
+        "path": "sentence.intended_effect",
+        "operator": "in",
+        "value": [
+          "abrupt_break",
+          "strong_insertion",
+          "emphatic_turn"
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.punctuation",
+          "value": "em_dash",
+          "limit": "avoid_repetitive_use"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "The em dash carries more visual and rhetorical force than a comma or parentheses.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-005",
+        "BK-009",
+        "BK-019"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-015",
+      "name": "Parentheses subordinate removable detail",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF material is useful but structurally secondary AND the sentence remains grammatical without it, THEN parentheses are available ELSE integrate or delete it.",
+      "when": {
+        "all": [
+          {
+            "path": "insertion.secondary",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "insertion.removal_preserves_grammar",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "wrap",
+          "target": "insertion",
+          "punctuation": "parentheses"
+        }
+      ],
+      "else": [
+        {
+          "action": "restructure",
+          "target": "insertion",
+          "options": [
+            "integrate",
+            "delete",
+            "footnote"
+          ]
+        }
+      ],
+      "unless": [],
+      "because": "Parentheses signal a stronger drop in emphasis than commas.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-009",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-016",
+      "name": "Question mark only for direct questions",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF the sentence directly asks a question, THEN use a question mark; IF it reports a question, use statement punctuation ELSE retain.",
+      "when": {
+        "any": [
+          {
+            "path": "sentence.force",
+            "operator": "eq",
+            "value": "direct_question"
+          },
+          {
+            "path": "sentence.force",
+            "operator": "eq",
+            "value": "indirect_question"
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "select",
+          "target": "sentence.terminal_mark",
+          "map": {
+            "direct_question": "?",
+            "indirect_question": "."
+          }
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Direct and reported questions have different grammatical force.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-002",
+        "BK-009"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-017",
+      "name": "Quotation marks require a quotation function",
+      "domain": "punctuation",
+      "layer": "phrase",
+      "strength": "hard_constraint",
+      "human_logic": "IF quotation marks appear, THEN verify direct quotation, title convention, coined term, or explicit distancing; otherwise remove scare quotes.",
+      "when": {
+        "path": "phrase.quotation_marks",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "verify",
+          "target": "phrase.quotation_function",
+          "allowed": [
+            "direct_quote",
+            "short_work_title",
+            "term_as_term",
+            "explicit_distancing"
+          ]
+        },
+        {
+          "action": "delete",
+          "target": "phrase.quotation_marks",
+          "when": "function_missing"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Unmotivated quotation marks create uncertainty about voice and commitment.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-005",
+        "BK-007",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-018",
+      "name": "Quote punctuation follows locale policy",
+      "domain": "punctuation",
+      "layer": "phrase",
+      "strength": "context_default",
+      "human_logic": "IF quoted material meets other punctuation, THEN apply the declared regional or house style ELSE retain.",
+      "when": {
+        "path": "quotation.meets_other_punctuation",
+        "operator": "eq",
+        "value": true
+      },
+      "then": [
+        {
+          "action": "apply_policy",
+          "target": "quotation.punctuation_placement",
+          "policy_from": "document.locale_and_style"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "American and British conventions differ; internal consistency prevents false corrections.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-003",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-019",
+      "name": "Ellipsis marks omission or trailing thought",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "context_default",
+      "human_logic": "IF words are omitted from quoted material OR speech deliberately trails off, THEN use an ellipsis according to style; ELSE do not use it as vague decoration.",
+      "when": {
+        "any": [
+          {
+            "path": "quotation.omission",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "dialogue.trailing_off",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      },
+      "then": [
+        {
+          "action": "insert",
+          "target": "ellipsis",
+          "style_from": "document.style.ellipsis"
+        }
+      ],
+      "else": [
+        {
+          "action": "delete",
+          "target": "decorative_ellipsis"
+        }
+      ],
+      "unless": [],
+      "because": "An ellipsis should communicate a specific absence or vocal effect.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-007",
+        "BK-009",
+        "BK-039"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    },
+    {
+      "id": "PUN-020",
+      "name": "Punctuation preserves hierarchy",
+      "domain": "punctuation",
+      "layer": "sentence",
+      "strength": "hard_constraint",
+      "human_logic": "IF nested structures use indistinguishable boundaries, THEN assign stronger marks to higher-level divisions OR split the sentence ELSE retain.",
+      "when": {
+        "path": "sentence.boundary_hierarchy_clear",
+        "operator": "eq",
+        "value": false
+      },
+      "then": [
+        {
+          "action": "restructure",
+          "target": "sentence.boundaries",
+          "order": [
+            "comma",
+            "semicolon",
+            "period"
+          ]
+        },
+        {
+          "action": "split",
+          "target": "sentence",
+          "when": "hierarchy_still_unclear"
+        }
+      ],
+      "else": [
+        {
+          "action": "retain",
+          "target": "current_text",
+          "reason": "No triggering condition is present."
+        }
+      ],
+      "unless": [],
+      "because": "Readers use punctuation strength to reconstruct grouping and relation.",
+      "diagnostics": [],
+      "examples": {},
+      "source_ids": [
+        "BK-008",
+        "BK-009",
+        "WEB-011"
+      ],
+      "laka": {
+        "smallest_sufficient_intervention": true,
+        "primary_axes": [
+          "scope",
+          "depth",
+          "magnitude",
+          "reversibility"
+        ]
+      }
+    }
+  ]
+}

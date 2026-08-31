@@ -1,0 +1,265 @@
+{
+  "title": "Volumetric Generation Recipes",
+  "version": "1.0.0",
+  "recipe_count": 8,
+  "theoretical_space": {
+    "context_axes_product": "12 × 10 × 9 × 13 × 9 × 4 × 5 × 5 × 7 × 5 × 8 × 7",
+    "laka_dynamic_states": 56,
+    "laka_diagnostic_prompts": 216,
+    "base_rules": 228,
+    "note": "This is an addressable decision space, not a recommendation to generate every combination."
+  },
+  "recipes": [
+    {
+      "id": "GEN-001",
+      "name": "Four-state LAKA sweep",
+      "input": "one diagnosed writing object",
+      "dimensions": [
+        "magnitude",
+        "rate",
+        "direction",
+        "scope",
+        "depth",
+        "duration",
+        "frequency",
+        "acceleration",
+        "variability",
+        "detectability",
+        "reversibility",
+        "propagation",
+        "amplification",
+        "accumulation"
+      ],
+      "states_per_dimension": 4,
+      "primary_variants": 56,
+      "logic": {
+        "if": {
+          "path": "diagnosis.target",
+          "operator": "exists"
+        },
+        "then": [
+          "generate one controlled candidate per dimension-state",
+          "reject candidates that do not change the named axis",
+          "score against outcome and hard gates"
+        ],
+        "else": "request target"
+      }
+    },
+    {
+      "id": "GEN-002",
+      "name": "6×6×6 question sweep",
+      "input": "one writing problem",
+      "dimensions": {
+        "interrogatives": [
+          "who",
+          "what",
+          "when",
+          "where",
+          "why",
+          "how"
+        ],
+        "relations": [
+          "direction",
+          "scope",
+          "depth",
+          "duration",
+          "frequency",
+          "reversibility"
+        ],
+        "scale": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "primary_prompts": 216,
+      "logic": {
+        "if": {
+          "path": "problem",
+          "operator": "exists"
+        },
+        "then": "generate diagnostic questions before edits",
+        "else": "stop"
+      }
+    },
+    {
+      "id": "GEN-003",
+      "name": "Sentence alternatives",
+      "input": "one proposition plus context",
+      "dimensions": [
+        "actor_visibility",
+        "voice",
+        "clause_relation",
+        "information_order",
+        "sentence_force",
+        "specificity",
+        "qualification",
+        "rhythm"
+      ],
+      "logic": {
+        "if": {
+          "all": [
+            {
+              "path": "proposition",
+              "operator": "exists",
+              "value": true
+            },
+            {
+              "path": "context.audience",
+              "operator": "exists",
+              "value": true
+            }
+          ]
+        },
+        "then": [
+          "generate valid alternatives",
+          "preserve truth conditions",
+          "rank by reader outcome"
+        ],
+        "else": "request proposition or audience"
+      }
+    },
+    {
+      "id": "GEN-004",
+      "name": "Paragraph alternatives",
+      "input": "one controlling move",
+      "dimensions": [
+        "point_position",
+        "evidence_type",
+        "example_presence",
+        "transition_relation",
+        "paragraph_length",
+        "tone",
+        "reader_knowledge_gap"
+      ],
+      "logic": {
+        "if": {
+          "path": "paragraph.controlling_move",
+          "operator": "exists"
+        },
+        "then": [
+          "generate structure maps",
+          "draft only non-dominated maps"
+        ],
+        "else": "diagnose controlling move"
+      }
+    },
+    {
+      "id": "GEN-005",
+      "name": "Headline alternatives",
+      "input": "audience, awareness, offer or content promise, proof",
+      "dimensions": [
+        "directness",
+        "benefit",
+        "curiosity",
+        "specificity",
+        "mechanism",
+        "proof_signal",
+        "time_horizon",
+        "risk_frame",
+        "question_or_statement"
+      ],
+      "logic": {
+        "if": {
+          "all": [
+            {
+              "path": "audience.awareness",
+              "operator": "exists",
+              "value": true
+            },
+            {
+              "path": "promise",
+              "operator": "exists",
+              "value": true
+            }
+          ]
+        },
+        "then": [
+          "generate",
+          "claim-check",
+          "message-match-check",
+          "rank"
+        ],
+        "else": "research_first"
+      }
+    },
+    {
+      "id": "GEN-006",
+      "name": "Document architecture alternatives",
+      "input": "reader questions and expected outcome",
+      "dimensions": [
+        "organizing_principle",
+        "depth_layers",
+        "section_count",
+        "summary_position",
+        "proof_distribution",
+        "action_position",
+        "navigation"
+      ],
+      "logic": {
+        "if": {
+          "path": "reader_questions",
+          "operator": "count_gte",
+          "value": 1
+        },
+        "then": [
+          "generate outlines",
+          "simulate scanning path",
+          "select lowest-friction complete route"
+        ],
+        "else": "interview_or_research"
+      }
+    },
+    {
+      "id": "GEN-007",
+      "name": "Minimal-pair testing",
+      "input": "baseline plus one proposed rule change",
+      "dimensions": [
+        "comprehension",
+        "task_success",
+        "trust",
+        "conversion",
+        "error_rate"
+      ],
+      "logic": {
+        "if": {
+          "path": "causal_attribution_needed",
+          "operator": "eq",
+          "value": true
+        },
+        "then": "change one primary variable",
+        "else": "multivariate exploration allowed with qualified inference"
+      }
+    },
+    {
+      "id": "GEN-008",
+      "name": "Exception stress test",
+      "input": "a rule-compliant draft",
+      "dimensions": [
+        "dialogue",
+        "poetry",
+        "brand_voice",
+        "legal_precision",
+        "safety",
+        "translation",
+        "screen_reader"
+      ],
+      "logic": {
+        "if": {
+          "path": "draft.rule_compliant",
+          "operator": "eq",
+          "value": true
+        },
+        "then": [
+          "test boundary contexts",
+          "record justified exceptions",
+          "never waive truth or safety"
+        ],
+        "else": "fix hard constraints first"
+      }
+    }
+  ]
+}
