@@ -132,7 +132,7 @@ function footer () {
       </div>
       <div class="foot__legal">
         <p class="m-0">${esc(corpus.manifest.title)} v${esc(corpus.manifest.version)} · ${corpus.rules.length} base rules · ${corpus.manifest.inventory?.total_operational_rule_records ?? ''} operational records</p>
-        <p class="m-0"><a href="/privacy">Privacy</a> · <a href="/api">API</a> · <a href="https://github.com/bowtiekreative/writing-system" rel="noopener">Source</a></p>
+        <p class="m-0"><a href="/privacy">Privacy</a> · <a href="/api">API</a> · <a href="/sitemap.xml">Sitemap</a> · <a href="https://github.com/bowtiekreative/writing-system" rel="noopener">Source</a></p>
         <p class="m-0">Powered by <a href="https://bowtiekreative.com">Bow Tie Kreative</a></p>
       </div>
       <p class="muted mt-6 t-13 wide">${esc(corpus.manifest.copyright_note)}</p>
