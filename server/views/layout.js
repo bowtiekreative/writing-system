@@ -190,10 +190,14 @@ export function layout (page) {
   <meta property="og:title" content="${attr(title)}">
   <meta property="og:description" content="${attr(description)}">
   <meta property="og:url" content="${attr(canonical)}">
-  <meta property="og:image" content="${BRAND}/btk-seal.png">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://media.publit.io/file/SEO-thumbnails/writingsystem-bowtiekreative-com.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="720">
+  <meta property="og:image:type" content="image/png">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${attr(title)}">
   <meta name="twitter:description" content="${attr(description)}">
+  <meta name="twitter:image" content="https://media.publit.io/file/SEO-thumbnails/writingsystem-bowtiekreative-com.png">
   <meta name="theme-color" content="#07090D">
   <link rel="icon" href="${BRAND}/favicon-32.png" sizes="32x32">
   <link rel="icon" href="${BRAND}/favicon-48.png" sizes="48x48">
